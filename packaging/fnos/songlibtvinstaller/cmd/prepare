@@ -26,7 +26,7 @@ fi
 mdns=false
 if [ -S /var/run/dbus/system_bus_socket ] && [ -S /var/run/avahi-daemon/socket ]; then mdns=true; fi
 printf '%s\n' "$mdns" > "$TRIM_PKGVAR/discovery-enabled"
-uid=$(id -u);gid=$(id -g)
+uid=${TRIM_UID:-$(id -u)};gid=${TRIM_GID:-$(id -g)}
 # Render the compose file itself, as in the tested Tingji/FrpDeck packages.
 awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" '
  /songlib:port/ { print "      - \""port":5533\" # songlib:port";next }

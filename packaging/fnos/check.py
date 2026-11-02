@@ -12,3 +12,11 @@ for name in ['config/privilege','config/resource','app/ui/config','wizard/instal
 s=(root/'app/docker/docker-compose.yaml').read_text();assert 'privileged:' not in s and 'seccomp:unconfined' not in s and 'docker.sock' not in s
 assert '音屿-Apple TV音乐播放器安装助手' in (root/'manifest').read_text()
 print('PASS: icons, metadata, JSON, minimum container privileges')
+
+policy=json.loads((Path(__file__).parent/'release-policy.json').read_text())
+manifest=dict(line.split('=',1) for line in (root/'manifest').read_text().splitlines() if '=' in line)
+manifest={k.strip():v.strip() for k,v in manifest.items()}
+for key in ['maintainer','distributor','distributor_url','platform']:assert manifest[key]==policy[key],key
+assert 'image: '+policy['image_repository']+':' in s
+assert '127.0.0.1:15933' not in s and 'pull_policy: never' not in s
+print('PASS: 6uos publisher, platform=all, DockerHub image, no bundled image source')

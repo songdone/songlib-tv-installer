@@ -10,7 +10,7 @@ services:
       - "${TRIM_PKGVAR:-/var/apps/songlibtvinstaller/var}/data:/data"
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # songlib:socket
       - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket:ro # songlib:socket
-    user: "10001:10001" # songlib:user
+    user: "${TRIM_UID:?fnOS package UID is required}:${TRIM_GID:?fnOS package GID is required}" # songlib:user
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     read_only: true

@@ -9,7 +9,7 @@ class Lifecycle(unittest.TestCase):
   with tempfile.TemporaryDirectory() as tmp:
    temp=Path(tmp);var=temp/'not-created-yet';dest=temp/'app';shutil.copytree(ROOT/'app',dest)
    password='音乐小岛 #$!123'
-   env=dict(os.environ,TRIM_PKGVAR=str(var),TRIM_APPDEST=str(dest),wizard_port='16533',wizard_password=password)
+   env=dict(os.environ,TRIM_PKGVAR=str(var),TRIM_APPDEST=str(dest),TRIM_UID=str(os.getuid()),TRIM_GID=str(os.getgid()),wizard_port='16533',wizard_password=password)
    # fnOS validates compose before assigning/creating the application data directory.
    r=subprocess.run(['docker','compose','-f',str(dest/'docker/docker-compose.yaml'),'config','--quiet'],env=env,capture_output=True,text=True)
    self.assertEqual(r.returncode,0,r.stderr);self.assertFalse(var.exists())
