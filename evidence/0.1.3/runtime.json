@@ -1,0 +1,24 @@
+{
+  "amd64": {
+    "same_fpk": "SongLib-TV-Installer-0.1.3.fpk",
+    "same_DockerHub_reference": "666uos/songlib-tv-installer:0.1.3",
+    "platform_all": true,
+    "publisher": "6uos",
+    "actual_uid": 501,
+    "started_before_callback": true,
+    "health": 200,
+    "login": 200,
+    "stage": "/var/folders/lt/qt673jr14d13j3dlndv1992h0000gn/T/songlib013-amd64ri5hdmlp"
+  },
+  "arm64": {
+    "same_fpk": "SongLib-TV-Installer-0.1.3.fpk",
+    "same_DockerHub_reference": "666uos/songlib-tv-installer:0.1.3",
+    "platform_all": true,
+    "publisher": "6uos",
+    "actual_uid": 501,
+    "started_before_callback": true,
+    "health": 200,
+    "login": 200,
+    "stage": "/var/folders/lt/qt673jr14d13j3dlndv1992h0000gn/T/songlib013-arm64hfpashro"
+  }
+}
