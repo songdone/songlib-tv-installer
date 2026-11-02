@@ -1,0 +1,122 @@
+[
+  {
+    "width": 1440,
+    "route": "home",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": -15,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 1440,
+    "route": "add-device",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": -15,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 1440,
+    "route": "account",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": -15,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 1440,
+    "route": "settings",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": -15,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 390,
+    "route": "home",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 390,
+    "route": "add-device",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 390,
+    "route": "account",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 390,
+    "route": "settings",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 320,
+    "route": "home",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 320,
+    "route": "add-device",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 320,
+    "route": "account",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  },
+  {
+    "width": 320,
+    "route": "settings",
+    "errors": [],
+    "lang": "zh-CN",
+    "overflow": 0,
+    "englishBrowser": true,
+    "staleEnglishCache": true,
+    "englishHomeLabels": false
+  }
+]
