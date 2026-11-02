@@ -466,8 +466,21 @@ func route(fi *fiber.App) {
 	})
 
 	api.Post("/upload", func(c *fiber.Ctx) error {
-		form, _ := c.MultipartForm()
+		form, formErr := c.MultipartForm()
+		if formErr != nil || form == nil {
+			return c.Status(400).JSON(apiError("invalid upload"))
+		}
 		files := form.File["files"]
+		var total int64
+		if len(files) == 0 || len(files) > 5 {
+			return c.Status(400).JSON(apiError("upload 1 to 5 IPA files"))
+		}
+		for _, file := range files {
+			total += file.Size
+			if !strings.EqualFold(filepath.Ext(file.Filename), ".ipa") || total > 512<<20 {
+				return c.Status(413).JSON(apiError("IPA files must total at most 512 MiB"))
+			}
+		}
 
 		result := []model.IpaFile{}
 		saveDir := filepath.Join(app.Config.Server.DataDir, "tmp")

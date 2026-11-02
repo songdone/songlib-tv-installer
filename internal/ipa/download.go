@@ -2,6 +2,7 @@ package ipa
 
 import (
 	"fmt"
+	"github.com/bitxeno/atvloadly/internal/safenet"
 	"image/png"
 	"io"
 	"net/http"
@@ -113,6 +114,9 @@ func downloadIPAWithHeaders(rawURL string, saveDir string, header http.Header, p
 	req.Header.Set(atvhttp.HEADER_USER_AGENT, atvhttp.HTTP_USER_AGENT)
 
 	client := &http.Client{Timeout: 60 * time.Minute}
+	if safenet.Enabled() {
+		client = safenet.Client(10 * time.Minute)
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		_ = tmpFile.Close()
@@ -132,7 +136,7 @@ func downloadIPAWithHeaders(rawURL string, saveDir string, header http.Header, p
 		total:      resp.ContentLength,
 		progressFn: progressFn,
 	}
-	if _, err := io.Copy(writer, resp.Body); err != nil {
+	if n, err := io.Copy(writer, io.LimitReader(resp.Body, (512<<20)+1)); err != nil || n > 512<<20 {
 		_ = tmpFile.Close()
 		_ = os.Remove(tmpPath)
 		return "", fmt.Errorf("failed to write ipa file: %w", err)
@@ -144,6 +148,11 @@ func downloadIPAWithHeaders(rawURL string, saveDir string, header http.Header, p
 
 // parseIPAMetadata parses an IPA file and extracts its icon.
 func parseIPAMetadata(ipaPath string, saveDir string) (*DownloadResult, error) {
+	if safenet.Enabled() {
+		if err := ValidateArchive(ipaPath); err != nil {
+			return nil, err
+		}
+	}
 	info, err := ParseFile(ipaPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse ipa: %w", err)

@@ -3,8 +3,8 @@
     <header class="navbar border-b pt-0 pb-0">
       <div class="flex-1">
         <a href="/" class="btn btn-ghost rounded-btn atv-brand">
-          <AppIcon class="w-7 h-7" />
-          <span class="normal-case text-xl">atvloadly</span>
+          <img src="/songlib-mark.png" class="w-7 h-7" alt="音屿" />
+          <span class="normal-case text-xl">音屿-Apple TV音乐播放器安装助手</span>
         </a>
       </div>
       <div class="flex-none">

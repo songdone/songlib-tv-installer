@@ -44,7 +44,7 @@ func (w consoleWriter) Write(p []byte) (n int, err error) {
 	if level == "TRACE" || level == "DEBUG" {
 		newformat = color.New(color.FgHiBlack).Sprintf("%-24s %-10s %-25s %s%s\n", evt[zerolog.TimestampFieldName], w.formatLevel(level), w.formatCaller(evt[zerolog.CallerFieldName]), msgInfo, errInfo)
 	}
-	_, err = w.l.Write([]byte(newformat))
+	_, err = w.l.Write([]byte(Redact(newformat)))
 
 	return len(p), err
 }

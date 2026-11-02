@@ -1,4 +1,5 @@
 <template>
+  <SongLibCard />
   <div class="xl:flex xl:flex-row xl:gap-x-12">
     <div class="xl:basis-3/12 min-w-0 flex gap-x-16 flex-col gap-y-8 mb-8 xl:mb-0">
       <div class="grid card atv-device-panel">
@@ -417,6 +418,7 @@
   
 
 <script>
+import SongLibCard from '@/components/SongLibCard.vue';
 import dayjs from "dayjs";
 import api from "@/api/api";
 import { toast } from "vue3-toastify";
@@ -426,7 +428,7 @@ import { updateFailed } from "@/utils/source.mjs";
 
 export default {
   name: "Home",
-  components: { SourceDialog },
+  components: { SongLibCard, SourceDialog },
   data() {
     return {
       devices: [],

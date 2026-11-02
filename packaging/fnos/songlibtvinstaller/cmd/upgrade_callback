@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+# Keep runtime.env, password hash, signing records, IPA and port. Reapply host port/UID.
+p=$(cat "$TRIM_PKGVAR/port")
+sed -e "s/10001:10001/$(id -u):$(id -g)/" -e "s/5533:5533/$p:5533/" "$TRIM_APPDEST/docker/docker-compose.yaml" > "$TRIM_APPDEST/docker/docker-compose.yaml.new"
+cat "$TRIM_APPDEST/docker/docker-compose.yaml.new" > "$TRIM_APPDEST/docker/docker-compose.yaml"
+sed -e "s/\"5533\"/\"$p\"/" "$TRIM_APPDEST/ui/config" > "$TRIM_APPDEST/ui/config.new"
+cat "$TRIM_APPDEST/ui/config.new" > "$TRIM_APPDEST/ui/config"

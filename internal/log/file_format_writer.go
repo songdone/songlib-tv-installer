@@ -41,7 +41,7 @@ func (w fileFormatWriter) Write(p []byte) (n int, err error) {
 	}
 	level := fmt.Sprintf("[%s]", strings.ToUpper(evt[zerolog.LevelFieldName].(string)))
 	newformat := fmt.Sprintf("%-24s %-8s %-16s> %s%s\n", evt[zerolog.TimestampFieldName], level, w.formatCaller(evt[zerolog.CallerFieldName]), msgInfo, errInfo)
-	_, err = w.l.Write([]byte(newformat))
+	_, err = w.l.Write([]byte(Redact(newformat)))
 
 	return len(p), err
 }

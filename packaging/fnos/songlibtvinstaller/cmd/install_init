@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+fail(){ printf '%s\n' "$1" >&2; [ -z "${TRIM_TEMP_LOGFILE:-}" ] || printf '%s\n' "$1" > "$TRIM_TEMP_LOGFILE"; exit 1; }
+p=${wizard_port:-5533}
+case "$p" in ''|*[!0-9]*) fail '端口须为1024–65535整数' ;; esac
+[ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || fail '端口超出范围'
+hex=$(printf '%04X' "$p")
+if awk -v h=":$hex" '$4=="0A" && substr($2,length($2)-4)==h{f=1} END{exit !f}' /proc/net/tcp /proc/net/tcp6 2>/dev/null; then fail '管理端口已占用，请更换'; fi
+[ "${#wizard_password}" -ge 16 ] || fail '管理密码至少16位'
+case "$wizard_password" in *[!A-Za-z0-9@_.!+-]*) fail '密码含不支持字符，请按向导重新设置' ;; esac
+[ -S /var/run/dbus/system_bus_socket ] || fail '缺少系统D-Bus socket，无法发现Apple TV'
+[ -S /var/run/avahi-daemon/socket ] || fail '缺少Avahi socket，请先配置mDNS，暂不支持此设备环境'

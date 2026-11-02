@@ -6,6 +6,7 @@ package source
 import (
 	"errors"
 	"fmt"
+	"github.com/bitxeno/atvloadly/internal/safenet"
 	"net/http"
 	"net/url"
 	"path"
@@ -179,5 +180,8 @@ func FileName(downloadURL string) string {
 }
 
 func newClient() *resty.Client {
+	if safenet.Enabled() {
+		return resty.NewWithClient(safenet.Client(requestTimeout))
+	}
 	return atvhttp.NewClient().SetTimeout(requestTimeout)
 }

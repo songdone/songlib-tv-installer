@@ -181,3 +181,10 @@ The private keys are stored encrypted with a deployment key file (`signing.key_f
 
 * This software is only for learning and communication purposes. The author does not assume any legal responsibility for the security risks or losses caused by the use of this software.
 * Before using this software, you should understand and bear corresponding risks, including but not limited to account freezing, which are unrelated to this software.
+
+## 音屿衍生版（2026-11-02）
+
+正式名称：**音屿-Apple TV音乐播放器安装助手**。本体永久免费，音屿播放器独立商业授权，不捆绑IPA。
+
+本地开发/打包见 [操作手册](docs/OPERATIONS.md)、[安全说明](docs/SECURITY.md)、[真实设备待测矩阵](docs/TEST_MATRIX.md)、[来源](docs/UPSTREAM.md)。
+运行界面可下载对应源码，AGPL-3.0适用。当前为本地开发验收，不宣称已上架或完成Apple TV签装/长期续签测试。

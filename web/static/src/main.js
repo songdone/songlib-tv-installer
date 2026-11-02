@@ -1,3 +1,6 @@
+import axios from 'axios';
+const management = fetch('/management/session').then(r=>r.ok?r.json():Promise.reject()).catch(()=>{location.href='/management/login';return {}});
+axios.interceptors.request.use(async config=>{const session=await management;config.headers=config.headers||{};config.headers['X-CSRF-Token']=session.csrf;return config});
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";

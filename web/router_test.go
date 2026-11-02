@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"testing"
@@ -104,6 +105,21 @@ func TestAppIconServesOnlyStoredIcons(t *testing.T) {
 // stored IPA directory out from under the worker. Refuse the delete until the
 // operation has finished, matching the source-edit guards.
 func TestDeleteRefusesInstallingApp(t *testing.T) {
+	// This test deliberately leaves an install queued. Isolate the process-wide singleton
+	// so a later settings-reload test cannot start its worker against a removed TempDir.
+	if os.Getenv("SONGLIB_QUEUE_TEST_CHILD") != "1" {
+		executable, err := os.Executable()
+		if err != nil {
+			t.Fatal(err)
+		}
+		cmd := exec.Command(executable, "-test.run=^TestDeleteRefusesInstallingApp$")
+		cmd.Env = append(os.Environ(), "SONGLIB_QUEUE_TEST_CHILD=1")
+		if out, err := cmd.CombinedOutput(); err != nil {
+			t.Fatalf("isolated queue test: %v\n%s", err, out)
+		}
+		return
+	}
+
 	server, dataDir := newTestServer(t)
 	const appID uint = 900001
 	ipaPath := writeFile(t, filepath.Join(dataDir, "ipa", strconv.FormatUint(uint64(appID), 10), "app.ipa"), "ipa")

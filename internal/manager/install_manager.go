@@ -479,7 +479,7 @@ func (t *InstallManager) SaveLog(id uint) {
 	data := t.OutputLog()
 
 	// Hide log password string
-	// data = strings.Replace(data, v.Password, "******", -1)
+	data = log.Redact(data)
 
 	saveDir := filepath.Join(app.Config.Server.DataDir, "log")
 	if err := os.MkdirAll(saveDir, os.ModePerm); err != nil {
