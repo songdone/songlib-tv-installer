@@ -16,7 +16,7 @@ func validBuyURL(raw string) bool {
 }
 func mountSongLib(server *fiber.App) {
 	server.Get("/songlib/diagnostics", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"product": "音屿-Apple TV音乐播放器安装助手", "version": "0.1.2", "process": "running", "privacy": "no account/device identifiers or logs included", "device_acceptance": "not_verified", "resign_long_term": "not_observed"})
+		return c.JSON(fiber.Map{"product": "音屿-Apple TV音乐播放器安装助手", "version": "0.1.3", "process": "running", "privacy": "no account/device identifiers or logs included", "device_acceptance": "not_verified", "resign_long_term": "not_observed"})
 	})
 	server.Get("/songlib/config", func(c *fiber.Ctx) error {
 		result := fiber.Map{"website": "https://songlib.playsong.cn/", "download": "https://songlib.playsong.cn/#download-tv", "ios": "https://songlib.playsong.cn/#download-ios", "mac": nil, "trial": "https://songlib.playsong.cn/#trial", "basic": nil, "pro": nil, "source": "/source", "license": "/license"}

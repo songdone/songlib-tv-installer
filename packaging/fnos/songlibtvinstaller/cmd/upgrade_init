@@ -1,3 +1,2 @@
 #!/bin/sh
-set -eu
-exec sh "$(dirname "$0")/offline-source"
+exit 0

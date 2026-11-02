@@ -1,6 +1,6 @@
 #!/bin/sh
 case "${1:-}" in
- start) exec sh "$(dirname "$0")/offline-source" ;;
+ start) exit 0 ;;
  stop) exit 0 ;;
  status)
  port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=5533

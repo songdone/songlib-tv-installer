@@ -1,6 +1,6 @@
 services:
   installer:
-    image: 127.0.0.1:15933/songlib-tv-installer:0.1.2
+    image: 666uos/songlib-tv-installer:0.1.3
     pull_policy: missing
     environment:
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
