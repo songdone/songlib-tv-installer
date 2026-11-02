@@ -1,0 +1,7 @@
+test_fresh_install_before_data_exists_and_upgrade (test_lifecycle.Lifecycle) ... ok
+test_password_validation_accepts_simple_eight_and_punctuation (test_lifecycle.Lifecycle) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.028s
+
+OK

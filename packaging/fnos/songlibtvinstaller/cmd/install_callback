@@ -1,14 +1,3 @@
 #!/bin/sh
 set -eu
-umask 077
-mkdir -p "$TRIM_PKGVAR/data"
-chmod 700 "$TRIM_PKGVAR/data"
-printf '%s\n' "${wizard_port:-5533}" > "$TRIM_PKGVAR/port"
-printf 'SONGLIB_ADMIN_PASSWORD=%s\n' "$wizard_password" > "$TRIM_PKGVAR/runtime.env"
-# Use package UID/GID so persistent data stays writable without privileged container.
-printf 'SONGLIB_UID=%s\nSONGLIB_GID=%s\n' "$(id -u)" "$(id -g)" >> "$TRIM_PKGVAR/runtime.env"
-# uid/gid are rendered into compose at install time; no Docker socket access for package user.
-sed -e "s/10001:10001/$(id -u):$(id -g)/" -e "s/5533:5533/${wizard_port:-5533}:5533/" "$TRIM_APPDEST/docker/docker-compose.yaml" > "$TRIM_APPDEST/docker/docker-compose.yaml.new"
-cat "$TRIM_APPDEST/docker/docker-compose.yaml.new" > "$TRIM_APPDEST/docker/docker-compose.yaml"
-sed -e "s/\"5533\"/\"${wizard_port:-5533}\"/" "$TRIM_APPDEST/ui/config" > "$TRIM_APPDEST/ui/config.new"
-cat "$TRIM_APPDEST/ui/config.new" > "$TRIM_APPDEST/ui/config"
+exec "$(dirname "$0")/prepare"

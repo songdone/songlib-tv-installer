@@ -12,7 +12,7 @@ func ValidateArchive(filename string) error {
 	if e != nil {
 		return e
 	}
-	defer z.Close()
+	defer func() { _ = z.Close() }()
 	if len(z.File) > 20000 {
 		return fmt.Errorf("too many IPA entries")
 	}

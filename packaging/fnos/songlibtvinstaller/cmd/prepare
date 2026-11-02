@@ -1,0 +1,40 @@
+#!/bin/sh
+# Called only after fnOS has assigned the application's private data directory.
+set -eu
+: "${TRIM_PKGVAR:?缺少飞牛应用数据目录}"
+: "${TRIM_APPDEST:?缺少飞牛应用安装目录}"
+umask 077
+mkdir -p "$TRIM_PKGVAR/data/keys"
+chmod 700 "$TRIM_PKGVAR/data" "$TRIM_PKGVAR/data/keys"
+p=${wizard_port:-}
+[ -n "$p" ] || p=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
+printf '%s\n' "$p" > "$TRIM_PKGVAR/port"
+# Keep existing password hashes. Never evaluate a password as shell or compose syntax.
+if [ ! -f "$TRIM_PKGVAR/data/keys/management-password.hash" ] && [ ! -f "$TRIM_PKGVAR/data/keys/initial-password" ]; then
+ if [ -n "${wizard_password:-}" ]; then
+  printf '%s' "$wizard_password" > "$TRIM_PKGVAR/data/keys/initial-password"
+ elif [ -f "$TRIM_PKGVAR/runtime.env" ]; then
+  while IFS= read -r line || [ -n "$line" ]; do
+   case "$line" in SONGLIB_ADMIN_PASSWORD=*) printf '%s' "${line#SONGLIB_ADMIN_PASSWORD=}" > "$TRIM_PKGVAR/data/keys/initial-password" ;; esac
+  done < "$TRIM_PKGVAR/runtime.env"
+ else
+  printf '%s\n' '缺少首次管理密码，请在安装向导设置8位及以上密码。' >&2
+  exit 1
+ fi
+ chmod 600 "$TRIM_PKGVAR/data/keys/initial-password"
+fi
+mdns=false
+if [ -S /var/run/dbus/system_bus_socket ] && [ -S /var/run/avahi-daemon/socket ]; then mdns=true; fi
+printf '%s\n' "$mdns" > "$TRIM_PKGVAR/discovery-enabled"
+uid=$(id -u);gid=$(id -g)
+# Render the compose file itself, as in the tested Tingji/FrpDeck packages.
+awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" '
+ /songlib:port/ { print "      - \""port":5533\" # songlib:port";next }
+ /songlib:user/ { print "    user: \""uid":"gid"\" # songlib:user";next }
+ /songlib:mdns-env/ { print "      ZEROCONF_ENABLED: \""mdns"\" # songlib:mdns-env";next }
+ /songlib:socket/ { if(mdns=="true")print;next }
+ {print}
+' "$TRIM_APPDEST/docker/docker-compose.yaml.template" > "$TRIM_APPDEST/docker/docker-compose.yaml.new"
+cat "$TRIM_APPDEST/docker/docker-compose.yaml.new" > "$TRIM_APPDEST/docker/docker-compose.yaml"
+sed -E 's/"port": *"[^"]*"/"port": "'"$p"'"/' "$TRIM_APPDEST/ui/config" > "$TRIM_APPDEST/ui/config.new"
+cat "$TRIM_APPDEST/ui/config.new" > "$TRIM_APPDEST/ui/config"

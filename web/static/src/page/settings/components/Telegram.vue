@@ -1,7 +1,7 @@
 <template>
   <div class="form-item">
     <label class="form-item-label">
-      <span class="label-text">BotToken</span>
+      <span class="label-text">机器人令牌</span>
     </label>
     <input
       v-model="modelValue.bot_token"
@@ -12,7 +12,7 @@
   </div>
   <div class="form-item">
     <label class="form-item-label">
-      <span class="label-text">ChatID</span>
+      <span class="label-text">会话编号</span>
     </label>
     <input
       v-model="modelValue.chat_id"

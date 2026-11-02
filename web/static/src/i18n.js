@@ -1,14 +1,17 @@
 import i18next from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+
 import en from "@locales/en.json";
 import zh_cn from "@locales/zh_cn.json";
 import sv from "@locales/sv.json";
 import sr from "@locales/sr.json";
 import srLatn from "@locales/sr-Latn.json";
 
-i18next.use(LanguageDetector).init({
+// Start this Chinese product in Chinese even on English browsers and older cached builds.
+// Deliberate language changes remain available during the session.
+i18next.init({
+  lng: "zh-CN",
   //   debug: true,
-  fallbackLng: "en",
+  fallbackLng: "zh-CN",
   // Translations are rendered as text (Vue interpolation, toasts), which
   // escapes them already: escaping here would show entities like &#39;.
   interpolation: {

@@ -1,5 +1,5 @@
 appname = songlibtvinstaller
-version = 0.1.0
+version = 0.1.1
 display_name = 音屿-Apple TV音乐播放器安装助手
 desc = 免费 Apple TV IPA 自签安装与自动续签工具。音屿播放器独立授权，收费与飞牛无关。开发验收包，尚未完成真实设备验收，未上架。
 platform = x86

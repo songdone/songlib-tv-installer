@@ -180,7 +180,7 @@
             <AppIcon class="w-12 h-12" />
           </div>
           <div class="space-y-2">
-            <h3 class="font-bold text-3xl tracking-tight">atvloadly</h3>
+            <h3 class="font-bold text-3xl tracking-tight">音屿安装助手</h3>
           </div>
           <div class="grid w-full max-w-md grid-cols-2 gap-3 pt-2">
             <div class="rounded-2xl border border-base-300 bg-base-100/80 px-4 py-3 shadow-sm backdrop-blur">

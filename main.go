@@ -16,7 +16,7 @@ const (
 	// service name
 	AppName = "atvloadly"
 	// service description
-	AppDesc = "Publish ipa to AppleTV Easily"
+	AppDesc = "Apple TV IPA 自签安装与自动续签"
 )
 
 //go:embed locales

@@ -16,14 +16,14 @@ func validBuyURL(raw string) bool {
 }
 func mountSongLib(server *fiber.App) {
 	server.Get("/songlib/diagnostics", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"product": "音屿-Apple TV音乐播放器安装助手", "version": "0.1.0", "process": "running", "privacy": "no account/device identifiers or logs included", "device_acceptance": "not_verified", "resign_long_term": "not_observed"})
+		return c.JSON(fiber.Map{"product": "音屿-Apple TV音乐播放器安装助手", "version": "0.1.1", "process": "running", "privacy": "no account/device identifiers or logs included", "device_acceptance": "not_verified", "resign_long_term": "not_observed"})
 	})
 	server.Get("/songlib/config", func(c *fiber.Ctx) error {
 		result := fiber.Map{"website": "https://songlib.playsong.cn/", "download": "https://songlib.playsong.cn/#download-tv", "ios": "https://songlib.playsong.cn/#download-ios", "mac": nil, "trial": "https://songlib.playsong.cn/#trial", "basic": nil, "pro": nil, "source": "/source", "license": "/license"}
 		client := &http.Client{Timeout: 3 * time.Second, CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse }}
 		r, e := client.Get("https://songlib.playsong.cn/api/v1/sales-config")
 		if e == nil {
-			defer r.Body.Close()
+			defer func() { _ = r.Body.Close() }()
 			if r.StatusCode == 200 {
 				var data struct {
 					Plans map[string]struct {

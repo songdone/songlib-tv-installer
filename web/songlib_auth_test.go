@@ -3,6 +3,7 @@ package web
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
 	"io"
 	"net/http/httptest"
 	"os"
@@ -72,5 +73,54 @@ func TestManagementRejectsPublicHostAndMissingPassword(t *testing.T) {
 	r, _ := server.Test(httptest.NewRequest("GET", "http://public.example.test/management/login", nil))
 	if r.StatusCode != 403 {
 		t.Fatal(r.StatusCode)
+	}
+}
+func TestManagementShortSimpleUnicodeAndInitialPasswordFile(t *testing.T) {
+	for _, password := range []string{"12345678", "pass#$!8", "音乐小岛1234", strings.Repeat("音", 64)} {
+		t.Run(password[:8], func(t *testing.T) {
+			dir := t.TempDir()
+			t.Setenv("SONGLIB_ADMIN_PASSWORD", "")
+			if err := os.WriteFile(dir+"/initial-password", []byte(password), 0600); err != nil {
+				t.Fatal(err)
+			}
+			auth, err := loadManagementAuth(dir)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !managementPasswordMatches(auth.hash, password) {
+				t.Fatal("password was altered")
+			}
+			if _, err := os.Stat(dir + "/initial-password"); !os.IsNotExist(err) {
+				t.Fatal("initial password was not removed")
+			}
+		})
+	}
+	for _, password := range []string{"1234567", strings.Repeat("a", 65), "12345678\n"} {
+		if validManagementPassword(password) {
+			t.Fatal("invalid password accepted")
+		}
+	}
+}
+func TestExistingManagementHashIsPreserved(t *testing.T) {
+	dir := t.TempDir()
+	password := "old-password-123456"
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err = os.WriteFile(dir+"/management-password.hash", hash, 0600); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("SONGLIB_ADMIN_PASSWORD", "12345678")
+	auth, err := loadManagementAuth(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stored, err := os.ReadFile(dir + "/management-password.hash")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(stored) != string(hash) || !managementPasswordMatches(auth.hash, password) {
+		t.Fatal("existing password was reset")
 	}
 }

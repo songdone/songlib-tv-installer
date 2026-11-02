@@ -1,15 +1,16 @@
 services:
   installer:
-    image: songlib-tv-installer:0.1.0
+    image: songlib-tv-installer:0.1.1
     pull_policy: never
-    env_file: /var/apps/songlibtvinstaller/var/runtime.env
+    environment:
+      ZEROCONF_ENABLED: "false" # songlib:mdns-env
     ports:
-      - "5533:5533"
+      - "${wizard_port:-5533}:5533" # songlib:port
     volumes:
-      - /var/apps/songlibtvinstaller/var/data:/data
-      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
-      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket:ro
-    user: "10001:10001"
+      - "${TRIM_PKGVAR:-/var/apps/songlibtvinstaller/var}/data:/data"
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # songlib:socket
+      - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket:ro # songlib:socket
+    user: "10001:10001" # songlib:user
     cap_drop: [ALL]
     security_opt: [no-new-privileges:true]
     read_only: true

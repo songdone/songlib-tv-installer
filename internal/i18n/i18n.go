@@ -18,7 +18,7 @@ var (
 )
 
 func Init(localesFs fs.FS) {
-	i18nBundle = i18n.NewBundle(language.English)
+	i18nBundle = i18n.NewBundle(language.SimplifiedChinese)
 	i18nBundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 
 	root := "locales"
@@ -35,7 +35,7 @@ func Init(localesFs fs.FS) {
 	}
 
 	mu.Lock()
-	i18nLocalizer = i18n.NewLocalizer(i18nBundle, "en")
+	i18nLocalizer = i18n.NewLocalizer(i18nBundle, "zh-CN")
 	mu.Unlock()
 }
 

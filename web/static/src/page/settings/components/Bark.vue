@@ -1,7 +1,7 @@
 <template>
   <div class="form-item">
     <label class="form-item-label">
-      <span class="label-text">Device Key</span>
+      <span class="label-text">设备密钥</span>
     </label>
     <input
       v-model="modelValue.device_key"
@@ -12,7 +12,7 @@
   </div>
   <div class="form-item">
     <label class="form-item-label">
-      <span class="label-text">Bark Server</span>
+      <span class="label-text">Bark 服务器</span>
     </label>
     <input
       v-model="modelValue.bark_server"

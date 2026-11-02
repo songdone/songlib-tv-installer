@@ -16,6 +16,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 )
 
 type managementSession struct {
@@ -40,18 +41,42 @@ func randomToken() string {
 	}
 	return hex.EncodeToString(b)
 }
+
+// Passwords are Unicode text, not shell or dotenv input. Prehashing avoids bcrypt's 72-byte limit.
+func validManagementPassword(password string) bool {
+	n := utf8.RuneCountInString(password)
+	return utf8.ValidString(password) && n >= 8 && n <= 64 && !strings.ContainsAny(password, "\r\n\x00")
+}
+func managementPasswordMaterial(password string) string {
+	sum := sha256.Sum256([]byte(password))
+	return hex.EncodeToString(sum[:])
+}
+func managementPasswordMatches(hash []byte, password string) bool {
+	if strings.HasPrefix(string(hash), "sha256$") {
+		return bcrypt.CompareHashAndPassword(hash[len("sha256$"):], []byte(managementPasswordMaterial(password))) == nil
+	}
+	return bcrypt.CompareHashAndPassword(hash, []byte(password)) == nil
+}
 func loadManagementAuth(dataDir string) (*managementAuth, error) {
 	path := filepath.Join(dataDir, "management-password.hash")
 	hash, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
 		password := os.Getenv("SONGLIB_ADMIN_PASSWORD")
-		if len(password) < 16 {
-			return nil, fmt.Errorf("set a management password of at least 16 characters during first setup")
+		initialPath := filepath.Join(dataDir, "initial-password")
+		if initial, e := os.ReadFile(initialPath); e == nil {
+			password = string(initial)
+		} else if !os.IsNotExist(e) {
+			return nil, e
 		}
-		hash, err = bcrypt.GenerateFromPassword([]byte(password), 12)
+		if !validManagementPassword(password) {
+			return nil, fmt.Errorf("请设置8至64位管理密码，不需要混合大小写或特殊符号")
+		}
+		hash, err = bcrypt.GenerateFromPassword([]byte(managementPasswordMaterial(password)), 12)
 		if err != nil {
 			return nil, err
 		}
+		hash = append([]byte("sha256$"), hash...)
+
 		if err = os.MkdirAll(dataDir, 0700); err != nil {
 			return nil, err
 		}
@@ -61,8 +86,11 @@ func loadManagementAuth(dataDir string) (*managementAuth, error) {
 	} else if err != nil {
 		return nil, err
 	}
-	if _, err = bcrypt.Cost(hash); err != nil {
-		return nil, fmt.Errorf("invalid management password file")
+	if err = os.Remove(filepath.Join(dataDir, "initial-password")); err != nil && !os.IsNotExist(err) {
+		return nil, err
+	}
+	if _, err = bcrypt.Cost([]byte(strings.TrimPrefix(string(hash), "sha256$"))); err != nil {
+		return nil, fmt.Errorf("管理密码文件无效，请从备份恢复")
 	}
 	_ = os.Chmod(path, 0600)
 	return &managementAuth{hash: hash, sessions: map[[32]byte]managementSession{}, attempts: map[string]attempt{}}, nil
@@ -159,7 +187,7 @@ func (a *managementAuth) mount(server *fiber.App) {
 		if len(c.Body()) > 1024 || json.Unmarshal(c.Body(), &body) != nil {
 			return c.SendStatus(400)
 		}
-		if bcrypt.CompareHashAndPassword(a.hash, []byte(body.Password)) != nil {
+		if !managementPasswordMatches(a.hash, body.Password) {
 			return c.SendStatus(401)
 		}
 		token, csrf := randomToken(), randomToken()

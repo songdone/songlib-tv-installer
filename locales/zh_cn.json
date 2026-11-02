@@ -26,12 +26,12 @@
     "notify": {
         "title": "[{{.name}}]刷新任务执行失败",
         "content": "帐号：{{.account}}\n错误日志：{{.error}}",
-        "batch_title": "atvloadly 刷新任务执行失败",
+        "batch_title": "音屿安装助手续签任务执行失败",
         "batch_content": "{{.name}}: {{.error}}\n\n",
-        "update_title": "atvloadly：应用更新",
+        "update_title": "音屿安装助手：应用更新",
         "update_available": "{{.name}}：新版本 {{.version}} 可用\n",
         "update_attention": "{{.name}}：更新需要处理：{{.error}}\n",
-        "update_installed_title": "atvloadly：应用已更新",
+        "update_installed_title": "音屿安装助手：应用已更新",
         "update_installed": "{{.name}} 已更新到 {{.version}}\n"
     },
     "nav": {
@@ -69,7 +69,7 @@
         "heading": {
             "paired_devices": "已连接设备",
             "service_status": "服务状态",
-            "installed_app": "已安装 Apps"
+            "installed_app": "已安装应用"
         },
         "dialog": {
             "delete_confirm": {
