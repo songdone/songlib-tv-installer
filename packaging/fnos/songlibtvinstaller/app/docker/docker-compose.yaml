@@ -1,7 +1,7 @@
 services:
   installer:
-    image: songlib-tv-installer:0.1.1
-    pull_policy: never
+    image: 127.0.0.1:15933/songlib-tv-installer:0.1.2
+    pull_policy: missing
     environment:
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
     ports:

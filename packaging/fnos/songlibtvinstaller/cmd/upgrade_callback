@@ -1,3 +1,5 @@
 #!/bin/sh
 set -eu
-exec "$(dirname "$0")/prepare"
+base=$(dirname "$0")
+sh "$base/prepare"
+exec sh "$base/offline-source"

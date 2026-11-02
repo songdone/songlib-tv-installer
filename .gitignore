@@ -60,3 +60,6 @@ docs/todo/
 # Local acceptance evidence/artifacts
 runtime.env
 *.fpk
+packaging/fnos/songlibtvinstaller/cmd/offline-image/
+packaging/fnos/songlibtvinstaller/cmd/offline-registry
+!packaging/fnos/songlibtvinstaller/cmd/main

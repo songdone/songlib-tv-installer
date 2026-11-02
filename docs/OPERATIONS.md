@@ -3,13 +3,12 @@
 ## 构建
 1. Go1.25+，Node，npm ci（web/static），npm test，npm run build。
 2. CGO_ENABLED=0 GOOS=linux GOARCH=amd64/arm64 go build -trimpath -o build/atvloadly-linux-<arch> .
-3. git archive HEAD | gzip > build/songlib-source.tar.gz。不得混入商业项目。
-4. docker build --platform linux/<arch> -f packaging/Dockerfile -t songlib-tv-installer:0.1.1 .（跨架构须对应参数）。
-5. python3 packaging/fnos/check.py；python3 packaging/fnos/build.py --fnpack /path/to/fnpack --arch x86 --image songlib-tv-installer:0.1.1 --output /path/to/SongLib-TV-Installer-0.1.1.fpk。
+3. 构建CGO_ENABLED=0 GOOS=linux GOARCH=amd64/arm64的 ./cmd/offline-registry，输出build/offline-registry-linux-<arch>；git archive HEAD | gzip > build/songlib-source.tar.gz。不得混入商业项目。
+4. docker build --platform linux/<arch> -f packaging/Dockerfile -t songlib-tv-installer:0.1.2 .（跨架构须对应参数）。
+5. python3 packaging/fnos/check.py；python3 packaging/fnos/build.py --fnpack /path/to/fnpack --arch x86 --image songlib-tv-installer:0.1.2 --output /path/to/SongLib-TV-Installer-0.1.2.fpk。
 
-## 本地验收包安装
-先docker load对应架构镜像，记录image ID。用fnOS手动安装FPK，向导选择空闲端口、8至64位管理密码。
-本地包不从不存在的公开registry拉取，不能直接当作应用中心版本。
+## 完整离线包安装
+在fnOS手动安装对应架构的FPK，向导选择空闲管理端口、8至64位管理密码。镜像已在包内，安装初始化时启动本机临时只读源，由飞牛Docker自动载入；无需docker load或另行下载镜像。该包尚未提交应用中心审核。
 数据目录 `/var/apps/songlibtvinstaller/var/data`，运行配置在私有目录内的密码哈希与应用配置。此目录不可分享给普通NAS用户。
 
 ## 配对与续签

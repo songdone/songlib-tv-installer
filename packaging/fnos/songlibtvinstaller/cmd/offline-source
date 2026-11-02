@@ -1,0 +1,22 @@
+#!/bin/sh
+# Starts a temporary read-only loopback source as the package user, without Docker access.
+set -eu
+base=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
+fail(){ printf '%s\n' "$1" >&2; [ -z "${TRIM_TEMP_LOGFILE:-}" ] || printf '%s\n' "$1" > "$TRIM_TEMP_LOGFILE"; exit 1; }
+root="$base/offline-image"
+[ -f "$root/manifest-digest" ] && [ -f "$root/listen-port" ] && [ -x "$base/offline-registry" ] || fail '安装包缺少内置镜像，请使用完整离线安装包。'
+digest=$(cat "$root/manifest-digest");port=$(cat "$root/listen-port");arch=$(cat "$root/architecture")
+case "$port" in ''|*[!0-9]*) fail '内置镜像配置校验失败。' ;; esac
+case "$arch:$(uname -m)" in amd64:x86_64|arm64:aarch64|arm64:arm64) ;; *) fail '安装包架构与这台NAS不符，请选择对应的x86或ARM安装包。' ;; esac
+ready(){ curl --noproxy '*' --fail --silent --max-time 1 "http://127.0.0.1:$port/health" 2>/dev/null | grep -Fq "$digest"; }
+if ready; then exit 0; fi
+# Do not write TRIM_PKGVAR here: fnOS has not assigned its ownership during install_init.
+logs=$(mktemp -d /tmp/songlibtvinstaller-source.XXXXXX)
+nohup "$base/offline-registry" --root "$root" --listen "127.0.0.1:$port" --ttl 20m > "$logs/start.log" 2>&1 < /dev/null &
+pid=$!
+for attempt in 1 2 3 4 5 6 7 8 9 10; do
+ if ready; then exit 0; fi
+ kill -0 "$pid" 2>/dev/null || fail "无法准备内置镜像，本机镜像端口可能被占用（$port）。请保留此错误信息。"
+ sleep 1
+done
+fail '内置镜像源启动超时，请检查NAS剩余空间及应用包完整性。'

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Validate only: fnOS has not assigned the data directory to the package user yet.
+set -eu
+fail(){ printf '%s\n' "$1" >&2; [ -z "${TRIM_TEMP_LOGFILE:-}" ] || printf '%s\n' "$1" > "$TRIM_TEMP_LOGFILE"; exit 1; }
+p=${wizard_port:-5533}
+case "$p" in ''|*[!0-9]*) fail '管理端口须为1024–65535之间的整数。' ;; esac
+[ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || fail '管理端口超出范围。'
+hex=$(printf '%04X' "$p")
+if awk -v h=":$hex" '$4=="0A" && substr($2,length($2)-4)==h{f=1} END{exit !f}' /proc/net/tcp /proc/net/tcp6 2>/dev/null; then fail '管理端口已被占用，请换一个端口。'; fi
+password=${wizard_password:-}
+[ "${#password}" -ge 8 ] && [ "${#password}" -le 256 ] || fail '请设置8至64位管理密码，不需要复杂字符组合。'
+# Line breaks cannot be entered in the one-line installation field.
+cr=$(printf '\r')
+case "$password" in *"$cr"*|*'
+'*) fail '管理密码不能包含换行。' ;; esac
+exit 0

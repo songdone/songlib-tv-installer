@@ -1,0 +1,10 @@
+#!/bin/sh
+case "${1:-}" in
+ start) exec sh "$(dirname "$0")/offline-source" ;;
+ stop) exit 0 ;;
+ status)
+ port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=5533
+ curl --noproxy '*' --fail --silent --max-time 3 "http://127.0.0.1:$port/ready" >/dev/null && exit 0
+ exit 3 ;;
+ *) exit 1 ;;
+esac
