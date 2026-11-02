@@ -1,0 +1,10 @@
+{
+  "ready": 200,
+  "anonymous_api": 401,
+  "login": 200,
+  "missing_csrf": 403,
+  "with_csrf": 200,
+  "source_status": 200,
+  "source_sha256": "0a767d3ea6e98aec9b2299399ec083664a3ed8949179e19b6db31e012070be70",
+  "license": 200
+}
