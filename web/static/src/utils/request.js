@@ -1,4 +1,5 @@
 import axios from "axios";
+import { managementSession } from "./management";
 import { toast } from "vue3-toastify";
 
 // create an axios instance
@@ -10,8 +11,9 @@ const service = axios.create({
 
 // request interceptor
 service.interceptors.request.use(
-  (config) => {
-    // do something before request is sent
+  async (config) => {
+    const session=await managementSession();
+    config.headers=config.headers||{};config.headers['X-CSRF-Token']=session.csrf;
     return config;
   },
   (error) => {

@@ -71,7 +71,11 @@ func sameOrigin(c *fiber.Ctx) bool {
 	return c.Get("Origin") != "" && c.Get("Origin") == c.Protocol()+"://"+string(c.Request().Host())
 }
 func allowedHost(c *fiber.Ctx) bool {
-	host := c.Hostname()
+	host := string(c.Request().Host())
+	if h, _, err := net.SplitHostPort(host); err == nil {
+		host = h
+	}
+	host = strings.Trim(host, "[]")
 	if host == "localhost" {
 		return true
 	}

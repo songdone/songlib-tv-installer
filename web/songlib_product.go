@@ -15,6 +15,9 @@ func validBuyURL(raw string) bool {
 	return e == nil && u.Scheme == "https" && (u.Host == "www.16688.com.cn" || u.Host == "16688.com.cn") && u.User == nil && u.RawQuery == "" && u.Fragment == "" && u.Path != "" && u.Path != "/"
 }
 func mountSongLib(server *fiber.App) {
+	server.Get("/songlib/diagnostics", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"product": "音屿-Apple TV音乐播放器安装助手", "version": "0.1.0", "process": "running", "privacy": "no account/device identifiers or logs included", "device_acceptance": "not_verified", "resign_long_term": "not_observed"})
+	})
 	server.Get("/songlib/config", func(c *fiber.Ctx) error {
 		result := fiber.Map{"website": "https://songlib.playsong.cn/", "download": "https://songlib.playsong.cn/#download-tv", "ios": "https://songlib.playsong.cn/#download-ios", "mac": nil, "trial": "https://songlib.playsong.cn/#trial", "basic": nil, "pro": nil, "source": "/source", "license": "/license"}
 		client := &http.Client{Timeout: 3 * time.Second, CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse }}

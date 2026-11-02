@@ -164,12 +164,18 @@ func TestDiscoverManualPairingPortFindsPairSetup(t *testing.T) {
 }
 
 func TestDiscoverManualPairingPortNotFound(t *testing.T) {
-	// Nothing listens in this range on 127.0.0.1: expect not found.
+	// Probe a known closed ephemeral port, not the machine's entire real port range.
+	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	port := uint16(ln.Addr().(*net.TCPAddr).Port)
+	_ = ln.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_, _, err := DiscoverManualPairingPort(ctx, "127.0.0.1", nil)
-	if err != ErrPairingPortNotFound {
-		t.Fatalf("want ErrPairingPortNotFound, got %v", err)
+	found, _, err := discoverManualPairingPort(ctx, "127.0.0.1", port, port, true, nil)
+	if err != nil || found != 0 {
+		t.Fatalf("expected exhausted range without a service, port=%d err=%v", found, err)
 	}
 }
 

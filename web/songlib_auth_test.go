@@ -25,19 +25,19 @@ func TestManagementBoundary(t *testing.T) {
 	auth.mount(app)
 	app.Get("/secret", func(c *fiber.Ctx) error { return c.SendStatus(200) })
 	app.Post("/action", func(c *fiber.Ctx) error { return c.SendStatus(200) })
-	req := httptest.NewRequest("GET", "http://localhost/secret", nil)
+	req := httptest.NewRequest("GET", "http://localhost:18533/secret", nil)
 	r, _ := app.Test(req)
 	if r.StatusCode != 401 {
 		t.Fatal(r.StatusCode)
 	}
-	req = httptest.NewRequest("POST", "http://localhost/management/login", strings.NewReader(`{"password":"testing-only-password-123"}`))
+	req = httptest.NewRequest("POST", "http://localhost:18533/management/login", strings.NewReader(`{"password":"testing-only-password-123"}`))
 	req.Header.Set("Origin", "http://evil.test")
 	r, _ = app.Test(req)
 	if r.StatusCode != 403 {
 		t.Fatal(r.StatusCode)
 	}
-	req = httptest.NewRequest("POST", "http://localhost/management/login", strings.NewReader(`{"password":"testing-only-password-123"}`))
-	req.Header.Set("Origin", "http://localhost")
+	req = httptest.NewRequest("POST", "http://localhost:18533/management/login", strings.NewReader(`{"password":"testing-only-password-123"}`))
+	req.Header.Set("Origin", "http://localhost:18533")
 	r, _ = app.Test(req, 5000)
 	if r.StatusCode != 200 {
 		t.Fatal(r.StatusCode)
@@ -49,8 +49,8 @@ func TestManagementBoundary(t *testing.T) {
 	for _, tc := range []struct {
 		origin, csrf string
 		status       int
-	}{{"http://evil.test", result["csrf"], 403}, {"http://localhost", "", 403}, {"http://localhost", result["csrf"], 200}} {
-		req = httptest.NewRequest("POST", "http://localhost/action", nil)
+	}{{"http://evil.test", result["csrf"], 403}, {"http://localhost:18533", "", 403}, {"http://localhost:18533", result["csrf"], 200}} {
+		req = httptest.NewRequest("POST", "http://localhost:18533/action", nil)
 		req.AddCookie(cookies[0])
 		req.Header.Set("Origin", tc.origin)
 		req.Header.Set("X-CSRF-Token", tc.csrf)
@@ -58,5 +58,19 @@ func TestManagementBoundary(t *testing.T) {
 		if r.StatusCode != tc.status {
 			t.Fatal(r.StatusCode, tc.status)
 		}
+	}
+}
+func TestManagementRejectsPublicHostAndMissingPassword(t *testing.T) {
+	t.Setenv("SONGLIB_ADMIN_PASSWORD", "")
+	if _, err := loadManagementAuth(t.TempDir()); err == nil {
+		t.Fatal("missing password accepted")
+	}
+	t.Setenv("SONGLIB_ADMIN_PASSWORD", "testing-only-password-123")
+	a, _ := loadManagementAuth(t.TempDir())
+	server := fiber.New()
+	a.mount(server)
+	r, _ := server.Test(httptest.NewRequest("GET", "http://public.example.test/management/login", nil))
+	if r.StatusCode != 403 {
+		t.Fatal(r.StatusCode)
 	}
 }

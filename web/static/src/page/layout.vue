@@ -356,3 +356,6 @@ import HelpIcon from "@/assets/icons/help.svg";
 .atv-theme-glyph { display: inline-flex; width: 20px; height: 20px; }
 .atv-theme-glyph svg { display: block; width: 100%; height: 100%; }
 </style>
+<style>
+.atv-brand{max-width:min(60vw,620px);height:auto;white-space:normal}.atv-brand span{font-size:clamp(12px,1.3vw,18px);line-height:1.4;overflow-wrap:anywhere;text-align:left}
+</style>

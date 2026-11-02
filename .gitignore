@@ -56,3 +56,7 @@ desktop/app/locales/
 desktop/app/desktop
 version_gen.go
 docs/todo/
+
+# Local acceptance evidence/artifacts
+runtime.env
+*.fpk
