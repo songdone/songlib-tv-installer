@@ -127,7 +127,7 @@
           </div>
 
           <div>
-            <a href="https://github.com/bitxeno/atvloadly" target="_blank">
+            <a href="https://github.com/songdone/songlib-tv-installer" target="_blank" rel="noopener noreferrer" aria-label="安装助手公开源码 GitHub" title="安装助手公开源码">
               <label tabindex="0" class="btn btn-ghost rounded-btn">
                 <GithubIcon class="w-5 h-5" /></label>
             </a>
@@ -177,7 +177,7 @@
         </div>
         <div class="relative flex flex-col items-center text-center gap-5 py-6">
           <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-base-100/80 shadow-lg ring-1 ring-base-300 backdrop-blur">
-            <AppIcon class="w-12 h-12" />
+            <img src="/songlib-mark.png" class="w-12 h-12" alt="音屿" />
           </div>
           <div class="space-y-2">
             <h3 class="font-bold text-3xl tracking-tight">音屿安装助手</h3>
@@ -325,7 +325,6 @@ export default {
 </script>
 
 <script setup>
-import AppIcon from "@/assets/icons/app.svg";
 import SettingsIcon from "@/assets/icons/settings.svg";
 import WorldIcon from "@/assets/icons/world.svg";
 import GithubIcon from "@/assets/icons/github.svg";
