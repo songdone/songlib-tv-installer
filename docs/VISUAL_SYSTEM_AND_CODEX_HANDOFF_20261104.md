@@ -8,7 +8,7 @@
 > 目标仓库（公开）：`https://github.com/songdone/songlib-tv-installer`  
 > 关联仓库（私有）：`songdone/songlib-amp-tv`（商业播放器、授权、16688、官网）  
 > 上游基础：`https://github.com/bitxeno/atvloadly` · AGPL-3.0  
-> 本文配合 `docs/UI_PRODUCT_REDESIGN_HANDOFF_20261104.md` 使用；**本文优先定义布局、视觉 Token、组件、文案与 UI 验收。**
+> 本文配合 `docs/UI_PRODUCT_REDESIGN_HANDOFF_20261104.md` 使用；**与最新 `docs/FRPDECK_GLOBAL_UI_SYSTEM_HANDOFF_20261104.md` 冲突的布局/颜色/导航/组件要求一律由新文档覆盖，本文件仅保留不冲突的验收和产品约束。**
 
 ---
 
