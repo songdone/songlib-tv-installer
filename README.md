@@ -1,3 +1,18 @@
+**音屿-Apple TV音乐播放器安装助手**
+
+由 **6uos** 维护，基于 [ATVLoadly](https://github.com/bitxeno/atvloadly) 修改，遵循 **AGPL-3.0**。本仓库是安装助手的公开源码；音屿商业播放器和授权后端独立维护。
+
+- 当前交付：一个 `platform=all` 的轻量 FPK，x86/ARM 共用，由 DockerHub 多架构镜像自动匹配。
+- 镜像：[666uos/songlib-tv-installer:0.1.3](https://hub.docker.com/r/666uos/songlib-tv-installer/tags)。
+- 默认中文，管理密码8–64位；使用既有音屿圆角图标，提供256/512素材。
+- [构建与运行](docs/OPERATIONS.md) · [当前版本说明](docs/RELEASE-0.1.3.md) · [安全说明](docs/SECURITY.md) · [验收矩阵](docs/TEST_MATRIX.md) · [第三方声明](THIRD_PARTY_NOTICES.md)。
+
+本地两架构启动及登录已验证；真实 fnOS、Apple TV 配对/签装与长期续签仍需设备验收。源码已提交不代表已完成上架或生产部署。
+
+下方保留上游 README 作为来源和功能参考；当前衍生版的安装、鉴权及打包说明以上述中文文档为准。
+
+---
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/preview/logo_dark.svg">
