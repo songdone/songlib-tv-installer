@@ -23,10 +23,13 @@ test("AppShell sidebar carries the destinations and no upstream chrome", () => {
   assert.ok(layout.includes(`name: "settings"`), "settings stays in the sidebar");
   // The topbar GitHub entry points at the public installer repo.
   assert.ok(layout.includes("https://github.com/songdone/songlib-tv-installer"));
-  // The old donate modal is gone; upstream support links survive only inside
-  // the About credits, clearly attributed.
+  // The old donate modal is gone and no upstream sponsorship/donation links
+  // remain anywhere in the UI (owner decision 2026-11-04); attribution stays.
   assert.ok(!layout.includes("showDonateModal"), "donate modal must be removed");
-  assert.ok(layout.includes("sponsors/bitxeno"), "upstream support links must stay in About credits");
+  assert.ok(!layout.includes("sponsors/bitxeno"), "upstream sponsor links must be removed");
+  assert.ok(!layout.includes("ko-fi"), "upstream sponsor links must be removed");
+  assert.ok(!layout.includes("ifdian"), "upstream sponsor links must be removed");
+  assert.ok(layout.includes("about.upstream_repo"), "upstream attribution must stay");
   // Brand naming rules.
   assert.ok(layout.includes("音屿-Apple TV音乐播放器安装助手"));
   assert.ok(layout.includes("音屿 TV 安装助手"));

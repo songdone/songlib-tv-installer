@@ -123,12 +123,7 @@
             <a class="sl-link" href="https://github.com/bitxeno/atvloadly" target="_blank" rel="noopener noreferrer">{{ $t("about.upstream_repo") }}</a>
             <a class="sl-link" href="https://songlib.playsong.cn/" target="_blank" rel="noopener noreferrer">{{ $t("about.website") }}</a>
           </div>
-          <p class="sl-hint" style="margin-top: 12px">
-            {{ $t("about.upstream_support") }}:
-            <a class="sl-link" href="https://github.com/sponsors/bitxeno" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a> ·
-            <a class="sl-link" href="https://ko-fi.com/bitxeno" target="_blank" rel="noopener noreferrer">Ko-fi</a> ·
-            <a class="sl-link" href="https://ifdian.net/a/bitxeno" target="_blank" rel="noopener noreferrer">爱发电</a>
-          </p>
+          <p class="sl-hint" style="margin-top: 12px">{{ $t("about.credits_footer") }}</p>
         </div>
       </div>
     </div>

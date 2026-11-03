@@ -68,7 +68,7 @@
         "credits_body": "本项目基于 ATVLoadly（AGPL-3.0）改造，保留上游版权与对应源码义务；签名核心能力来自上游项目。",
         "source_code": "下载对应源码",
         "upstream_repo": "上游仓库",
-        "upstream_support": "支持上游作者（与购买音屿无关）"
+        "credits_footer": "ATVLoadly 名称与上游版权归原作者所有。"
     },
     "result": {
         "success": "成功",

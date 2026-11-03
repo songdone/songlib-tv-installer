@@ -68,7 +68,7 @@
         "credits_body": "This project is built on ATVLoadly (AGPL-3.0); upstream copyrights and the corresponding source obligation are preserved. The signing core comes from the upstream project.",
         "source_code": "Download source",
         "upstream_repo": "Upstream repository",
-        "upstream_support": "Support the upstream author (unrelated to buying SongLib)"
+        "credits_footer": "The ATVLoadly name and upstream copyrights belong to their original authors."
     },
     "result": {
         "success": "Success",

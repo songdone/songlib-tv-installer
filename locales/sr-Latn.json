@@ -68,7 +68,7 @@
         "credits_body": "Projekat je zasnovan na ATVLoadly (AGPL-3.0); autorska prava i obaveza izvornog koda su zadržani. Jezgro za potpisivanje dolazi iz izvornog projekta.",
         "source_code": "Preuzmi izvorni kod",
         "upstream_repo": "Izvorni repozitorijum",
-        "upstream_support": "Podržite autora izvornog projekta (nema veze sa kupovinom SongLib-a)"
+        "credits_footer": "Naziv ATVLoadly i autorska prava pripadaju originalnim autorima."
     },
     "result": {
         "success": "Uspešno",

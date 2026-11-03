@@ -68,7 +68,7 @@
         "credits_body": "Projektet bygger på ATVLoadly (AGPL-3.0); upphovsrätt och källkodsplikt respekteras. Signeringskärnan kommer från uppströmsprojektet.",
         "source_code": "Hämta källkod",
         "upstream_repo": "Uppströmsarkiv",
-        "upstream_support": "Stöd uppströmsupphovspersonen (inget att göra med att köpa SongLib)"
+        "credits_footer": "Namnet ATVLoadly och upphovsrätterna tillhör de ursprungliga upphovspersonerna."
     },
     "result": {
         "success": "Lyckades",
