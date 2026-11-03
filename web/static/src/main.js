@@ -7,6 +7,12 @@ import I18NextVue from "i18next-vue";
 import i18next from "./i18n";
 import "./app.css";
 import "./mobile.css";
+// SongLib design system: tokens are the single source of truth; layout and
+// component classes build the redesigned AppShell and shared widgets. Loaded
+// after the legacy sheets so .sl-* rules win where both exist.
+import "./styles/tokens.css";
+import "./styles/layout.css";
+import "./styles/components.css";
 import "vue3-toastify/dist/index.css";
 
 // Error toasts live longer so they can be read; success and other toasts keep

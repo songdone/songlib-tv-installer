@@ -1,0 +1,306 @@
+/*
+ * AppShell layout: 64px top bar + left sidebar, content column capped at
+ * 1240px. Responsive per docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF_20261104.md §3:
+ *   ≥1440   sidebar 216px, content max 1240px, page padding 36px
+ *   1024+   sidebar 200px, padding 24px
+ *   768+    sidebar collapses to a 68px icon rail
+ *   <768    top bar 56px + collapsible drawer navigation
+ */
+
+.sl-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--sl-bg);
+  color: var(--sl-text);
+  font-family: var(--sl-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- top bar ---- */
+
+.sl-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: var(--sl-topbar-h);
+  padding-inline: clamp(16px, 2.4vw, 32px);
+  background: color-mix(in srgb, var(--sl-panel) 88%, transparent);
+  border-bottom: 1px solid var(--sl-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+@supports not (background: color-mix(in srgb, red 50%, blue)) {
+  .sl-topbar {
+    background: var(--sl-panel);
+  }
+}
+
+.sl-topbar--mobile {
+  height: var(--sl-topbar-h-mobile);
+}
+
+.sl-topbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--sl-text);
+  text-decoration: none;
+}
+
+.sl-topbar-brand img {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.sl-topbar-brand-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.sl-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* Topbar dropdowns open right-aligned so the hidden absolute panels never
+   extend past the viewport edge (they still contribute to scrollWidth while
+   visibility:hidden). */
+.sl-topbar .dropdown-content {
+  left: auto;
+  right: 0;
+}
+
+.sl-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: var(--sl-radius-sm);
+  background: transparent;
+  color: var(--sl-text-muted);
+  cursor: pointer;
+  transition: background-color var(--sl-motion-fast) ease, color var(--sl-motion-fast) ease;
+}
+
+.sl-iconbtn:hover,
+.sl-iconbtn:focus-visible {
+  background: var(--sl-panel-hover);
+  color: var(--sl-text);
+}
+
+.sl-iconbtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---- body: sidebar + content ---- */
+
+.sl-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.sl-sidebar {
+  position: sticky;
+  top: var(--sl-topbar-h);
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  width: var(--sl-sidebar-w);
+  height: calc(100vh - var(--sl-topbar-h));
+  flex-shrink: 0;
+  padding: 16px 12px;
+  border-right: 1px solid var(--sl-border);
+  background: var(--sl-panel-soft);
+  overflow-y: auto;
+}
+
+.sl-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sl-navitem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border-radius: var(--sl-radius-sm);
+  color: var(--sl-text-muted);
+  font-size: 0.88rem;
+  font-weight: 620;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--sl-motion-fast) ease, color var(--sl-motion-fast) ease;
+}
+
+.sl-navitem:hover,
+.sl-navitem:focus-visible {
+  background: var(--sl-panel-hover);
+  color: var(--sl-text);
+}
+
+.sl-navitem--active {
+  background: var(--sl-panel);
+  color: var(--sl-text);
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 var(--sl-gold), var(--sl-shadow-card);
+}
+
+.sl-navitem svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.sl-sidebar-foot {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--sl-border);
+}
+
+/* ---- content column ---- */
+
+.sl-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.sl-page {
+  max-width: var(--sl-content-max);
+  margin-inline: auto;
+  padding: clamp(20px, 2.6vw, 36px);
+  padding-top: clamp(20px, 2.6vw, 32px);
+}
+
+.sl-section {
+  margin-top: 32px;
+}
+
+.sl-section-title {
+  margin: 0 0 8px;
+  color: var(--sl-text);
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.sl-section-sub {
+  margin: 0 0 16px;
+  color: var(--sl-text-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+/* 12-column grid helper for page blocks */
+.sl-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* ---- responsive ---- */
+
+@media (max-width: 1439px) {
+  .sl-sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sl-sidebar {
+    width: var(--sl-sidebar-rail);
+    padding: 16px 10px;
+  }
+
+  .sl-navitem {
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .sl-navitem .sl-navlabel {
+    display: none;
+  }
+
+  .sl-navitem--active {
+    box-shadow: inset 0 3px 0 var(--sl-gold), var(--sl-shadow-card);
+  }
+}
+
+@media (max-width: 767px) {
+  .sl-shell {
+    display: block;
+  }
+
+  .sl-body {
+    display: block;
+  }
+
+  .sl-sidebar {
+    /* Drawer: fixed under the top bar, slides in from the left. */
+    position: fixed;
+    top: var(--sl-topbar-h-mobile);
+    left: 0;
+    z-index: 45;
+    width: min(78vw, 300px);
+    height: calc(100vh - var(--sl-topbar-h-mobile));
+    transform: translateX(-104%);
+    transition: transform var(--sl-motion-normal) ease;
+    box-shadow: var(--sl-shadow-popover);
+  }
+
+  .sl-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .sl-navitem {
+    justify-content: flex-start;
+  }
+
+  .sl-navitem .sl-navlabel {
+    display: inline;
+  }
+
+  .sl-sidebar-scrim {
+    position: fixed;
+    inset: var(--sl-topbar-h-mobile) 0 0 0;
+    z-index: 44;
+    background: rgba(13, 16, 20, .38);
+    border: 0;
+    padding: 0;
+  }
+
+  .sl-page {
+    padding: 20px;
+  }
+
+  .sl-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 479px) {
+  .sl-page {
+    padding: 16px;
+  }
+}

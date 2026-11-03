@@ -1,195 +1,166 @@
 <template>
-  <div class="app-container">
-    <header class="navbar border-b pt-0 pb-0">
-      <div class="flex-1">
-        <a href="/" class="btn btn-ghost rounded-btn atv-brand">
-          <img src="/songlib-mark.png" class="w-7 h-7" alt="音屿" />
-          <span class="normal-case text-xl">音屿-Apple TV音乐播放器安装助手</span>
+  <div class="sl-shell app-container">
+    <header class="sl-topbar">
+      <div class="flex items-center gap-x-1 min-w-0">
+        <!-- Hamburger only exists on phone widths, where the sidebar is a drawer. -->
+        <button
+          type="button"
+          class="sl-iconbtn md:hidden"
+          :aria-label="$t('nav.menu')"
+          :aria-expanded="sidebarOpen ? 'true' : 'false'"
+          @click.stop="toggleSidebar"
+        >
+          <span class="atv-theme-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </button>
+        <a href="/" class="sl-topbar-brand" title="音屿-Apple TV音乐播放器安装助手">
+          <img src="/songlib-mark.png" alt="音屿" />
+          <!-- Full official name on desktop; compact name on phones. The
+               complete name stays visible via the title and About dialog. -->
+          <span class="sl-topbar-brand-title atv-brand-full">音屿-Apple TV音乐播放器安装助手</span>
+          <span class="sl-topbar-brand-title atv-brand-short">音屿 TV 安装助手</span>
         </a>
       </div>
-      <div class="flex-none">
-        <nav class="navbar w-full"> 
-          <div class="dropdown" :class="{ 'dropdown-hover': !isMobile, 'dropdown-open': isMobile && openMobileMenu === 'preferences' }" @click="closeMobileMenu">
-            <label tabindex="0" class="btn btn-ghost rounded-btn px-2 md:px-4"
-              @click.stop="toggleMobileMenu('preferences')"
-              @keydown.enter.prevent="toggleMobileMenu('preferences')"
-              @keydown.space.prevent="toggleMobileMenu('preferences')"
-              :aria-expanded="isMobile ? openMobileMenu === 'preferences' : undefined"
-              :aria-label="$t('nav.preferences')">
-              <span class="w-5">
-                  <OptionIcon />
-                </span>
-              <span class="hidden sm:inline">{{ $t("nav.preferences") }}</span></label
-            >
-            <ul
-              tabindex="0"
-              class="dropdown-content z-[1] menu menu-sm p-2 shadow bg-base-200 rounded-box w-36 gap-1"
-            >
-              <li>
-                <router-link :to="{ name: 'account' }">
-                  <span class="w-5">
-                  <AccountIcon />
-                </span>
-                  {{ $t("nav.account") }}
-                  </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'tools' }">
-                    <span class="w-5">
-                      <ToolsIcon />
-                    </span>
-                    {{ $t("nav.tools") }}
-                </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'laboratory' }">
-                    <span class="w-5">
-                      <FlaskIcon />
-                    </span>
-                    {{ $t("nav.laboratory") }}
-                </router-link>
-              </li>
-              <li>
-                <router-link :to="{ name: 'settings' }">
-                  <span class="w-5">
-                  <SettingsIcon />
-                </span>
-                  {{ $t("nav.settings") }}
-                </router-link>
-              </li>
-              <li>
-                <button @click="showDonateModal = true">
-                  <span class="w-5">
-                    <DonateThumbIcon />
-                  </span>
-                  {{ $t("nav.donate") }}
-                </button>
-              </li>
-              <li>
-                <button @click="showAboutModal = true">
-                  <span class="inline-flex h-5 w-5 items-center justify-center">
-                    <HelpIcon class="h-5 w-5" />
-                  </span>
-                  {{ $t("nav.about") }}
-                </button>
-              </li>
-            </ul>
-          </div>
 
-          <div class="dropdown" :class="{ 'dropdown-hover': !isMobile, 'dropdown-open': isMobile && openMobileMenu === 'language' }" @click="closeMobileMenu">
-            <label tabindex="0" class="btn btn-ghost rounded-btn px-2 md:px-4"
-              @click.stop="toggleMobileMenu('language')"
-              @keydown.enter.prevent="toggleMobileMenu('language')"
-              @keydown.space.prevent="toggleMobileMenu('language')"
-              :aria-expanded="isMobile ? openMobileMenu === 'language' : undefined"
-              :aria-label="$t('nav.language')">
-              <span class="w-5">
-                <WorldIcon />
-              </span>
-              <span class="hidden sm:inline">{{ $t("nav.language") }}</span></label
-            >
-            <ul
-              tabindex="0"
-              class="dropdown-content z-[1] menu menu-sm p-2 shadow bg-base-200 rounded-box w-36 gap-1"
-            >
-              <li v-for="item in languages" :key="item.key">
-                <button
-                  :class="[{ active: $i18next.language == item.key }]"
-                  v-on:click="changeLanguage(item.key)"
-                >
-                  {{ item.name }}
-                </button>
-              </li>
-            </ul>
-          </div>
+      <div class="sl-topbar-actions">
+        <!-- Language -->
+        <div class="dropdown" :class="{ 'dropdown-hover': !isMobile, 'dropdown-open': isMobile && openMobileMenu === 'language' }" @click="closeMobileMenu">
+          <label tabindex="0" class="sl-iconbtn cursor-pointer"
+            :aria-label="$t('nav.language')"
+            @click.stop="toggleMobileMenu('language')"
+            @keydown.enter.prevent="toggleMobileMenu('language')"
+            @keydown.space.prevent="toggleMobileMenu('language')"
+            :aria-expanded="isMobile ? openMobileMenu === 'language' : undefined">
+            <WorldIcon />
+          </label>
+          <ul tabindex="0" class="dropdown-content dropdown-end z-[1] menu menu-sm p-2 shadow rounded-box w-36 gap-1 sl-menu">
+            <li v-for="item in languages" :key="item.key">
+              <button :class="[{ active: $i18next.language == item.key }]" @click="changeLanguage(item.key)">
+                {{ item.name }}
+              </button>
+            </li>
+          </ul>
+        </div>
 
-<div class="dropdown" :class="{ 'dropdown-hover': !isMobile, 'dropdown-open': isMobile && openMobileMenu === 'theme' }" @click="closeMobileMenu">
-            <label tabindex="0" class="btn btn-ghost rounded-btn px-2 md:px-4"
-              :aria-label="$t('nav.theme')"
-              @click.stop="toggleMobileMenu('theme')"
-              @keydown.enter.prevent="toggleMobileMenu('theme')"
-              @keydown.space.prevent="toggleMobileMenu('theme')"
-              :aria-expanded="isMobile ? openMobileMenu === 'theme' : undefined">
-              <span class="atv-theme-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3 A9 9 0 0 0 12 21 Z" fill="currentColor"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.4"/></svg></span>
-              <span class="hidden sm:inline">{{ $t("nav.theme") }}</span>
-            </label>
-            <ul tabindex="0"
-              class="dropdown-content z-[1] menu menu-sm p-2 shadow bg-base-200 rounded-box w-44 gap-1">
-              <li v-for="mode in ['system', 'light', 'dark']" :key="mode">
-                <button type="button"
-                  :class="{ active: themePreference === mode }"
-                  :aria-pressed="themePreference === mode"
-                  @click="changeTheme(mode)">
-                  {{ $t('nav.theme_' + mode) }}
-                </button>
-              </li>
-            </ul>
-          </div>
+        <!-- Theme -->
+        <div class="dropdown" :class="{ 'dropdown-hover': !isMobile, 'dropdown-open': isMobile && openMobileMenu === 'theme' }" @click="closeMobileMenu">
+          <label tabindex="0" class="sl-iconbtn cursor-pointer"
+            :aria-label="$t('nav.theme')"
+            @click.stop="toggleMobileMenu('theme')"
+            @keydown.enter.prevent="toggleMobileMenu('theme')"
+            @keydown.space.prevent="toggleMobileMenu('theme')"
+            :aria-expanded="isMobile ? openMobileMenu === 'theme' : undefined">
+            <span class="atv-theme-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3 A9 9 0 0 0 12 21 Z" fill="currentColor"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.4"/></svg></span>
+          </label>
+          <ul tabindex="0" class="dropdown-content dropdown-end z-[1] menu menu-sm p-2 shadow rounded-box w-44 gap-1 sl-menu">
+            <li v-for="mode in ['system', 'light', 'dark']" :key="mode">
+              <button type="button" :class="{ active: themePreference === mode }" :aria-pressed="themePreference === mode" @click="changeTheme(mode)">
+                {{ $t('nav.theme_' + mode) }}
+              </button>
+            </li>
+          </ul>
+        </div>
 
-          <div>
-            <a href="https://github.com/songdone/songlib-tv-installer" target="_blank" rel="noopener noreferrer" aria-label="安装助手公开源码 GitHub" title="安装助手公开源码">
-              <label tabindex="0" class="btn btn-ghost rounded-btn">
-                <GithubIcon class="w-5 h-5" /></label>
-            </a>
-          </div>
-        </nav>
+        <!-- Help / About: product identity, maintainer and open-source credits.
+             Upstream sponsorship lives here, clearly attributed to ATVLoadly,
+             never as a main-UI payment entry. -->
+        <button type="button" class="sl-iconbtn" :aria-label="$t('nav.about')" @click="showAboutModal = true">
+          <HelpIcon />
+        </button>
+
+        <a href="https://github.com/songdone/songlib-tv-installer" target="_blank" rel="noopener noreferrer" aria-label="安装助手公开源码 GitHub" title="安装助手公开源码" class="sl-iconbtn">
+          <GithubIcon />
+        </a>
       </div>
     </header>
 
-    <div class="main-container">
-      <router-view />
-    </div>
+    <div class="sl-body">
+      <button
+        v-if="sidebarOpen"
+        type="button"
+        class="sl-sidebar-scrim md:hidden"
+        :aria-label="$t('nav.menu')"
+        @click="sidebarOpen = false"
+      ></button>
 
-    <!-- Donate Modal -->
-    <div v-if="showDonateModal" class="modal modal-open modal-middle" @click.self="showDonateModal = false">
-      <div class="modal-box relative">
-        <label @click="showDonateModal = false" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <h3 class="font-bold text-lg flex items-center gap-2">
-          <LikeIcon class="w-6 h-6 text-red-500" />
-          {{ $t("donate.title") }}
-        </h3>
-        <p class="py-4 text-base-content/70">
-          {{ $t("donate.desc") }}
-        </p>
-        <div class="flex flex-col gap-3 w-full mt-2">
-           <a href="https://github.com/sponsors/bitxeno" target="_blank" class="btn border-none w-full normal-case text-lg gap-2 text-white hover:opacity-90" style="background-color: #ea4aaa;">
-             <GithubIcon class="w-6 h-6" />
-             {{ $t("donate.github_sponsor") }}
-           </a>
-           <a href="https://ko-fi.com/bitxeno" target="_blank" class="btn border-none w-full normal-case text-lg gap-2 text-white hover:opacity-90" style="background-color: #29abe0;">
-             <KofiIcon class="w-6 h-6" />
-             {{ $t("donate.kofi") }}
-           </a>
-           <a href="https://ifdian.net/a/bitxeno" target="_blank" class="btn border-none w-full normal-case text-lg gap-2 text-white hover:opacity-90" style="background-color: #946ce6;">
-             <AfdianIcon class="w-6 h-6" />
-             {{ $t("donate.afdian") }}
-           </a>
+      <aside class="sl-sidebar" :class="{ 'sl-sidebar--open': sidebarOpen }">
+        <nav class="sl-sidebar-nav" aria-label="主导航">
+          <router-link class="sl-navitem" :to="{ name: 'home' }" :class="{ 'sl-navitem--active': isActive('home') }" @click="closeSidebar">
+            <HomeIcon />
+            <span class="sl-navlabel">{{ $t("nav.home") }}</span>
+          </router-link>
+          <router-link class="sl-navitem" :to="{ name: 'devices' }" :class="{ 'sl-navitem--active': isActive('devices') }" @click="closeSidebar">
+            <AppleTVIcon />
+            <span class="sl-navlabel">{{ $t("nav.devices") }}</span>
+          </router-link>
+          <router-link class="sl-navitem" :to="{ name: 'apps' }" :class="{ 'sl-navitem--active': isActive('apps') }" @click="closeSidebar">
+            <AppsIcon />
+            <span class="sl-navlabel">{{ $t("nav.apps") }}</span>
+          </router-link>
+          <router-link class="sl-navitem" :to="{ name: 'account' }" :class="{ 'sl-navitem--active': isActive('account') }" @click="closeSidebar">
+            <AccountIcon />
+            <span class="sl-navlabel">{{ $t("nav.account") }}</span>
+          </router-link>
+          <router-link class="sl-navitem" :to="{ name: 'explore' }" :class="{ 'sl-navitem--active': isActive('explore') }" @click="closeSidebar">
+            <ExploreIcon />
+            <span class="sl-navlabel">{{ $t("nav.explore") }}</span>
+          </router-link>
+          <router-link class="sl-navitem" :to="{ name: 'settings' }" :class="{ 'sl-navitem--active': isActive('settings') }" @click="closeSidebar">
+            <SettingsIcon />
+            <span class="sl-navlabel">{{ $t("nav.settings") }}</span>
+          </router-link>
+        </nav>
+
+        <div class="sl-sidebar-foot">
+          <button type="button" class="sl-navitem w-full text-left" @click="showAboutModal = true">
+            <HelpIcon />
+            <span class="sl-navlabel">{{ $t("nav.about_license") }}</span>
+          </button>
         </div>
-      </div>
+      </aside>
+
+      <main class="sl-main">
+        <router-view />
+      </main>
     </div>
 
+    <!-- About modal: full product name, maintainer, version and open-source
+         credits (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF_20261104.md §0.7). -->
     <div v-if="showAboutModal" class="modal modal-open modal-middle" @click.self="showAboutModal = false">
-      <div class="modal-box relative overflow-hidden border border-base-300 bg-gradient-to-br from-base-100 via-base-100 to-info/10 shadow-2xl">
+      <div class="modal-box relative overflow-hidden sl-about-box">
         <label @click="showAboutModal = false" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <div class="absolute inset-0 pointer-events-none opacity-60">
-          <div class="absolute -top-12 -left-10 h-40 w-40 rounded-full bg-info/20 blur-3xl"></div>
-          <div class="absolute -bottom-10 -right-6 h-36 w-36 rounded-full bg-secondary/20 blur-3xl"></div>
-        </div>
-        <div class="relative flex flex-col items-center text-center gap-5 py-6">
-          <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-base-100/80 shadow-lg ring-1 ring-base-300 backdrop-blur">
-            <img src="/songlib-mark.png" class="w-12 h-12" alt="音屿" />
+        <div class="relative flex flex-col items-center text-center gap-4 py-4">
+          <img src="/songlib-mark.png" class="w-20 h-20" alt="音屿" />
+          <div class="space-y-1">
+            <h3 class="font-bold text-2xl tracking-tight sl-about-title">{{ $t("about.product") }}</h3>
+            <p class="text-sm sl-about-muted">{{ $t("about.maintainer") }}: {{ $t("about.maintainer_name") }}</p>
           </div>
-          <div class="space-y-2">
-            <h3 class="font-bold text-3xl tracking-tight">音屿安装助手</h3>
-          </div>
-          <div class="grid w-full max-w-md grid-cols-2 gap-3 pt-2">
-            <div class="rounded-2xl border border-base-300 bg-base-100/80 px-4 py-3 shadow-sm backdrop-blur">
-              <div class="text-xs uppercase tracking-wide text-base-content/50">{{ $t("about.version") }}</div>
+          <div class="grid w-full max-w-md grid-cols-2 gap-3">
+            <div class="sl-about-cell">
+              <div class="sl-caption uppercase tracking-wide">{{ $t("about.version") }}</div>
               <div class="mt-1 text-lg font-semibold">{{ appVersion }}</div>
             </div>
-            <div class="rounded-2xl border border-base-300 bg-base-100/80 px-4 py-3 shadow-sm backdrop-blur">
-              <div class="text-xs uppercase tracking-wide text-base-content/50">{{ $t("about.build_date") }}</div>
+            <div class="sl-about-cell">
+              <div class="sl-caption uppercase tracking-wide">{{ $t("about.build_date") }}</div>
               <div class="mt-1 text-lg font-semibold">{{ buildDate }}</div>
+            </div>
+          </div>
+          <div class="w-full max-w-md text-left sl-about-credits">
+            <div class="sl-h3">{{ $t("about.credits_title") }}</div>
+            <p class="mt-1.5 text-sm leading-relaxed sl-about-muted">
+              {{ $t("about.credits_body") }}
+            </p>
+            <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
+              <a class="sl-link" href="/source">{{ $t("about.source_code") }}</a>
+              <a class="sl-link" href="/license">AGPL-3.0</a>
+              <a class="sl-link" href="https://github.com/songdone/songlib-tv-installer" target="_blank" rel="noopener noreferrer">songdone/songlib-tv-installer</a>
+              <a class="sl-link" href="https://github.com/bitxeno/atvloadly" target="_blank" rel="noopener noreferrer">{{ $t("about.upstream_repo") }}</a>
+              <a class="sl-link" href="https://songlib.playsong.cn/" target="_blank" rel="noopener noreferrer">{{ $t("about.website") }}</a>
+            </div>
+            <div class="mt-3 text-xs leading-relaxed sl-about-muted">
+              {{ $t("about.upstream_support") }}:
+              <a class="sl-link" href="https://github.com/sponsors/bitxeno" target="_blank" rel="noopener noreferrer">GitHub Sponsors</a> ·
+              <a class="sl-link" href="https://ko-fi.com/bitxeno" target="_blank" rel="noopener noreferrer">Ko-fi</a> ·
+              <a class="sl-link" href="https://ifdian.net/a/bitxeno" target="_blank" rel="noopener noreferrer">爱发电</a>
             </div>
           </div>
         </div>
@@ -197,9 +168,10 @@
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import api from "@/api/api";
+
 export default {
   name: "App",
   data() {
@@ -208,9 +180,9 @@ export default {
       isMobile: window.matchMedia("(max-width: 767px)").matches,
       mobileMediaQuery: null,
       openMobileMenu: null,
+      sidebarOpen: false,
       themePreference: "light",
       colorSchemeQuery: null,
-      showDonateModal: false,
       showAboutModal: false,
       appVersion: "unknown",
       buildDate: "unknown",
@@ -248,9 +220,26 @@ export default {
     document.removeEventListener("keydown", this.onDocumentKeydown);
   },
   methods: {
+    isActive(name) {
+      // Keep install/pair flows visually attached to their entry sections.
+      if (name === "devices") {
+        return ["devices", "add-device", "pair", "pair-manual"].includes(this.$route.name);
+      }
+      if (name === "apps") {
+        return ["apps", "install"].includes(this.$route.name);
+      }
+      return this.$route.name === name;
+    },
+    toggleSidebar() {
+      this.sidebarOpen = !this.sidebarOpen;
+    },
+    closeSidebar() {
+      this.sidebarOpen = false;
+    },
     onMobileBreakpointChange(event) {
       this.isMobile = event.matches;
       this.openMobileMenu = null;
+      this.sidebarOpen = false;
     },
     toggleMobileMenu(menu) {
       if (!this.isMobile) return;
@@ -264,19 +253,26 @@ export default {
       if (!this.isMobile) return;
       this.openMobileMenu = null;
       const focused = document.activeElement;
-      if (focused?.closest?.(".app-container > .navbar .dropdown")) {
+      if (focused?.closest?.(".sl-topbar .dropdown")) {
         focused.blur();
       }
     },
     onDocumentClick(event) {
       if (this.isMobile &&
-          !event.target?.closest?.(".app-container > .navbar .dropdown")) {
+          !event.target?.closest?.(".sl-topbar .dropdown")) {
         this.closeMobileMenu();
+      }
+      // Any click outside the drawer closes it.
+      if (this.sidebarOpen &&
+          !event.target?.closest?.(".sl-sidebar") &&
+          !event.target?.closest?.(".sl-topbar")) {
+        this.sidebarOpen = false;
       }
     },
     onDocumentKeydown(event) {
       if (this.isMobile && event.key === "Escape") {
         this.closeMobileMenu();
+        this.sidebarOpen = false;
       }
     },
     applyTheme() {
@@ -329,32 +325,75 @@ import SettingsIcon from "@/assets/icons/settings.svg";
 import WorldIcon from "@/assets/icons/world.svg";
 import GithubIcon from "@/assets/icons/github.svg";
 import AccountIcon from "@/assets/icons/person.svg";
-import OptionIcon from "@/assets/icons/slider.svg";
-import LikeIcon from "@/assets/icons/like.svg";
-import DonateThumbIcon from "@/assets/icons/donate-thumb.svg";
-import AfdianIcon from "@/assets/icons/afdian.svg";
-import KofiIcon from "@/assets/icons/kofi.svg";
-import ToolsIcon from "@/assets/icons/tools.svg";
-import FlaskIcon from "@/assets/icons/flask.svg";
+import HomeIcon from "@/assets/icons/home.svg";
+import AppsIcon from "@/assets/icons/apps.svg";
+import ExploreIcon from "@/assets/icons/explore.svg";
 import HelpIcon from "@/assets/icons/help.svg";
 </script>
 
 <style lang="postcss" scoped>
-.app-container {
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--atv-canvas);
-  background-image: var(--atv-page-background);
-  background-size: cover;
-  background-attachment: fixed;
-}
-.main-container {
-  @apply px-6 lg:px-16 py-8 gap-y-16;
+/* AppShell visuals that stay component-specific; generic shell styles live
+   in styles/layout.css. */
+
+.sl-menu {
+  background: var(--sl-panel);
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-md);
+  box-shadow: var(--sl-shadow-popover);
+  color: var(--sl-text);
 }
 
-.atv-theme-glyph { display: inline-flex; width: 20px; height: 20px; }
-.atv-theme-glyph svg { display: block; width: 100%; height: 100%; }
-</style>
-<style>
-.atv-brand{max-width:min(60vw,620px);height:auto;white-space:normal}.atv-brand span{font-size:clamp(12px,1.3vw,18px);line-height:1.4;overflow-wrap:anywhere;text-align:left}
+.sl-menu .active {
+  color: var(--sl-text);
+  background: var(--sl-panel-hover);
+}
+
+/* Brand name swap: full name from 768px up (sidebar carries navigation),
+   compact name on phones where horizontal space is tight. */
+.atv-brand-full {
+  display: none;
+}
+
+.atv-brand-short {
+  display: inline;
+}
+
+@media (min-width: 768px) {
+  .atv-brand-full {
+    display: inline;
+  }
+
+  .atv-brand-short {
+    display: none;
+  }
+}
+
+.sl-about-box {
+  background: var(--sl-panel);
+  color: var(--sl-text);
+  border: 1px solid var(--sl-border);
+  box-shadow: var(--sl-shadow-popover);
+}
+
+.sl-about-title {
+  color: var(--sl-text);
+}
+
+.sl-about-muted {
+  color: var(--sl-text-muted);
+}
+
+.sl-about-cell {
+  border: 1px solid var(--sl-border);
+  background: var(--sl-panel-soft);
+  border-radius: var(--sl-radius-md);
+  padding: 12px 16px;
+}
+
+.sl-about-credits {
+  border: 1px solid var(--sl-border);
+  background: var(--sl-panel-soft);
+  border-radius: var(--sl-radius-md);
+  padding: 16px 20px;
+}
 </style>

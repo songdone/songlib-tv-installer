@@ -43,43 +43,33 @@
         "theme_system": "System",
         "theme_light": "Light",
         "theme_dark": "Dark",
-        "preferences": "Preferences",
         "account": "Accounts",
-        "devices": "Devices",
-        "donate": "Donate",
-        "about": "About"
+        "devices": "Apple TV Devices",
+        "about": "About",
+        "home": "Workbench",
+        "apps": "Apps & Renewal",
+        "explore": "Explore SongLib",
+        "menu": "Menu",
+        "about_license": "About & License"
     },
     "about": {
         "version": "Version",
-        "build_date": "Build date"
-    },
-    "donate": {
-        "title": "Donate",
-        "desc": "If you find this project helpful, please consider supporting its development. Your support keeps the project alive!",
-        "github_sponsor": "Support on GitHub Sponsors",
-        "kofi": "Support on Ko-fi",
-        "afdian": "Support on Afadian",
-        "close": "Close"
+        "build_date": "Build date",
+        "product": "SongLib Apple TV Installer",
+        "maintainer": "Maintainer",
+        "maintainer_name": "6uos",
+        "website": "Website",
+        "credits_title": "Open source & credits",
+        "credits_body": "This project is built on ATVLoadly (AGPL-3.0); upstream copyrights and the corresponding source obligation are preserved. The signing core comes from the upstream project.",
+        "source_code": "Download source",
+        "upstream_repo": "Upstream repository",
+        "upstream_support": "Support the upstream author (unrelated to buying SongLib)"
     },
     "result": {
         "success": "Success",
         "fail": "Failed"
     },
     "home": {
-        "heading": {
-            "paired_devices": "Paired Devices",
-            "service_status": "Service Status",
-            "installed_app": "Installed Apps"
-        },
-        "dialog": {
-            "delete_confirm": {
-                "title": "Are you sure you want to delete {{name}}?",
-                "button": {
-                    "cancel": "Cancel",
-                    "confirm": "Confirm"
-                }
-            }
-        },
         "toast": {
             "refresh_app_started": "Refresh of {{name}} started",
             "installing_app": "Installing {{name}}…",
@@ -98,10 +88,6 @@
             "update_failed": "Installing {{version}} failed and is not retried automatically. Use Update to retry."
         },
         "sidebar": {
-            "add_device": {
-                "title": "Add New Device",
-                "subtitle": "Connect AppleTV or iPhone"
-            },
             "device_status": {
                 "pairable": "Pairable",
                 "paired": "Paired",
@@ -111,10 +97,6 @@
                 "forget": "Delete",
                 "forget_confirm": "Confirm",
                 "forget_done": "Device forgotten"
-            },
-            "tips": {
-                "no_paired_devices": "No connected devices",
-                "how_pair_device": "For AppleTV, go to 'Settings -> Remotes and Devices -> Remote App and Devices' to enter pairing mode for completion"
             }
         },
         "table": {
@@ -156,7 +138,6 @@
                 "view_log": "Click to view installation log",
                 "account_invalid": "There is an issue with the account. Please check logs and fix it.",
                 "certificate_limit": "The Apple ID has no free certificate slot, so nothing was installed or revoked. Open the app on the install page to choose which certificate may be revoked.",
-                "no_data": "No data",
                 "footer": "By default, when the app expiration time is less than 1 day, it will automatically refresh between 3-6am. Apps linked to a GitHub or AltStore source are checked for new versions in the background; automatic updates are installed in the same time window.",
                 "footer_external": "Apps signed with an external certificate are never refreshed automatically: they stop working when the certificate or the provisioning profile expires. Reinstalling with the same certificate and profile does not extend this date: replace the profile (or import a new identity when the certificate expires first), then reinstall the app.",
                 "reinstall_external": "Reinstalling with the same certificate and provisioning profile does not extend the validity. After replacing the profile (or with a new identity), reinstall the app to extend it.",
@@ -170,7 +151,45 @@
                 "identity_missing": "Deleted identity",
                 "valid_until": "Valid until {{date}}"
             }
-        }
+        },
+        "hero": {
+            "kicker": "SONGLIB AMP · FOR APPLE TV",
+            "slogan_line1": "Your music,",
+            "slogan_line2": "an island of its own",
+            "description": "Bring the music on your NAS to Apple TV. Connect your own music library and enjoy album art, synced lyrics and a relaxed living-room listening experience.",
+            "cta_learn": "About SongLib",
+            "cta_ios": "iPhone version",
+            "mac_pending": "Mac: coming soon",
+            "gallery_playing": "Now Playing · original-format FLAC",
+            "gallery_lyrics": "Full-screen synced lyrics",
+            "gallery_playlist": "Playlists and library",
+            "purchase_title": "Get a SongLib license",
+            "purchase_basic": "Buy Basic",
+            "purchase_pro": "Buy Pro",
+            "cta_install": "Start installing to Apple TV",
+            "feature_local": "Music stays on your NAS",
+            "feature_tv": "Made for the Apple TV big screen",
+            "feature_multi": "More than one library"
+        },
+        "safety": {
+            "title": "Before you start",
+            "item1": "Use a dedicated Apple account for self-signing, with two-factor authentication enabled. Do not use your main account with photos and payment info.",
+            "item2": "Free Apple accounts sign apps for about 7 days. Automatic renewal depends on the NAS being online, the Apple TV being reachable and your Apple account status — it cannot be guaranteed.",
+            "item3": "Apple signing validity and SongLib license validity are two separate timelines, managed independently."
+        },
+        "footer": {
+            "version_label": "Version",
+            "source": "Source code",
+            "license": "AGPL-3.0 license",
+            "upstream": "Upstream ATVLoadly",
+            "upstream_note": "Maintained by 6uos, based on ATVLoadly (AGPL-3.0). The upstream project is the technical origin, separate from the SongLib product."
+        },
+        "risk_title": "{{count}} app(s) expiring soon or already expired",
+        "risk_open": "Open apps & renewal",
+        "devices_title": "Devices",
+        "devices_open": "All devices",
+        "apps_title": "Recent apps",
+        "apps_open": "All apps & renewal"
     },
     "pair": {
         "toast": {
@@ -237,8 +256,7 @@
             "install_success": "Installation Successful",
             "install_failed": "Installation Failed. Please check logs for more information.",
             "connection_closed": "Installation connection closed. Please try again.",
-            "app_group_unavailable": "The app's shared storage group could not be registered with this Apple account. Check that the account can create App Groups and supports the app's required capabilities. See the technical log for details."
-        ,
+            "app_group_unavailable": "The app's shared storage group could not be registered with this Apple account. Check that the account can create App Groups and supports the app's required capabilities. See the technical log for details.",
             "login_success": "Login Success"
         },
         "form": {
@@ -349,8 +367,7 @@
                 "label": "Allow missing entitlements",
                 "tips": "Sign even though the provisioning profile does not grant some entitlements the app requests. Features relying on them may not work."
             }
-        }
-        ,
+        },
         "login_modal": {
             "title": "Login Apple Account",
             "setup_2fa_help": "How to set up an iPhone as a trusted device for 2FA?",
@@ -513,39 +530,44 @@
             "button": {
                 "submit": "Save"
             }
-        }
-            ,
-            "advanced": {
-                "title": "Advanced",
-                "update_coreadi": "Update CoreADI",
-                "update_coreadi_confirm": "Are you sure you want update the CoreADI libraries?",
-                "anisette_server": "Anisette Server",
-                "anisette_server_default_tag": "Default",
-                "anisette_server_tips": "Leave empty to use the default server. If requests still fail after changing the server, try resetting or deleting the Anisette data of the account.",
-                "save": "Save",
-                "reset_anisette": "Anisette Data",
-                "reset_anisette_empty": "No account has Anisette data stored.",
-                "reset_anisette_confirm": "Are you sure you want to reset the Anisette data of {{email}}? A new device identity is generated on its next use, so the account must log in again.",
-                "remove_anisette_confirm": "This account is no longer signed in. Are you sure you want to delete its leftover Anisette data?",
-                "reset": "Reset",
-                "delete": "Delete",
-                "cancel": "Cancel",
-                "confirm": "Confirm",
-                "toast": {
-                    "downloading": "Downloading...",
-                    "success": "Update completed",
-                    "failed": "Update failed",
-                    "reset_success": "Anisette data of {{email}} reset",
-                    "reset_failed": "Reset failed",
-                    "remove_success": "Anisette data of {{email}} deleted",
-                    "remove_failed": "Delete failed",
-                    "server_success": "Anisette server saved",
-                    "server_failed": "Saving anisette server failed"
-                }
+        },
+        "advanced": {
+            "title": "Advanced",
+            "update_coreadi": "Update CoreADI",
+            "update_coreadi_confirm": "Are you sure you want update the CoreADI libraries?",
+            "anisette_server": "Anisette Server",
+            "anisette_server_default_tag": "Default",
+            "anisette_server_tips": "Leave empty to use the default server. If requests still fail after changing the server, try resetting or deleting the Anisette data of the account.",
+            "save": "Save",
+            "reset_anisette": "Anisette Data",
+            "reset_anisette_empty": "No account has Anisette data stored.",
+            "reset_anisette_confirm": "Are you sure you want to reset the Anisette data of {{email}}? A new device identity is generated on its next use, so the account must log in again.",
+            "remove_anisette_confirm": "This account is no longer signed in. Are you sure you want to delete its leftover Anisette data?",
+            "reset": "Reset",
+            "delete": "Delete",
+            "cancel": "Cancel",
+            "confirm": "Confirm",
+            "toast": {
+                "downloading": "Downloading...",
+                "success": "Update completed",
+                "failed": "Update failed",
+                "reset_success": "Anisette data of {{email}} reset",
+                "reset_failed": "Reset failed",
+                "remove_success": "Anisette data of {{email}} deleted",
+                "remove_failed": "Delete failed",
+                "server_success": "Anisette server saved",
+                "server_failed": "Saving anisette server failed"
             }
+        },
+        "tools": {
+            "title": "Advanced tools"
+        }
     },
     "account": {
-      "status_labels": {"valid": "Valid", "invalid": "Invalid"},
+        "status_labels": {
+            "valid": "Valid",
+            "invalid": "Invalid"
+        },
         "select_account": "Select Account",
         "select_placeholder": "Please select an account",
         "table": {
@@ -573,9 +595,9 @@
             "logout_success": "Account logged out successfully",
             "logout_failed": "Failed to logout account"
         },
-      "heading": {
-          "apple_accounts": "Apple Accounts"
-      }
+        "heading": {
+            "apple_accounts": "Apple Accounts"
+        }
     },
     "source_dialog": {
         "title_track": "Track updates for {{name}}",
@@ -663,8 +685,7 @@
             "delete_success": "Device deleted successfully",
             "delete_failed": "Failed to delete device"
         }
-    }
-    ,
+    },
     "tools": {
         "ssdp": {
             "title": "SSDP Scanner",
@@ -921,5 +942,100 @@
             "pairing_record_invalid": "The pairing record of the device is missing or unreadable. Pair the device again.",
             "certificate_invalid": "The stored certificate cannot be read. Import the identity again."
         }
+    },
+    "quickstart": {
+        "title": "Connect your Apple TV to your NAS",
+        "subtitle": "Three steps: discover the TV, pair it, then import a tvOS IPA to sign and install. The installer itself is free.",
+        "state_waiting": "Waiting for a TV",
+        "state_pairing": "Ready to pair",
+        "state_ready": "Ready to install",
+        "step1_title": "Find the Apple TV",
+        "step1_desc": "Keep this server and the Apple TV on the same network. TVs currently in pairing mode appear here automatically.",
+        "step2_title": "Connect and pair",
+        "step2_desc": "On the Apple TV, open “Settings → Remotes and Devices → Remote App and Devices” to enter pairing mode, then start pairing from the discovered list.",
+        "step3_title": "Download the IPA and install",
+        "step3_desc": "Download the Apple TV IPA from the official site, then import it here to sign and install. Free Apple accounts sign for about 7 days; renewal is attempted automatically before expiry.",
+        "scanning": "Scanning the local network…",
+        "none_found": "Nothing found? Make sure the Apple TV is in pairing mode, or enter an IP manually.",
+        "rescan": "Rescan",
+        "manual_ip": "Enter IP manually",
+        "pair_now": "Start pairing",
+        "choose_ipa": "Choose an IPA",
+        "download_ipa": "Download official tvOS IPA",
+        "free_note": "The installer is permanently free: installing other legitimate tvOS IPAs never requires buying SongLib.",
+        "summary_title": "{{count}} Apple TV connected",
+        "summary_open_apps": "Open apps & renewal",
+        "summary_open_devices": "Manage devices",
+        "summary_no_renewal": "No renewal recorded yet",
+        "summary_renewal_ok": "Last renewal {{date}} succeeded",
+        "summary_renewal_fail": "Last renewal {{date}} failed — check the app"
+    },
+    "devices": {
+        "title": "Apple TV Devices",
+        "subtitle": "Discover, pair and manage the Apple TVs this installer can reach.",
+        "filter_paired": "Paired",
+        "filter_pairable": "Pairable",
+        "filter_all": "All",
+        "rescan": "Rescan",
+        "scanning_hint": "Looking for Apple TVs in pairing mode on this network…",
+        "empty_title": "No Apple TV found",
+        "empty_hint": "Make sure the TV is on the same network and has opened “Settings → Remotes and Devices → Remote App and Devices”, or add it by IP manually.",
+        "empty_action": "Add a device",
+        "status_paired": "Connected",
+        "status_pairable": "Waiting to pair",
+        "status_unpaired": "Not connected",
+        "status_added": "Added",
+        "action_install": "Install apps",
+        "action_pair": "Start pairing",
+        "action_forget": "Delete",
+        "action_forget_confirm": "Confirm delete",
+        "forget_done": "Device deleted",
+        "manual_title": "Enter IP manually",
+        "manual_desc": "For Tailscale addresses or networks where discovery is isolated.",
+        "manual_placeholder": "e.g. 192.168.1.120",
+        "manual_action": "Connect"
+    },
+    "apps": {
+        "title": "Apps & Renewal",
+        "subtitle": "Manage installed tvOS apps, signing validity and automatic renewal.",
+        "stat_total": "Installed apps",
+        "stat_expiring": "Expiring within 7 days",
+        "stat_renewal_ok": "Last renewal succeeded",
+        "stat_renewal_fail": "Last renewal failed",
+        "stat_renewal_none": "No renewal recorded yet",
+        "empty_title": "No apps installed yet",
+        "empty_hint": "Pair an Apple TV first, then choose “Install apps” on the device to import an IPA.",
+        "empty_action": "Go to devices"
+    },
+    "explore": {
+        "eyebrow": "SONGLIB AMP · FOR APPLE TV",
+        "title": "Explore SongLib",
+        "intro": "SongLib Amp is a private music player for Apple TV. Connect your self-hosted library, play in the original format, and enjoy album art with synced lyrics on the big screen.",
+        "sources_label": "Supported music servers",
+        "ch1_caption": "Now Playing · official screenshot",
+        "ch1_title": "Original-format playback",
+        "ch1_desc": "FLAC and ALAC decode directly without forced transcoding; internal and public addresses switch automatically.",
+        "ch1_point1": "Album art and full playback controls",
+        "ch1_point2": "Optional server transcoding with selectable bitrate",
+        "ch2_caption": "Full-screen lyrics · official screenshot",
+        "ch2_title": "Big-screen synced lyrics",
+        "ch2_desc": "Line-by-line synced lyrics with the current line enlarged, timeline fine-tuning and a full-screen mode.",
+        "ch2_point1": "Lyrics load from your library and retry automatically",
+        "ch2_point2": "The up-next queue is reachable from both player views",
+        "ch3_caption": "Library · official screenshot",
+        "ch3_title": "Your own library",
+        "ch3_desc": "Browse your NAS music by songs, albums, artists and playlists, with search, favourites and the up-next queue.",
+        "ch3_point1": "Multiple servers and libraries in one view",
+        "ch3_point2": "Pro merges and de-duplicates across libraries",
+        "features_title": "Why play NAS music with SongLib",
+        "feature1_title": "Music stays on your NAS",
+        "feature1_desc": "Connects to supported, tested music servers. Your files remain under your control — no third-party hosting.",
+        "feature2_title": "Made for the Apple TV big screen",
+        "feature2_desc": "Album art, synced lyrics and full-screen playback designed for the living room.",
+        "feature3_title": "More than one library",
+        "feature3_desc": "Pro aggregates multiple sources and other released capabilities, choosing versions by quality or speed.",
+        "get_title": "Get SongLib",
+        "get_desc": "Download the Apple TV IPA from the official site (unsigned, self-signing required). This installer never bundles an IPA.",
+        "get_tv": "Download for Apple TV"
     }
 }

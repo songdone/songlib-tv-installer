@@ -43,43 +43,33 @@
         "theme_system": "跟随系统",
         "theme_light": "浅色",
         "theme_dark": "深色",
-        "preferences": "选项",
         "account": "帐号",
-        "devices": "设备",
-        "donate": "赞助",
-        "about": "关于"
+        "devices": "Apple TV 设备",
+        "about": "关于",
+        "home": "工作台",
+        "apps": "应用与续签",
+        "explore": "探索音屿",
+        "menu": "菜单",
+        "about_license": "关于 / 许可"
     },
     "about": {
         "version": "版本",
-        "build_date": "构建日期"
-    },
-    "donate": {
-        "title": "赞助",
-        "desc": "如果您觉得本项目对您有帮助，请考虑赞助支持开发。您的支持是项目持续发展的动力！",
-        "github_sponsor": "在 GitHub Sponsors 上支持",
-        "kofi": "在 Ko-fi 上支持",
-        "afdian": "在爱发电上支持",
-        "close": "关闭"
+        "build_date": "构建日期",
+        "product": "音屿-Apple TV音乐播放器安装助手",
+        "maintainer": "维护者",
+        "maintainer_name": "6uos",
+        "website": "官方网站",
+        "credits_title": "开源与致谢",
+        "credits_body": "本项目基于 ATVLoadly（AGPL-3.0）改造，保留上游版权与对应源码义务；签名核心能力来自上游项目。",
+        "source_code": "下载对应源码",
+        "upstream_repo": "上游仓库",
+        "upstream_support": "支持上游作者（与购买音屿无关）"
     },
     "result": {
         "success": "成功",
         "fail": "失败"
     },
     "home": {
-        "heading": {
-            "paired_devices": "已连接设备",
-            "service_status": "服务状态",
-            "installed_app": "已安装应用"
-        },
-        "dialog": {
-            "delete_confirm": {
-                "title": "确定要删除 {{name}} 吗?",
-                "button": {
-                    "cancel": "取消",
-                    "confirm": "确定"
-                }
-            }
-        },
         "toast": {
             "refresh_app_started": "已启动刷新 {{name}}",
             "installing_app": "{{name}} 安装中...",
@@ -98,10 +88,6 @@
             "update_failed": "安装 {{version}} 失败，不会自动重试。请点击“更新”重试。"
         },
         "sidebar": {
-            "add_device": {
-                "title": "添加新设备",
-                "subtitle": "连接 AppleTV 或 iPhone"
-            },
             "device_status": {
                 "pairable": "待配对",
                 "paired": "已连接",
@@ -111,10 +97,6 @@
                 "forget": "删除",
                 "forget_confirm": "确认",
                 "forget_done": "已忘记设备"
-            },
-            "tips": {
-                "no_paired_devices": "没有连接设备",
-                "how_pair_device": "AppleTV 请转到『设置 -> 遥控器与设备 -> 遥控器App与设备』，进入配对模式完成配对"
             }
         },
         "table": {
@@ -156,7 +138,6 @@
                 "view_log": "点击查看安装日志",
                 "account_invalid": "帐号存在问题，请查看日志并修正",
                 "certificate_limit": "该 Apple ID 没有空闲的证书名额，本次未安装任何内容，也未注销任何证书。请前往安装页为该应用手动选择一张可注销的证书。",
-                "no_data": "没有数据",
                 "footer": "默认当app过期时间小于1天时，会在凌晨3～6点钟自动进行刷新操作。关联了 GitHub 或 AltStore 来源的应用会在后台检查新版本，自动更新会在同一时间段内安装。",
                 "footer_external": "使用外部证书签名的应用不会自动刷新：证书或描述文件过期后应用将无法使用。使用相同的证书和描述文件重新安装不会延长该日期：请先替换描述文件（如果证书先过期，则导入新的签名身份），再重新安装应用。",
                 "reinstall_external": "使用相同的证书和描述文件重新安装不会延长有效期。替换描述文件（或使用新的签名身份）后重新安装应用即可延长。",
@@ -170,7 +151,45 @@
                 "identity_missing": "身份已删除",
                 "valid_until": "有效期至 {{date}}"
             }
-        }
+        },
+        "hero": {
+            "kicker": "SONGLIB AMP · FOR APPLE TV",
+            "slogan_line1": "你的音乐",
+            "slogan_line2": "自成一屿",
+            "description": "把 NAS 里的音乐带到 Apple TV。连接自己的音乐库，享受专辑封面、同步歌词和自在播放的客厅音乐体验。",
+            "cta_learn": "了解音屿",
+            "cta_ios": "了解 iPhone 版",
+            "mac_pending": "Mac 版敬请期待",
+            "gallery_playing": "正在播放 · FLAC 原格式",
+            "gallery_lyrics": "全屏同步歌词",
+            "gallery_playlist": "歌单与资料库",
+            "purchase_title": "获取音屿授权",
+            "purchase_basic": "购买基础版",
+            "purchase_pro": "购买 Pro",
+            "cta_install": "开始安装到 Apple TV",
+            "feature_local": "音乐留在自己的 NAS",
+            "feature_tv": "专为 Apple TV 的聆听画面",
+            "feature_multi": "不止一个音乐库"
+        },
+        "safety": {
+            "title": "安装前须知",
+            "item1": "建议注册专用的 Apple 账户小号用于自签，开启双重认证并保存恢复方式；不要使用存有照片、支付与个人资料的主账号。",
+            "item2": "Apple 免费账户签名通常约 7 天有效。自动续签依赖 NAS 在线、Apple TV 可达、Apple 账户状态与证书配额，不能保证百分之百成功，请留意应用到期时间。",
+            "item3": "Apple 签名有效期与音屿授权有效期相互独立，请分别管理预期。"
+        },
+        "footer": {
+            "version_label": "版本",
+            "source": "公开源码",
+            "license": "AGPL-3.0 许可证",
+            "upstream": "上游 ATVLoadly",
+            "upstream_note": "安装助手由 6uos 维护，基于 ATVLoadly（AGPL-3.0）改造；上游为技术来源，独立于音屿商业产品。"
+        },
+        "risk_title": "{{count}} 个应用的签名即将到期或已过期",
+        "risk_open": "查看应用与续签",
+        "devices_title": "设备",
+        "devices_open": "查看所有设备",
+        "apps_title": "最近的应用",
+        "apps_open": "查看全部应用与续签"
     },
     "pair": {
         "toast": {
@@ -237,8 +256,7 @@
             "install_success": "安装成功",
             "install_failed": "安装失败，请查看日志了解详细信息",
             "connection_closed": "安装连接已关闭，请重试。",
-            "app_group_unavailable": "无法使用此 Apple 帐号注册该应用的共享存储组。请确认该帐号有创建 App Groups 的权限，并支持该应用所需的功能。详情请查看技术日志。"
-        ,
+            "app_group_unavailable": "无法使用此 Apple 帐号注册该应用的共享存储组。请确认该帐号有创建 App Groups 的权限，并支持该应用所需的功能。详情请查看技术日志。",
             "login_success": "登录成功"
         },
         "form": {
@@ -349,8 +367,7 @@
                 "label": "允许缺少权限",
                 "tips": "即使描述文件未授予应用请求的部分权限（entitlements）也进行签名，依赖这些权限的功能可能无法使用。"
             }
-        }
-        ,
+        },
         "login_modal": {
             "title": "登录 Apple 帐号",
             "setup_2fa_help": "如何把 iPhone 设为 2FA 授信设备？",
@@ -513,39 +530,44 @@
             "button": {
                 "submit": "保 存"
             }
-        }
-            ,
-            "advanced": {
-                "title": "高级",
-                "update_coreadi": "更新 CoreADI",
-                "update_coreadi_confirm": "确认要下载并更新 CoreADI 库文件吗？",
-                "anisette_server": "Anisette 服务器",
-                "anisette_server_default_tag": "默认",
-                "anisette_server_tips": "留空使用默认服务器。如果更换服务器后还是请求失败，请尝试重置/删除对应帐号的 Anisette 数据。",
-                "save": "保存",
-                "reset_anisette": "Anisette 数据",
-                "reset_anisette_empty": "没有保存 Anisette 数据的帐号。",
-                "reset_anisette_confirm": "确认要重置 {{email}} 的 Anisette 数据吗？下次使用该帐号时将生成新的设备身份，需要重新登录。",
-                "remove_anisette_confirm": "该帐号已不在登录列表中，确认要删除它残留的 Anisette 数据吗？",
-                "reset": "重置",
-                "delete": "删除",
-                "cancel": "取消",
-                "confirm": "确认",
-                "toast": {
-                    "downloading": "正在下载...",
-                    "success": "更新完成",
-                    "failed": "更新失败",
-                    "reset_success": "已重置 {{email}} 的 Anisette 数据",
-                    "reset_failed": "重置失败",
-                    "remove_success": "已删除 {{email}} 的 Anisette 数据",
-                    "remove_failed": "删除失败",
-                    "server_success": "Anisette 服务器已保存",
-                    "server_failed": "保存 Anisette 服务器失败"
-                }
+        },
+        "advanced": {
+            "title": "高级",
+            "update_coreadi": "更新 CoreADI",
+            "update_coreadi_confirm": "确认要下载并更新 CoreADI 库文件吗？",
+            "anisette_server": "Anisette 服务器",
+            "anisette_server_default_tag": "默认",
+            "anisette_server_tips": "留空使用默认服务器。如果更换服务器后还是请求失败，请尝试重置/删除对应帐号的 Anisette 数据。",
+            "save": "保存",
+            "reset_anisette": "Anisette 数据",
+            "reset_anisette_empty": "没有保存 Anisette 数据的帐号。",
+            "reset_anisette_confirm": "确认要重置 {{email}} 的 Anisette 数据吗？下次使用该帐号时将生成新的设备身份，需要重新登录。",
+            "remove_anisette_confirm": "该帐号已不在登录列表中，确认要删除它残留的 Anisette 数据吗？",
+            "reset": "重置",
+            "delete": "删除",
+            "cancel": "取消",
+            "confirm": "确认",
+            "toast": {
+                "downloading": "正在下载...",
+                "success": "更新完成",
+                "failed": "更新失败",
+                "reset_success": "已重置 {{email}} 的 Anisette 数据",
+                "reset_failed": "重置失败",
+                "remove_success": "已删除 {{email}} 的 Anisette 数据",
+                "remove_failed": "删除失败",
+                "server_success": "Anisette 服务器已保存",
+                "server_failed": "保存 Anisette 服务器失败"
             }
+        },
+        "tools": {
+            "title": "高级工具"
+        }
     },
     "account": {
-      "status_labels": {"valid": "有效", "invalid": "无效"},
+        "status_labels": {
+            "valid": "有效",
+            "invalid": "无效"
+        },
         "select_account": "选择帐号",
         "select_placeholder": "请选择一个帐号",
         "table": {
@@ -573,9 +595,9 @@
             "logout_success": "帐号登出成功",
             "logout_failed": "登出帐号失败"
         },
-      "heading": {
-          "apple_accounts": "Apple 帐号"
-      }
+        "heading": {
+            "apple_accounts": "Apple 帐号"
+        }
     },
     "source_dialog": {
         "title_track": "跟踪 {{name}} 的更新",
@@ -663,8 +685,7 @@
             "delete_success": "设备删除成功",
             "delete_failed": "删除设备失败"
         }
-    }
-    ,
+    },
     "tools": {
         "ssdp": {
             "title": "SSDP 扫描器",
@@ -921,5 +942,100 @@
             "pairing_record_invalid": "设备的配对记录缺失或无法读取，请重新配对设备。",
             "certificate_invalid": "无法读取已保存的证书，请重新导入该身份。"
         }
+    },
+    "quickstart": {
+        "title": "让 Apple TV 与 NAS 连接起来",
+        "subtitle": "三步完成：发现电视、连接配对，再导入 tvOS IPA 签名安装。安装助手本体免费。",
+        "state_waiting": "等待发现电视",
+        "state_pairing": "可以配对",
+        "state_ready": "可以安装",
+        "step1_title": "发现 Apple TV",
+        "step1_desc": "让本机与 Apple TV 处于同一局域网。正在配对模式下的电视会自动出现在这里。",
+        "step2_title": "连接并配对",
+        "step2_desc": "在 Apple TV 上打开「设置 → 遥控器与设备 → 遥控器 App 与设备」进入配对模式，然后从发现的设备开始配对。",
+        "step3_title": "下载 IPA 并安装",
+        "step3_desc": "从官网下载 Apple TV 版 IPA，回到这里导入签名安装。免费 Apple 账户签名约 7 天有效，到期前会自动尝试续签。",
+        "scanning": "正在扫描局域网…",
+        "none_found": "没有发现电视？确认 Apple TV 已进入配对模式，或手动输入 IP。",
+        "rescan": "重新扫描",
+        "manual_ip": "手动输入 IP",
+        "pair_now": "开始配对",
+        "choose_ipa": "选择 IPA",
+        "download_ipa": "下载官方 tvOS IPA",
+        "free_note": "安装助手永久免费：安装其他合法 tvOS IPA 不需要购买音屿。",
+        "summary_title": "已连接 {{count}} 台 Apple TV",
+        "summary_open_apps": "查看应用与续签",
+        "summary_open_devices": "管理设备",
+        "summary_no_renewal": "暂无续签记录",
+        "summary_renewal_ok": "最近一次续签 {{date}} 成功",
+        "summary_renewal_fail": "最近一次续签 {{date}} 失败，请查看应用"
+    },
+    "devices": {
+        "title": "Apple TV 设备",
+        "subtitle": "发现、配对和管理本安装助手可达的 Apple TV。",
+        "filter_paired": "已配对",
+        "filter_pairable": "可配对",
+        "filter_all": "全部",
+        "rescan": "重新扫描",
+        "scanning_hint": "正在查找同一网络中处于配对模式的 Apple TV…",
+        "empty_title": "暂未发现 Apple TV",
+        "empty_hint": "确认电视与 NAS 在同一网络，并已打开「设置 → 遥控器与设备 → 遥控器 App 与设备」；也可以手动输入 IP 添加。",
+        "empty_action": "添加设备",
+        "status_paired": "已连接",
+        "status_pairable": "待配对",
+        "status_unpaired": "未连接",
+        "status_added": "已添加",
+        "action_install": "安装应用",
+        "action_pair": "开始配对",
+        "action_forget": "删除",
+        "action_forget_confirm": "确认删除",
+        "forget_done": "已删除设备",
+        "manual_title": "手动输入 IP",
+        "manual_desc": "适用于 Tailscale 地址或 mDNS 被隔离的网络环境。",
+        "manual_placeholder": "例如 192.168.1.120",
+        "manual_action": "连接"
+    },
+    "apps": {
+        "title": "应用与续签",
+        "subtitle": "管理已安装的 tvOS 应用、签名有效期与自动续签。",
+        "stat_total": "已安装应用",
+        "stat_expiring": "7 天内到期",
+        "stat_renewal_ok": "最近续签成功",
+        "stat_renewal_fail": "最近续签失败",
+        "stat_renewal_none": "暂无续签记录",
+        "empty_title": "还没有已安装的应用",
+        "empty_hint": "先配对 Apple TV，然后在设备页选择「安装应用」导入 IPA。",
+        "empty_action": "去设备页"
+    },
+    "explore": {
+        "eyebrow": "SONGLIB AMP · FOR APPLE TV",
+        "title": "探索音屿",
+        "intro": "音屿 SongLib Amp 是 Apple TV 私人音乐播放器。连接自建音乐库，原格式播放，在电视大屏上享受专辑封面与同步歌词。",
+        "sources_label": "支持的音乐服务器",
+        "ch1_caption": "正在播放 · 官方界面截图",
+        "ch1_title": "原格式播放",
+        "ch1_desc": "FLAC、ALAC 直接解码，不强制转码；内网与公网地址按网络环境自动切换。",
+        "ch1_point1": "专辑封面与完整播放控制",
+        "ch1_point2": "可选服务器转码，码率自由选择",
+        "ch2_caption": "全屏歌词 · 官方界面截图",
+        "ch2_title": "大屏同步歌词",
+        "ch2_desc": "逐行同步歌词，当前句放大，支持时间轴微调与全屏歌词模式。",
+        "ch2_point1": "歌词读取自媒体库，失败自动重试",
+        "ch2_point2": "播放页与全屏歌词页都能调出待播列表",
+        "ch3_caption": "资料库 · 官方界面截图",
+        "ch3_title": "自己的曲库",
+        "ch3_desc": "按歌曲、专辑、歌手和歌单浏览 NAS 音乐库，支持搜索、收藏与待播队列。",
+        "ch3_point1": "多服务器与多库聚合浏览",
+        "ch3_point2": "Pro 支持跨库去重与按音质/速度选择版本",
+        "features_title": "为什么用音屿听 NAS 音乐",
+        "feature1_title": "音乐留在自己的 NAS",
+        "feature1_desc": "连接已支持并实测的音乐服务器，文件仍由你自己掌控，不交给第三方托管。",
+        "feature2_title": "专为 Apple TV 的聆听画面",
+        "feature2_desc": "唱片封面、同步歌词与大屏播放，为客厅聆听体验设计。",
+        "feature3_title": "不止一个音乐库",
+        "feature3_desc": "Pro 支持多源聚合与其他已发布能力，可按音质或加载速度选择版本。",
+        "get_title": "获取音屿",
+        "get_desc": "前往官网下载 Apple TV 版 IPA（未签名，需自行签名安装）；安装助手不内置任何 IPA。",
+        "get_tv": "下载 Apple TV 版"
     }
 }

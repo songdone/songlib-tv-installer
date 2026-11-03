@@ -1,924 +1,1041 @@
 {
-  "language": "sv",
-  "tray": {
-    "open_browser": "Öppna i webbläsare",
-    "open_log": "Öppna loggfil",
-    "open_at_login": "Öppna vid inloggning",
-    "settings": "Inställningar",
-    "settings_title": "Inställningar",
-    "settings_description": "Ändringar börjar gälla efter att appen startats om.",
-    "settings_port_label": "Serverport",
-    "settings_lan_label": "Tillåt åtkomst från LAN",
-    "settings_lan_help": "Tillåt även anslutningar från det lokala nätverket (IPv4).",
-    "settings_save": "Spara",
-    "settings_cancel": "Avbryt",
-    "settings_saved": "Inställningarna har sparats. Starta om appen för att tillämpa dem.",
-    "settings_invalid_port": "Ange en giltig TCP-port mellan 1 och 65535.",
-    "settings_save_error": "Det gick inte att spara inställningarna.",
-    "quit": "Avsluta"
-  },
-  "common": {
-    "loading": "Laddar…",
-    "button": {
-      "close": "Stäng"
-    }
-  },
-  "notify": {
-    "title": "[{{.name}}] Automatisk förnyelse misslyckades",
-    "content": "Konto: {{.account}}\nFel: {{.error}}",
-    "batch_title": "atvloadly: automatisk förnyelse misslyckades",
-    "batch_content": "{{.name}}: {{.error}}\n\n",
-    "update_title": "atvloadly: nya appversioner",
-    "update_available": "{{.name}}: {{.version}} finns tillgänglig\n",
-    "update_attention": "{{.name}}: uppdateringen kräver åtgärd: {{.error}}\n",
-    "update_installed_title": "atvloadly: appar uppdaterade",
-    "update_installed": "{{.name}} har uppdaterats till {{.version}}\n"
-  },
-  "nav": {
-    "settings": "Inställningar",
-    "tools": "Verktyg",
-    "laboratory": "Laboratorium",
-    "language": "Svenska",
-    "theme": "Tema",
-    "theme_system": "System",
-    "theme_light": "Ljust",
-    "theme_dark": "Mörkt",
-    "preferences": "Alternativ",
-    "account": "Konton",
-    "devices": "Enheter",
-    "donate": "Donera",
-    "about": "Om"
-  },
-  "about": {
-    "version": "Version",
-    "build_date": "Byggdatum"
-  },
-  "donate": {
-    "title": "Stöd projektet",
-    "desc": "Om du har nytta av projektet får du gärna stödja utvecklingen. Ditt bidrag hjälper projektet att leva vidare!",
-    "github_sponsor": "Stöd via GitHub Sponsors",
-    "kofi": "Stöd via Ko-fi",
-    "afdian": "Stöd via Afadian",
-    "close": "Stäng"
-  },
-  "result": {
-    "success": "Lyckades",
-    "fail": "Misslyckades"
-  },
-  "home": {
-    "heading": {
-      "paired_devices": "Parkopplade enheter",
-      "service_status": "Tjänststatus",
-      "installed_app": "Installerade appar"
+    "language": "sv",
+    "tray": {
+        "open_browser": "Öppna i webbläsare",
+        "open_log": "Öppna loggfil",
+        "open_at_login": "Öppna vid inloggning",
+        "settings": "Inställningar",
+        "settings_title": "Inställningar",
+        "settings_description": "Ändringar börjar gälla efter att appen startats om.",
+        "settings_port_label": "Serverport",
+        "settings_lan_label": "Tillåt åtkomst från LAN",
+        "settings_lan_help": "Tillåt även anslutningar från det lokala nätverket (IPv4).",
+        "settings_save": "Spara",
+        "settings_cancel": "Avbryt",
+        "settings_saved": "Inställningarna har sparats. Starta om appen för att tillämpa dem.",
+        "settings_invalid_port": "Ange en giltig TCP-port mellan 1 och 65535.",
+        "settings_save_error": "Det gick inte att spara inställningarna.",
+        "quit": "Avsluta"
     },
-    "dialog": {
-      "delete_confirm": {
-        "title": "Vill du verkligen ta bort {{name}}?",
+    "common": {
+        "loading": "Laddar…",
         "button": {
-          "cancel": "Avbryt",
-          "confirm": "Bekräfta"
+            "close": "Stäng"
         }
-      }
     },
-    "toast": {
-      "refresh_app_started": "Förnyelse av {{name}} har startat",
-      "installing_app": "Installerar {{name}}…",
-      "reinstall_app_started": "Ominstallation av {{name}} har startat",
-      "update_started": "Uppdatering av {{name}} till {{version}} har startat",
-      "updates_available": "Nya versioner tillgängliga: {{count}}",
-      "check_errors": "Källor som inte kunde kontrolleras: {{count}}",
-      "check_done": "Alla följda appar har den senaste versionen"
+    "notify": {
+        "title": "[{{.name}}] Automatisk förnyelse misslyckades",
+        "content": "Konto: {{.account}}\nFel: {{.error}}",
+        "batch_title": "atvloadly: automatisk förnyelse misslyckades",
+        "batch_content": "{{.name}}: {{.error}}\n\n",
+        "update_title": "atvloadly: nya appversioner",
+        "update_available": "{{.name}}: {{.version}} finns tillgänglig\n",
+        "update_attention": "{{.name}}: uppdateringen kräver åtgärd: {{.error}}\n",
+        "update_installed_title": "atvloadly: appar uppdaterade",
+        "update_installed": "{{.name}} har uppdaterats till {{.version}}\n"
     },
-    "source": {
-      "track": "Följ nya versioner",
-      "manage": "Hantera källa",
-      "auto": "Auto",
-      "available": "{{version}} tillgänglig",
-      "check_updates": "Sök efter nya versioner",
-      "update_failed": "Installationen av {{version}} misslyckades och görs inte om automatiskt. Använd Uppdatera för att försöka igen."
+    "nav": {
+        "settings": "Inställningar",
+        "tools": "Verktyg",
+        "laboratory": "Laboratorium",
+        "language": "Svenska",
+        "theme": "Tema",
+        "theme_system": "System",
+        "theme_light": "Ljust",
+        "theme_dark": "Mörkt",
+        "account": "Konton",
+        "devices": "Apple TV-enheter",
+        "about": "Om",
+        "home": "Arbetsyta",
+        "apps": "Appar & förnyelse",
+        "explore": "Utforska SongLib",
+        "menu": "Meny",
+        "about_license": "Om & licens"
     },
-    "sidebar": {
-      "add_device": {
-        "title": "Lägg till ny enhet",
-        "subtitle": "Anslut AppleTV eller iPhone"
-      },
-      "device_status": {
-        "pairable": "Kan parkopplas",
-        "paired": "Parkopplad",
-        "unpaired": "Inte parkopplad",
-        "added": "Tillagd",
-        "ip_badge": "IP",
-        "forget": "Ta bort",
-        "forget_confirm": "Bekräfta",
-        "forget_done": "Enheten har tagits bort"
-      },
-      "tips": {
-        "no_paired_devices": "Inga anslutna enheter",
-        "how_pair_device": "På Apple TV: öppna Inställningar → Fjärrkontroller och enheter → Fjärrapp och enheter för att starta parkopplingen."
-      }
+    "about": {
+        "version": "Version",
+        "build_date": "Byggdatum",
+        "product": "SongLib Apple TV-installatör",
+        "maintainer": "Underhållare",
+        "maintainer_name": "6uos",
+        "website": "Webbplats",
+        "credits_title": "Öppen källkod och tack",
+        "credits_body": "Projektet bygger på ATVLoadly (AGPL-3.0); upphovsrätt och källkodsplikt respekteras. Signeringskärnan kommer från uppströmsprojektet.",
+        "source_code": "Hämta källkod",
+        "upstream_repo": "Uppströmsarkiv",
+        "upstream_support": "Stöd uppströmsupphovspersonen (inget att göra med att köpa SongLib)"
     },
-    "table": {
-      "header": {
-        "app": "App",
-        "device": "Enhet",
-        "account": "Konto",
-        "expired_date": "Utgångsdatum",
-        "operate": "Åtgärd"
-      },
-      "expired_time_format": {
-        "expired_tips": "Utgången",
-        "days_one": "{{num}} dag",
-        "days": "{{num}} dagar",
-        "hours_one": "{{num}} timme",
-        "hours": "{{num}} timmar",
-        "less_than_hour": "Under 1 timme"
-      },
-      "refresh_date_format": {
-        "installing_tips": "Installerar…",
-        "seconds_one": "För {{num}} sekund sedan",
-        "seconds": "För {{num}} sekunder sedan",
-        "miniutes_one": "För {{num}} minut sedan",
-        "miniutes": "För {{num}} minuter sedan",
-        "hours_one": "För {{num}} timme sedan",
-        "hours": "För {{num}} timmar sedan",
-        "days_one": "För {{num}} dag sedan",
-        "days": "För {{num}} dagar sedan"
-      },
-      "button": {
-        "refresh": "Förnya",
-        "delete": "Ta bort",
-        "reinstall": "Installera om",
-        "update": "Uppdatera",
-        "more": "Mer",
-        "confirm_delete": "Bekräfta borttagning"
-      },
-      "tips": {
-        "view_log": "Klicka för att visa installationsloggen",
-        "account_invalid": "Det finns ett problem med kontot. Kontrollera loggarna och åtgärda felet.",
-        "certificate_limit": "Apple-ID:t har nått gränsen för antalet certifikat. Ingen app installerades och inget certifikat återkallades. Öppna appen på installationssidan och välj vilket certifikat som får återkallas.",
-        "no_data": "Inga uppgifter",
-        "footer": "Som standard förnyas appars signering automatiskt mellan kl. 03 och 06 när mindre än ett dygn återstår till utgångsdatumet. Appar som är kopplade till en GitHub- eller AltStore-källa kontrolleras i bakgrunden efter nya versioner; automatiska versionsuppdateringar installeras under samma tidsperiod.",
-        "footer_external": "Appar som signerats med ett externt certifikat uppdateras aldrig automatiskt: de slutar fungera när certifikatet eller provisioneringsprofilen går ut. En ominstallation med samma certifikat och profil förlänger inte det datumet: byt profil (eller importera en ny signeringsidentitet om certifikatet går ut först) och installera sedan om appen.",
-        "reinstall_external": "En ominstallation med samma certifikat och provisioneringsprofil förlänger inte giltighetstiden. Byt profil (eller använd en ny signeringsidentitet) och installera sedan om appen för att förlänga den.",
-        "signing_identity_error": "Signeringsidentiteten (certifikat, privat nyckel eller provisioneringsprofil) är ogiltig eller inte kompatibel. Kontrollera loggen och identiteten under Konton.",
-        "signing_error": "Signeringen misslyckades eller den signerade appen klarade inte verifieringen. Se loggen för mer information.",
-        "transport_error": "Det gick inte att nå enheten, eller så avvisade den installationen. Se loggen för mer information.",
-        "refresh_failed": "Förnyelsen misslyckades. Se loggen för mer information."
-      },
-      "signing": {
-        "external_badge": "Externt certifikat",
-        "identity_missing": "Borttagen identitet",
-        "valid_until": "Giltig till {{date}}"
-      }
-    }
-  },
-  "pair": {
-    "toast": {
-      "pin_incorrect": "Fel PIN-kod",
-      "pair_error": "Parkopplingen misslyckades. Se konsolen för mer information.",
-      "no_device_found": "Enheten hittades inte. Kontrollera att tjänsten usbmuxd körs."
+    "result": {
+        "success": "Lyckades",
+        "fail": "Misslyckades"
     },
-    "manual": {
-      "discovering": "Söker parkopplingsport…",
-      "stage_mdns": "Slår upp parkopplingstjänsten…",
-      "stage_scanning": "Skannar portar… {{percent}}%",
-      "stage_probing": "Verifierar parkopplingstjänsten…",
-      "stage_found": "Parkopplingsport hittad",
-      "stage_failed": "Parkopplingsport hittades inte",
-      "found": "Parkopplingsport: {{port}}",
-      "failed": "Kunde inte hitta parkopplingsporten. Kontrollera att Apple TV:n är i parkopplingsläge.",
-      "retry": "Sök igen"
-    },
-    "step": {
-      "start": {
-        "title": "Start",
-        "device": "Enhet",
-        "button": "Starta parkoppling"
-      },
-      "pin": {
-        "title": "Ange PIN-kod",
-        "loading": "Ansluter…",
-        "placeholder": "Ange PIN-koden som visas på Apple TV",
-        "button": "Bekräfta"
-      },
-      "completed": {
-        "title": "Parkoppling slutförd",
-        "msg": "Parkopplingen lyckades",
-        "button": "Tillbaka"
-      }
-    }
-  },
-  "install": {
-    "cert_revoke": {
-      "title": "Apple-ID:t har nått gränsen för antalet certifikat",
-      "warning": "Ett certifikat måste återkallas för att installationen ska kunna signeras med ett nytt. Appar som signerats med det certifikat du återkallar slutar fungera på sina enheter. Inget certifikat återkallas innan du har valt ett.",
-      "no_certificates": "Inga certifikat som kan återkallas hittades för kontot. Avbryt och återkalla ett certifikat manuellt på kontosidan.",
-      "button": {
-        "revoke": "Återkalla det valda certifikatet"
-      },
-      "resuming": "Försöker installera igen med godkänd certifikatåterkallelse…"
-    },
-    "tips": {
-      "warning": "Enheten kommer att efterlikna en MacBook. Ha en iPhone eller annan betrodd enhet till hands när du loggar in med installationskontot, så att du kan ta emot verifieringskoder för tvåfaktorsautentisering.",
-      "external": "Läget med externt certifikat signerar med ditt importerade certifikat och din provisioneringsprofil, utan något Apple-ID. Appen är giltig tills certifikatet eller profilen går ut, om inte Apple återkallar certifikatet tidigare; atvloadly kontrollerar inte återkallelse."
-    },
-    "dialog": {
-      "input_pin": {
-        "title": "Ange verifieringskoden för tvåfaktorsautentisering",
-        "input": {
-          "placeholder": ""
-        },
-        "button": {
-          "submit": "Bekräfta"
-        }
-      }
-    },
-    "toast": {
-      "install_success": "Installationen lyckades",
-      "install_failed": "Installationen misslyckades. Se loggarna för mer information.",
-      "connection_closed": "Installationsanslutningen stängdes. Försök igen.",
-      "app_group_unavailable": "Appens delade lagringsgrupp kunde inte registreras med detta Apple-konto. Kontrollera att kontot får skapa App Groups och har stöd för appens nödvändiga funktioner. Se den tekniska loggen för detaljer.",
-      "login_success": "Inloggningen lyckades"
-    },
-    "form": {
-      "mode": {
-        "file": "IPA-fil",
-        "link": "IPA-URL",
-        "source": "Källa"
-      },
-      "source": {
-        "label": "Källa:",
-        "url_placeholder": {
-          "github": "owner/repo eller https://github.com/owner/repo",
-          "altstore": "https://example.com/apps.json"
-        },
-        "fetch": "Hämta",
-        "prerelease": "Inkludera förhandsversioner",
-        "prerelease_badge": "Förhandsversion",
-        "recommended": "Rekommenderad",
-        "choose_tips": "Den här versionen innehåller flera IPA-filer. Välj den som är byggd för din enhet (tvOS för Apple TV, iOS för iPhone och iPad). Varianter som Sideload och Sideloadly kan vara olika appar, så behåll samma för uppdateringar.",
-        "choose_app_tips": "Den här källan innehåller flera appar. Välj den som ska installeras.",
-        "advanced": "Avancerat",
-        "filter": {
-          "label": "Filnamnsfilter",
-          "tips": "Reguljärt uttryck som hittar samma IPA i kommande versioner. Det härleds från den valda filen.",
-          "custom": "Anpassat",
-          "reset": "Återställ",
-          "mismatch": "Filtret matchar inte den valda filen."
-        },
-        "bundle_id": {
-          "label": "Paketidentifierare",
-          "tips": "AltStore-appar följs via sin paketidentifierare."
-        },
-        "auto_update": "Installera nya versioner automatiskt",
-        "auto_update_tips": "Nya versioner installeras under tidsintervallet för automatisk appförnyelse, även om appen ännu inte behöver förnyas. De signeras med samma konto eller signeringsidentitet.",
-        "select_build": "Hämta källan och välj en IPA att installera.",
-        "choose_saved_app_tips": "Dina sparade källor innehåller flera appar. Välj den som ska installeras.",
-        "saved": {
-          "label": "Sparade källor",
-          "all": "Alla sparade källor"
-        },
-        "search_placeholder": "Sök appar…",
-        "more_results": "{{num}} till – förfina sökningen",
-        "no_match": "Ingen app matchar sökningen",
-        "save_source": "Spara källan",
+    "home": {
         "toast": {
-          "source_saved": "{{name}} har lagts till i de sparade källorna"
-        }
-      },
-      "choose_ipa": {
-        "label": "Välj IPA-fil:"
-      },
-      "ipa_url": {
-        "label": "IPA-URL:",
-        "external_unavailable": "Signering med externt certifikat kräver en uppladdad IPA-fil eller en källa"
-      },
-      "signer": {
-        "label": "Apple-ID eller certifikat:",
-        "placeholder": "Välj ett Apple-ID eller certifikat",
-        "manage": "Hantera konton och certifikat",
-        "alt": "Välj ett Apple-ID eller ett importerat signeringscertifikat för att signera appen.",
-        "empty": "Inget Apple-konto eller signeringsidentitet än.",
-        "go_to_accounts": "Gå till konton"
-      },
-      "account": {
-        "label": "Apple-konto:",
-        "select": {
-          "placeholder": "Välj ett konto"
+            "refresh_app_started": "Förnyelse av {{name}} har startat",
+            "installing_app": "Installerar {{name}}…",
+            "reinstall_app_started": "Ominstallation av {{name}} har startat",
+            "update_started": "Uppdatering av {{name}} till {{version}} har startat",
+            "updates_available": "Nya versioner tillgängliga: {{count}}",
+            "check_errors": "Källor som inte kunde kontrolleras: {{count}}",
+            "check_done": "Alla följda appar har den senaste versionen"
         },
-        "last_used": "Senast använt",
-        "alt": "Använd inte ditt huvudsakliga Apple-konto för installationer av säkerhetsskäl."
-      },
-      "custom_name": {
-        "label": "Appnamn:",
-        "placeholder": "Lämna tomt för att behålla appens namn",
-        "tips": "Byter namn på appen på hemskärmen. Paketidentifieraren ändras inte, så appen ersätts fortfarande vid förnyelse."
-      },
-      "password": {
-        "label": "Apple-lösenord:"
-      },
-      "button": {
-        "back": "Tillbaka",
-        "submit": "Installera"
-      },
-      "extensions": {
-        "remove_extensions": "Ta bort tillägg (insticksprogram)",
-        "tips": "Användbart när det inte finns tillräckligt många lediga app-ID:n för registrering",
-        "tips_external": "Tar bort alla apptillägg (widgetar, plugin-program). Som standard behålls tilläggen och signeras med provisioneringsprofilen. Borttagna tillägg visas i kompatibilitetskontrollen."
-      },
-      "signing_mode": {
-        "label": "Signering:"
-      },
-      "identity": {
-        "label": "Signeringsidentitet:",
-        "placeholder": "Välj en signeringsidentitet",
-        "expires": "går ut {{date}}",
-        "manage": "Hantera signeringsidentiteter",
-        "alt": "Appen signeras med det här certifikatet och den här provisioneringsprofilen; inget Apple-ID används.",
-        "empty": "Ingen signeringsidentitet ännu. Importera ett P12-certifikat och en provisioneringsprofil under Konton."
-      },
-      "custom_identifier": {
-        "label": "Anpassat paket-ID:",
-        "placeholder": "Lämna tomt för att behålla IPA-filens paket-ID",
-        "tips": "Installerar appen under ett andra paket-ID, vilket registrerar ett andra App ID: appen ligger då bredvid den ursprungliga. Lämna tomt för att behålla IPA-filens paket-ID:n.",
-        "tips_external": "Installerar appen under ett andra paket-ID, bredvid den ursprungliga. Apptilläggens paket-ID:n följer det. Lämna tomt för att behålla IPA-filens paket-ID:n.",
-        "invalid": "Det anpassade paket-ID:t är ogiltigt: använd bara bokstäver, siffror, bindestreck och punkter."
-      },
-      "allow_missing_entitlements": {
-        "label": "Tillåt saknade entitlements",
-        "tips": "Signera även om provisioneringsprofilen inte beviljar vissa entitlements som appen begär. Funktioner som är beroende av dem kanske inte fungerar."
-      }
+        "source": {
+            "track": "Följ nya versioner",
+            "manage": "Hantera källa",
+            "auto": "Auto",
+            "available": "{{version}} tillgänglig",
+            "check_updates": "Sök efter nya versioner",
+            "update_failed": "Installationen av {{version}} misslyckades och görs inte om automatiskt. Använd Uppdatera för att försöka igen."
+        },
+        "sidebar": {
+            "device_status": {
+                "pairable": "Kan parkopplas",
+                "paired": "Parkopplad",
+                "unpaired": "Inte parkopplad",
+                "added": "Tillagd",
+                "ip_badge": "IP",
+                "forget": "Ta bort",
+                "forget_confirm": "Bekräfta",
+                "forget_done": "Enheten har tagits bort"
+            }
+        },
+        "table": {
+            "header": {
+                "app": "App",
+                "device": "Enhet",
+                "account": "Konto",
+                "expired_date": "Utgångsdatum",
+                "operate": "Åtgärd"
+            },
+            "expired_time_format": {
+                "expired_tips": "Utgången",
+                "days_one": "{{num}} dag",
+                "days": "{{num}} dagar",
+                "hours_one": "{{num}} timme",
+                "hours": "{{num}} timmar",
+                "less_than_hour": "Under 1 timme"
+            },
+            "refresh_date_format": {
+                "installing_tips": "Installerar…",
+                "seconds_one": "För {{num}} sekund sedan",
+                "seconds": "För {{num}} sekunder sedan",
+                "miniutes_one": "För {{num}} minut sedan",
+                "miniutes": "För {{num}} minuter sedan",
+                "hours_one": "För {{num}} timme sedan",
+                "hours": "För {{num}} timmar sedan",
+                "days_one": "För {{num}} dag sedan",
+                "days": "För {{num}} dagar sedan"
+            },
+            "button": {
+                "refresh": "Förnya",
+                "delete": "Ta bort",
+                "reinstall": "Installera om",
+                "update": "Uppdatera",
+                "more": "Mer",
+                "confirm_delete": "Bekräfta borttagning"
+            },
+            "tips": {
+                "view_log": "Klicka för att visa installationsloggen",
+                "account_invalid": "Det finns ett problem med kontot. Kontrollera loggarna och åtgärda felet.",
+                "certificate_limit": "Apple-ID:t har nått gränsen för antalet certifikat. Ingen app installerades och inget certifikat återkallades. Öppna appen på installationssidan och välj vilket certifikat som får återkallas.",
+                "footer": "Som standard förnyas appars signering automatiskt mellan kl. 03 och 06 när mindre än ett dygn återstår till utgångsdatumet. Appar som är kopplade till en GitHub- eller AltStore-källa kontrolleras i bakgrunden efter nya versioner; automatiska versionsuppdateringar installeras under samma tidsperiod.",
+                "footer_external": "Appar som signerats med ett externt certifikat uppdateras aldrig automatiskt: de slutar fungera när certifikatet eller provisioneringsprofilen går ut. En ominstallation med samma certifikat och profil förlänger inte det datumet: byt profil (eller importera en ny signeringsidentitet om certifikatet går ut först) och installera sedan om appen.",
+                "reinstall_external": "En ominstallation med samma certifikat och provisioneringsprofil förlänger inte giltighetstiden. Byt profil (eller använd en ny signeringsidentitet) och installera sedan om appen för att förlänga den.",
+                "signing_identity_error": "Signeringsidentiteten (certifikat, privat nyckel eller provisioneringsprofil) är ogiltig eller inte kompatibel. Kontrollera loggen och identiteten under Konton.",
+                "signing_error": "Signeringen misslyckades eller den signerade appen klarade inte verifieringen. Se loggen för mer information.",
+                "transport_error": "Det gick inte att nå enheten, eller så avvisade den installationen. Se loggen för mer information.",
+                "refresh_failed": "Förnyelsen misslyckades. Se loggen för mer information."
+            },
+            "signing": {
+                "external_badge": "Externt certifikat",
+                "identity_missing": "Borttagen identitet",
+                "valid_until": "Giltig till {{date}}"
+            }
+        },
+        "hero": {
+            "kicker": "SONGLIB AMP · FOR APPLE TV",
+            "slogan_line1": "Din musik –",
+            "slogan_line2": "en ö för sig",
+            "description": "Ta musiken från ditt NAS till Apple TV. Anslut ditt eget musikbibliotek och njut av skivomslag, synkade texter och en bekväm musikupplevelse i vardagsrummet.",
+            "cta_learn": "Om SongLib",
+            "cta_ios": "iPhone-version",
+            "mac_pending": "Mac: kommer snart",
+            "gallery_playing": "Spelar nu · FLAC i ursprungligt format",
+            "gallery_lyrics": "Synkade texter i helskärm",
+            "gallery_playlist": "Spellistor och bibliotek",
+            "purchase_title": "Skaffa en SongLib-licens",
+            "purchase_basic": "Köp Basic",
+            "purchase_pro": "Köp Pro",
+            "cta_install": "Börja installera till Apple TV",
+            "feature_local": "Musiken stannar på ditt NAS",
+            "feature_tv": "Byggd för Apple TVs storskärm",
+            "feature_multi": "Mer än ett bibliotek"
+        },
+        "safety": {
+            "title": "Innan du börjar",
+            "item1": "Använd ett dedikerat Apple-konto för signering med tvåfaktorsautentisering aktiverad. Använd inte ditt huvudkonto med foton och betalningsuppgifter.",
+            "item2": "Gratis Apple-konton signerar appar i ca 7 dagar. Automatisk förnyelse kräver att NAS:n är online, att Apple TV:n nås och att Apple-kontot fungerar – det kan inte garanteras.",
+            "item3": "Signeringens giltighet och SongLib-licensens giltighet är två separata tidslinjer."
+        },
+        "footer": {
+            "version_label": "Version",
+            "source": "Källkod",
+            "license": "AGPL-3.0-licens",
+            "upstream": "Uppström ATVLoadly",
+            "upstream_note": "Underhålls av 6uos, baserad på ATVLoadly (AGPL-3.0). Uppströmsprojektet är den tekniska källan, skilt från produkten SongLib."
+        },
+        "risk_title": "{{count}} app(er) går ut snart eller har redan gått ut",
+        "risk_open": "Öppna appar & förnyelse",
+        "devices_title": "Enheter",
+        "devices_open": "Alla enheter",
+        "apps_title": "Senaste appar",
+        "apps_open": "Alla appar & förnyelse"
     },
-    "login_modal": {
-      "title": "Logga in på ett Apple-konto",
-      "setup_2fa_help": "Hur sätter man upp en iPhone som betrodd enhet för 2FA?",
-      "button": {
-        "close": "Stäng",
-        "login": "Logga in",
-        "add_account": "Lägg till konto"
-      }
+    "pair": {
+        "toast": {
+            "pin_incorrect": "Fel PIN-kod",
+            "pair_error": "Parkopplingen misslyckades. Se konsolen för mer information.",
+            "no_device_found": "Enheten hittades inte. Kontrollera att tjänsten usbmuxd körs."
+        },
+        "manual": {
+            "discovering": "Söker parkopplingsport…",
+            "stage_mdns": "Slår upp parkopplingstjänsten…",
+            "stage_scanning": "Skannar portar… {{percent}}%",
+            "stage_probing": "Verifierar parkopplingstjänsten…",
+            "stage_found": "Parkopplingsport hittad",
+            "stage_failed": "Parkopplingsport hittades inte",
+            "found": "Parkopplingsport: {{port}}",
+            "failed": "Kunde inte hitta parkopplingsporten. Kontrollera att Apple TV:n är i parkopplingsläge.",
+            "retry": "Sök igen"
+        },
+        "step": {
+            "start": {
+                "title": "Start",
+                "device": "Enhet",
+                "button": "Starta parkoppling"
+            },
+            "pin": {
+                "title": "Ange PIN-kod",
+                "loading": "Ansluter…",
+                "placeholder": "Ange PIN-koden som visas på Apple TV",
+                "button": "Bekräfta"
+            },
+            "completed": {
+                "title": "Parkoppling slutförd",
+                "msg": "Parkopplingen lyckades",
+                "button": "Tillbaka"
+            }
+        }
     },
-    "screenshot": {
-      "title": "Skärmbild från enheten",
-      "action": "Ta skärmbild",
-      "empty": "Ingen skärmbild ännu",
-      "status": {
-        "capturing": "Tar skärmbild…",
-        "success": "Skärmbilden har tagits",
-        "failed": "Kunde inte ta skärmbild"
-      },
-      "toast": {
-        "device_not_ready": "Enhetsinformationen är inte klar. Försök igen senare.",
-        "mount_failed": "Kunde inte förbereda enheten för skärmbild",
-        "failed": "Kunde inte ta skärmbild",
-        "opened_new_tab": "Webbläsaren blockerade den automatiska nedladdningen. Skärmbilden öppnades i en ny flik för manuell sparning",
-        "download_failed": "Nedladdningen av skärmbilden misslyckades. Webbläsaren blockerade nedladdningen"
-      },
-      "button": {
-        "close": "Stäng",
-        "refresh": "Uppdatera",
-        "download": "Ladda ned"
-      }
+    "install": {
+        "cert_revoke": {
+            "title": "Apple-ID:t har nått gränsen för antalet certifikat",
+            "warning": "Ett certifikat måste återkallas för att installationen ska kunna signeras med ett nytt. Appar som signerats med det certifikat du återkallar slutar fungera på sina enheter. Inget certifikat återkallas innan du har valt ett.",
+            "no_certificates": "Inga certifikat som kan återkallas hittades för kontot. Avbryt och återkalla ett certifikat manuellt på kontosidan.",
+            "button": {
+                "revoke": "Återkalla det valda certifikatet"
+            },
+            "resuming": "Försöker installera igen med godkänd certifikatåterkallelse…"
+        },
+        "tips": {
+            "warning": "Enheten kommer att efterlikna en MacBook. Ha en iPhone eller annan betrodd enhet till hands när du loggar in med installationskontot, så att du kan ta emot verifieringskoder för tvåfaktorsautentisering.",
+            "external": "Läget med externt certifikat signerar med ditt importerade certifikat och din provisioneringsprofil, utan något Apple-ID. Appen är giltig tills certifikatet eller profilen går ut, om inte Apple återkallar certifikatet tidigare; atvloadly kontrollerar inte återkallelse."
+        },
+        "dialog": {
+            "input_pin": {
+                "title": "Ange verifieringskoden för tvåfaktorsautentisering",
+                "input": {
+                    "placeholder": ""
+                },
+                "button": {
+                    "submit": "Bekräfta"
+                }
+            }
+        },
+        "toast": {
+            "install_success": "Installationen lyckades",
+            "install_failed": "Installationen misslyckades. Se loggarna för mer information.",
+            "connection_closed": "Installationsanslutningen stängdes. Försök igen.",
+            "app_group_unavailable": "Appens delade lagringsgrupp kunde inte registreras med detta Apple-konto. Kontrollera att kontot får skapa App Groups och har stöd för appens nödvändiga funktioner. Se den tekniska loggen för detaljer.",
+            "login_success": "Inloggningen lyckades"
+        },
+        "form": {
+            "mode": {
+                "file": "IPA-fil",
+                "link": "IPA-URL",
+                "source": "Källa"
+            },
+            "source": {
+                "label": "Källa:",
+                "url_placeholder": {
+                    "github": "owner/repo eller https://github.com/owner/repo",
+                    "altstore": "https://example.com/apps.json"
+                },
+                "fetch": "Hämta",
+                "prerelease": "Inkludera förhandsversioner",
+                "prerelease_badge": "Förhandsversion",
+                "recommended": "Rekommenderad",
+                "choose_tips": "Den här versionen innehåller flera IPA-filer. Välj den som är byggd för din enhet (tvOS för Apple TV, iOS för iPhone och iPad). Varianter som Sideload och Sideloadly kan vara olika appar, så behåll samma för uppdateringar.",
+                "choose_app_tips": "Den här källan innehåller flera appar. Välj den som ska installeras.",
+                "advanced": "Avancerat",
+                "filter": {
+                    "label": "Filnamnsfilter",
+                    "tips": "Reguljärt uttryck som hittar samma IPA i kommande versioner. Det härleds från den valda filen.",
+                    "custom": "Anpassat",
+                    "reset": "Återställ",
+                    "mismatch": "Filtret matchar inte den valda filen."
+                },
+                "bundle_id": {
+                    "label": "Paketidentifierare",
+                    "tips": "AltStore-appar följs via sin paketidentifierare."
+                },
+                "auto_update": "Installera nya versioner automatiskt",
+                "auto_update_tips": "Nya versioner installeras under tidsintervallet för automatisk appförnyelse, även om appen ännu inte behöver förnyas. De signeras med samma konto eller signeringsidentitet.",
+                "select_build": "Hämta källan och välj en IPA att installera.",
+                "choose_saved_app_tips": "Dina sparade källor innehåller flera appar. Välj den som ska installeras.",
+                "saved": {
+                    "label": "Sparade källor",
+                    "all": "Alla sparade källor"
+                },
+                "search_placeholder": "Sök appar…",
+                "more_results": "{{num}} till – förfina sökningen",
+                "no_match": "Ingen app matchar sökningen",
+                "save_source": "Spara källan",
+                "toast": {
+                    "source_saved": "{{name}} har lagts till i de sparade källorna"
+                }
+            },
+            "choose_ipa": {
+                "label": "Välj IPA-fil:"
+            },
+            "ipa_url": {
+                "label": "IPA-URL:",
+                "external_unavailable": "Signering med externt certifikat kräver en uppladdad IPA-fil eller en källa"
+            },
+            "signer": {
+                "label": "Apple-ID eller certifikat:",
+                "placeholder": "Välj ett Apple-ID eller certifikat",
+                "manage": "Hantera konton och certifikat",
+                "alt": "Välj ett Apple-ID eller ett importerat signeringscertifikat för att signera appen.",
+                "empty": "Inget Apple-konto eller signeringsidentitet än.",
+                "go_to_accounts": "Gå till konton"
+            },
+            "account": {
+                "label": "Apple-konto:",
+                "select": {
+                    "placeholder": "Välj ett konto"
+                },
+                "last_used": "Senast använt",
+                "alt": "Använd inte ditt huvudsakliga Apple-konto för installationer av säkerhetsskäl."
+            },
+            "custom_name": {
+                "label": "Appnamn:",
+                "placeholder": "Lämna tomt för att behålla appens namn",
+                "tips": "Byter namn på appen på hemskärmen. Paketidentifieraren ändras inte, så appen ersätts fortfarande vid förnyelse."
+            },
+            "password": {
+                "label": "Apple-lösenord:"
+            },
+            "button": {
+                "back": "Tillbaka",
+                "submit": "Installera"
+            },
+            "extensions": {
+                "remove_extensions": "Ta bort tillägg (insticksprogram)",
+                "tips": "Användbart när det inte finns tillräckligt många lediga app-ID:n för registrering",
+                "tips_external": "Tar bort alla apptillägg (widgetar, plugin-program). Som standard behålls tilläggen och signeras med provisioneringsprofilen. Borttagna tillägg visas i kompatibilitetskontrollen."
+            },
+            "signing_mode": {
+                "label": "Signering:"
+            },
+            "identity": {
+                "label": "Signeringsidentitet:",
+                "placeholder": "Välj en signeringsidentitet",
+                "expires": "går ut {{date}}",
+                "manage": "Hantera signeringsidentiteter",
+                "alt": "Appen signeras med det här certifikatet och den här provisioneringsprofilen; inget Apple-ID används.",
+                "empty": "Ingen signeringsidentitet ännu. Importera ett P12-certifikat och en provisioneringsprofil under Konton."
+            },
+            "custom_identifier": {
+                "label": "Anpassat paket-ID:",
+                "placeholder": "Lämna tomt för att behålla IPA-filens paket-ID",
+                "tips": "Installerar appen under ett andra paket-ID, vilket registrerar ett andra App ID: appen ligger då bredvid den ursprungliga. Lämna tomt för att behålla IPA-filens paket-ID:n.",
+                "tips_external": "Installerar appen under ett andra paket-ID, bredvid den ursprungliga. Apptilläggens paket-ID:n följer det. Lämna tomt för att behålla IPA-filens paket-ID:n.",
+                "invalid": "Det anpassade paket-ID:t är ogiltigt: använd bara bokstäver, siffror, bindestreck och punkter."
+            },
+            "allow_missing_entitlements": {
+                "label": "Tillåt saknade entitlements",
+                "tips": "Signera även om provisioneringsprofilen inte beviljar vissa entitlements som appen begär. Funktioner som är beroende av dem kanske inte fungerar."
+            }
+        },
+        "login_modal": {
+            "title": "Logga in på ett Apple-konto",
+            "setup_2fa_help": "Hur sätter man upp en iPhone som betrodd enhet för 2FA?",
+            "button": {
+                "close": "Stäng",
+                "login": "Logga in",
+                "add_account": "Lägg till konto"
+            }
+        },
+        "screenshot": {
+            "title": "Skärmbild från enheten",
+            "action": "Ta skärmbild",
+            "empty": "Ingen skärmbild ännu",
+            "status": {
+                "capturing": "Tar skärmbild…",
+                "success": "Skärmbilden har tagits",
+                "failed": "Kunde inte ta skärmbild"
+            },
+            "toast": {
+                "device_not_ready": "Enhetsinformationen är inte klar. Försök igen senare.",
+                "mount_failed": "Kunde inte förbereda enheten för skärmbild",
+                "failed": "Kunde inte ta skärmbild",
+                "opened_new_tab": "Webbläsaren blockerade den automatiska nedladdningen. Skärmbilden öppnades i en ny flik för manuell sparning",
+                "download_failed": "Nedladdningen av skärmbilden misslyckades. Webbläsaren blockerade nedladdningen"
+            },
+            "button": {
+                "close": "Stäng",
+                "refresh": "Uppdatera",
+                "download": "Ladda ned"
+            }
+        }
+    },
+    "settings": {
+        "toast": {
+            "save_success": "Inställningarna har sparats",
+            "notify_success": "Aviseringen har skickats"
+        },
+        "notification": {
+            "title": "Aviseringar",
+            "toggle": {
+                "label": "Aktivera"
+            },
+            "type": {
+                "label": "Aviseringstyp"
+            },
+            "weixin": {
+                "title": "WeCom",
+                "corp_id": "Företags-ID",
+                "corp_secret": "Företagshemlig nyckel",
+                "agent_id": "Agent-ID",
+                "touser": "Mottagare"
+            },
+            "email": {
+                "smtp_host": "SMTP-server",
+                "smtp_port": "SMTP-port",
+                "username": "Användarnamn",
+                "password": "Lösenord",
+                "from": "Avsändaradress",
+                "to": "Mottagaradress"
+            },
+            "webhook": {
+                "url": "URL",
+                "url_placeholder": "Stöder mallvariablerna {{title}} och {{message}}",
+                "method": "HTTP-metod",
+                "content_type": "Innehållstyp",
+                "header": "HTTP-rubriker",
+                "header_placeholder": "Avgränsa flera rubriker med semikolon, t.ex.: Authorization: Bearer token; X-Custom: value",
+                "body": "Begärans innehåll",
+                "body_placeholder": "Stöder mallvariablerna {{title}} och {{message}}\nExempel: {\"title\": \"{{title}}\", \"message\": \"{{message}}\"}"
+            },
+            "button": {
+                "submit": "Spara",
+                "send_test": "Skicka testavisering"
+            }
+        },
+        "refresh": {
+            "title": "Automatisk appförnyelse",
+            "toggle": {
+                "label": "Aktivera"
+            },
+            "iphone_toggle": {
+                "label": "Automatisk förnyelse på iPhone",
+                "tips": "Förnyelse på iPhone begränsas inte av det inställda tidsintervallet. Ett förnyelseförsök görs när iPhone är ansluten till Wi-Fi."
+            },
+            "mode": {
+                "label": "Förnyelseläge",
+                "day_before_expired": "En dag före utgångsdatum",
+                "custom": "Anpassat"
+            },
+            "advance_days": {
+                "label": "Dagar i förväg",
+                "1_day": "1 dag",
+                "2_days": "2 dagar",
+                "3_days": "3 dagar"
+            },
+            "run_time": {
+                "label": "Tidsintervall för körning",
+                "format_tips": "Linux crontab-format; begränsas av förnyelseläget"
+            },
+            "button": {
+                "submit": "Spara"
+            }
+        },
+        "update": {
+            "title": "Nya appversioner",
+            "interval": {
+                "label": "Sök efter nya versioner",
+                "off": "Av",
+                "every_hour": "Varje timme",
+                "every_hours": "Var {{num}}:e timme"
+            },
+            "github_token": {
+                "label": "GitHub-token",
+                "placeholder": "ghp_... (valfritt)",
+                "tips": "Valfri personlig åtkomsttoken för GitHub API. Den höjer API-gränsen och ger stöd för privata GitHub-repon. För en finmaskig token, ge Contents: Read-only för de repon du vill använda.",
+                "configured_placeholder": "Konfigurerad - ange ett nytt värde för att ersätta",
+                "clear": "Ta bort"
+            },
+            "tips": "Appar som installerats från ett GitHub-repo eller en AltStore-källa kontrolleras i bakgrunden, och du aviseras om nya versioner när aviseringar är aktiverade. Automatiska versionsuppdateringar installeras under tidsintervallet för automatisk appförnyelse, även om appen ännu inte behöver förnyas. GitHub tillåter 60 oautentiserade förfrågningar per timme.",
+            "task_disabled": "Automatisk appförnyelse är avstängd: nya versioner upptäcks fortfarande, men versionsuppdateringar installeras inte automatiskt.",
+            "button": {
+                "submit": "Spara"
+            }
+        },
+        "sources": {
+            "title": "AltStore-källor",
+            "list": {
+                "label": "Sparade källor",
+                "empty": "Inga sparade källor ännu."
+            },
+            "add": {
+                "label": "Lägg till en källa"
+            },
+            "tips": "Sparade källor kan bläddras i och sökas från läget Källa på installationssidan.",
+            "delete_confirm": "Ta bort {{name}} från de sparade källorna? Appar som följer den påverkas inte.",
+            "button": {
+                "add": "Lägg till",
+                "delete": "Ta bort",
+                "cancel": "Avbryt",
+                "confirm": "Bekräfta"
+            },
+            "toast": {
+                "added": "{{name}} har sparats",
+                "deleted": "{{name}} har tagits bort"
+            }
+        },
+        "network": {
+            "title": "Nätverksinställningar",
+            "proxy_toggle": {
+                "label": "Aktivera proxy"
+            },
+            "http_proxy": {
+                "label": "HTTP-proxy",
+                "placeholder": "t.ex. http://proxy.example.com:8080"
+            },
+            "https_proxy": {
+                "label": "HTTPS-proxy",
+                "placeholder": "t.ex. http://proxy.example.com:8080"
+            },
+            "button": {
+                "submit": "Spara"
+            }
+        },
+        "advanced": {
+            "title": "Avancerat",
+            "update_coreadi": "Uppdatera CoreADI",
+            "update_coreadi_confirm": "Vill du verkligen uppdatera CoreADI-biblioteken?",
+            "anisette_server": "Anisette-server",
+            "anisette_server_default_tag": "Standard",
+            "anisette_server_tips": "Lämna tomt för att använda standardservern. Om anropen fortfarande misslyckas efter att du bytt server, försök återställa eller ta bort kontots Anisette-data.",
+            "save": "Spara",
+            "reset_anisette": "Anisette-data",
+            "reset_anisette_empty": "Inget konto har sparad Anisette-data.",
+            "reset_anisette_confirm": "Vill du verkligen återställa Anisette-data för {{email}}? En ny enhetsidentitet skapas vid nästa användning, så kontot måste logga in igen.",
+            "remove_anisette_confirm": "Det här kontot är inte längre inloggat. Vill du ta bort dess kvarvarande Anisette-data?",
+            "reset": "Återställ",
+            "delete": "Ta bort",
+            "cancel": "Avbryt",
+            "confirm": "Bekräfta",
+            "toast": {
+                "downloading": "Laddar ned…",
+                "success": "Uppdateringen är klar",
+                "failed": "Uppdateringen misslyckades",
+                "reset_success": "Anisette-data för {{email}} har återställts",
+                "reset_failed": "Återställningen misslyckades",
+                "remove_success": "Anisette-data för {{email}} har tagits bort",
+                "remove_failed": "Borttagningen misslyckades",
+                "server_success": "Anisette-servern har sparats",
+                "server_failed": "Det gick inte att spara Anisette-servern"
+            }
+        },
+        "tools": {
+            "title": "Avancerade verktyg"
+        }
+    },
+    "account": {
+        "status_labels": {
+            "valid": "Giltigt",
+            "invalid": "Ogiltigt"
+        },
+        "select_account": "Välj konto",
+        "select_placeholder": "Välj ett konto",
+        "table": {
+            "header": {
+                "email": "E-post",
+                "account": "Konto",
+                "status": "Status",
+                "machine_name": "Datornamn"
+            },
+            "button": {
+                "certificate": "Certifikat",
+                "devices": "Enheter",
+                "logout": "Logga ut"
+            },
+            "empty": "Inga konton hittades"
+        },
+        "dialog": {
+            "logout_confirm": {
+                "title": "Vill du verkligen logga ut från {{name}}?"
+            }
+        },
+        "toast": {
+            "delete_success": "Kontot har tagits bort",
+            "delete_failed": "Kunde inte ta bort kontot",
+            "logout_success": "Kontot har loggats ut",
+            "logout_failed": "Kunde inte logga ut från kontot"
+        },
+        "heading": {
+            "apple_accounts": "Apple-konton"
+        }
+    },
+    "source_dialog": {
+        "title_track": "Följ nya versioner av {{name}}",
+        "title": "Nya versioner av {{name}}",
+        "installed_version": "Installerad version",
+        "installed_build": "Installerat bygge",
+        "checked_at": "Senast kontrollerad",
+        "never": "Aldrig",
+        "already_installed": "Den installerade versionen är redan {{version}}",
+        "untrack_confirm": "Sluta följa nya versioner av {{name}}?",
+        "button": {
+            "untrack": "Sluta följa",
+            "save": "Spara",
+            "install": "Installera",
+            "cancel": "Avbryt",
+            "confirm": "Bekräfta"
+        },
+        "toast": {
+            "saved": "Källan har sparats",
+            "untracked": "Följer inte längre {{name}}"
+        }
+    },
+    "certificate": {
+        "modal": {
+            "title": "Certifikathantering – {{email}}",
+            "import_title": "Importera certifikat",
+            "export_title": "Exportera certifikat"
+        },
+        "button": {
+            "import": "Importera"
+        },
+        "import": {
+            "file_selected": "Vald fil: {{name}}"
+        },
+        "import_form": {
+            "password_label": "Certifikatlösenord",
+            "password_placeholder": "Ange P12-lösenord (valfritt)"
+        },
+        "export_form": {
+            "password_label": "P12-lösenord",
+            "password_placeholder": "Ange P12-lösenord"
+        },
+        "table": {
+            "header": {
+                "serial": "Serienummer",
+                "name": "Namn",
+                "machine_name": "Datornamn",
+                "expiration": "Utgångsdatum"
+            },
+            "button": {
+                "revoke": "Återkalla",
+                "export": "Exportera",
+                "import": "Importera"
+            }
+        },
+        "dialog": {
+            "revoke_confirm": {
+                "title": "Vill du verkligen återkalla certifikatet {{serial}}?"
+            }
+        },
+        "toast": {
+            "revoke_success": "Certifikatet har återkallats",
+            "revoke_failed": "Kunde inte återkalla certifikatet",
+            "export_success": "Exporten lyckades",
+            "export_failed": "Exporten misslyckades",
+            "export_password_required": "Ange certifikatlösenordet",
+            "import_success": "Importen lyckades",
+            "import_failed": "Importen misslyckades"
+        },
+        "no_certificates": "Inga certifikat hittades"
+    },
+    "device": {
+        "modal": {
+            "title": "Enheter – {{email}}"
+        },
+        "table": {
+            "header": {
+                "name": "Namn",
+                "udid": "UDID",
+                "platform": "Plattform"
+            },
+            "empty": "Inga enheter hittades"
+        },
+        "toast": {
+            "delete_success": "Enheten har tagits bort",
+            "delete_failed": "Kunde inte ta bort enheten"
+        }
+    },
+    "tools": {
+        "ssdp": {
+            "title": "SSDP-skanner",
+            "pairable_label": "Tjänstetyp för parkopplingsbara enheter: _remotepairing-manual-pairing._tcp"
+        }
+    },
+    "addDevice": {
+        "title": "Lägg till ny enhet",
+        "tabs": {
+            "appletv": "Apple TV",
+            "iphone": "iPhone"
+        },
+        "appletv": {
+            "device_label": "Apple TV-enhet",
+            "ip_placeholder": "t.ex. 192.168.1.120",
+            "ip_tips": "Apple TV:n måste vara i parkopplingsläge för att kunna hittas och anslutas; stöder en lokal IP-adress eller en Tailscale IP-adress",
+            "pairing_step1": "Öppna Inställningar → Fjärrkontroller och enheter → Fjärrapp och enheter på Apple TV:n för att gå in i parkopplingsläge.",
+            "pairing_step2": "Uppdatera enhetslistan och välj Apple TV:n, klicka sedan på Starta parkoppling.",
+            "no_device": "IP-adressen matchar ingen hittad Apple TV. Uppdatera listan och välj en enhet.",
+            "submit": "Starta parkoppling"
+        },
+        "iphone": {
+            "warning1": "Se till att utvecklarläget är aktiverat på iPhone och att systemversionen är iOS 17.4+.",
+            "warning2": "Använd <a href=\"https://github.com/jkcoxson/idevice_pair\" target=\"_blank\" class=\"link\">idevice_pair</a> för att exportera parkopplingsfilen i RPPairing-läge och aktivera Wireless Debugging.",
+            "warning3": "Automatisk uppdatering på iPhone är inte garanterat stabil; iPhone måste vara upplåst för att fjärruppdatering ska fungera.",
+            "warning4": "Anslutning via en Tailscale IP-adress kräver att iPhone är ansluten till Wi-Fi.",
+            "device_label": "iPhone-enhet",
+            "device_placeholder": "t.ex. 192.168.1.205, eller välj en enhet",
+            "device_tips": "iPhone måste låsas upp för att kunna hittas och anslutas; stöder en lokal IP-adress eller en Tailscale IP-adress",
+            "upload_label": "Ladda upp parkopplingsfil",
+            "no_device": "Kunde inte hitta iPhone-tunneltjänsten. iPhone måste vara ansluten till Wi-Fi (endast mobildata fungerar inte); kontrollera att den är upplåst och nåbar i samma nätverk eller via Tailscale.",
+            "submit": "Starta anslutning"
+        },
+        "toast": {
+            "device_required": "Ange eller välj en enhets IP-adress",
+            "file_required": "Ladda upp en parkopplingsfil först"
+        }
+    },
+    "laboratory": {
+        "title": "Anslut iPhone",
+        "tips": {
+            "step1": "Kontrollera att utvecklarläget är aktiverat på din iPhone och att iOS 17.4 eller senare är installerat.",
+            "step2": "Ladda ned <a href=\"https://github.com/jkcoxson/idevice_pair\" target=\"_blank\" class=\"link\">idevice_pair</a>, anslut din iPhone och exportera en parkopplingsfil i läget <b>RPPairing</b>.",
+            "step3": "Använd idevice_pair för att aktivera trådlös felsökning.",
+            "step4": "Kontrollera att din iPhone går att hitta under <a href=\"/#/tools\" class=\"link\">Verktyg</a>.",
+            "step5": "Automatisk förnyelse på iPhone är inte garanterat tillförlitlig. Enheten måste vara upplåst för att fjärrförnyelse ska fungera korrekt.",
+            "step6": "Förnyelse fungerar bara i det lokala nätverket: den fungerar inte korrekt via VPN eller Tailscale."
+        },
+        "form": {
+            "device_label": "Välj motsvarande enhet",
+            "device_placeholder": "Välj en enhet",
+            "device_unlock": "Din iPhone måste vara upplåst för att hittas",
+            "refresh": "Förnya",
+            "refresh_devices": "Uppdatera enhetslistan",
+            "upload_label": "Ladda upp parkopplingsfil",
+            "submit": "Skicka"
+        },
+        "toast": {
+            "import_success": "Importen lyckades",
+            "import_failed": "Importen misslyckades: {{msg}}",
+            "load_devices_failed": "Kunde inte läsa in enhetslistan: {{msg}}"
+        },
+        "dialog": {
+            "override": {
+                "title": "Bekräfta överskrivning",
+                "content": "En parkopplingsfil med samma namn finns redan. Vill du skriva över den?",
+                "cancel": "Avbryt",
+                "confirm": "Skriv över"
+            }
+        }
+    },
+    "identity": {
+        "title": "Signeringsidentiteter (externt certifikat)",
+        "subtitle": "P12-certifikat och provisioneringsprofiler som används för att signera appar utan Apple-ID.",
+        "notice": "Signering med ett importerat certifikat kräver inget Apple-ID i atvloadly. Appar kan installeras tills certifikatet eller provisioneringsprofilen går ut; Apple kan ändå återkalla certifikatet tidigare, och atvloadly kontrollerar inte återkallelse.",
+        "button": {
+            "import": "Importera P12",
+            "replace_profile": "Byt profil",
+            "copy": "Kopiera",
+            "copy_fingerprint": "Kopiera SHA-1-fingeravtrycket",
+            "done": "Klar"
+        },
+        "table": {
+            "header": {
+                "identity": "Identitet",
+                "certificate": "Certifikat",
+                "profile": "Provisioneringsprofil",
+                "validity": "Giltighet",
+                "status": "Status"
+            },
+            "empty": "Ingen signeringsidentitet har importerats"
+        },
+        "fields": {
+            "team": "Team",
+            "expires": "Går ut {{date}}",
+            "certificate_validity": "Certifikat: {{from}} → {{to}}",
+            "profile_validity": "Profil: {{from}} → {{to}}",
+            "devices_one": "{{count}} enhet",
+            "devices": "{{count}} enheter",
+            "all_devices": "Alla enheter (enterprise)"
+        },
+        "status": {
+            "in_use": "Används av en pågående installation",
+            "used_by_one": "Används av {{count}} app",
+            "used_by": "Används av {{count}} appar",
+            "unused": "Används inte av någon app"
+        },
+        "import_modal": {
+            "title": "Importera en signeringsidentitet",
+            "name_label": "Namn (valfritt)",
+            "name_placeholder": "Certifikatets namn används som standard",
+            "p12_label": "Certifikat (.p12)",
+            "password_label": "P12-lösenord",
+            "password_placeholder": "Lämna tomt om P12-filen saknar lösenord",
+            "password_tips": "Lösenordet används bara för att dekryptera P12-filen vid importen och sparas aldrig.",
+            "profile_label": "Provisioneringsprofil (.mobileprovision)",
+            "submit": "Importera",
+            "files_required": "Välj en P12-fil och en provisioneringsprofil.",
+            "issues_title": "Identiteten importerades med följande anmärkningar:"
+        },
+        "replace_modal": {
+            "title": "Byt profil för {{name}}",
+            "current": "Nuvarande profil: {{name}}",
+            "tips": "Den nya provisioneringsprofilen måste innehålla identitetens certifikat. Installerade appar behåller sin nuvarande signatur tills de installeras om.",
+            "submit": "Byt"
+        },
+        "dialog": {
+            "delete_confirm": {
+                "title": "Ta bort signeringsidentiteten {{name}}?"
+            },
+            "referenced": {
+                "title": "Identiteten används av installerade appar",
+                "content_one": "{{count}} installerad app använder {{name}}. Efter borttagningen kan den inte längre installeras om med den här identiteten. Ta bort ändå?",
+                "content": "{{count}} installerade appar använder {{name}}. Efter borttagningen kan de inte längre installeras om med den här identiteten. Ta bort ändå?",
+                "confirm": "Ta bort ändå"
+            }
+        },
+        "toast": {
+            "import_success": "Signeringsidentiteten har importerats",
+            "replace_success": "Provisioneringsprofilen har bytts",
+            "delete_success": "Signeringsidentiteten har tagits bort",
+            "copied": "Fingeravtrycket har kopierats",
+            "copy_failed": "Det gick inte att kopiera fingeravtrycket"
+        }
+    },
+    "signing": {
+        "mode": {
+            "apple_id": "Apple-ID",
+            "external_certificate": "Externt certifikat"
+        },
+        "severity": {
+            "error": "Blockerande",
+            "warning": "Varningar",
+            "info": "Information"
+        },
+        "issues": {
+            "show_more": "Visa {{count}} fler…",
+            "show_less": "Visa färre"
+        },
+        "classes": {
+            "identity": "Signeringsidentitet",
+            "signing": "Signering",
+            "transport": "Enhetsanslutning"
+        },
+        "profile_kinds": {
+            "development": "Utveckling",
+            "ad_hoc": "Ad hoc",
+            "enterprise": "Enterprise",
+            "app_store": "App Store"
+        },
+        "plan": {
+            "title": "Kompatibilitetskontroll",
+            "run_check": "Kontrollera igen",
+            "view_details": "Visa detaljer",
+            "uploading": "Laddar upp IPA-filen för kompatibilitetskontrollen…",
+            "downloading": "Laddar ner IPA-filen från källan för kompatibilitetskontrollen…",
+            "checking": "Kontrollerar IPA-filen, identiteten och enheten…",
+            "check_failed": "Kompatibilitetskontrollen misslyckades",
+            "pending": "Välj en IPA-fil eller en version från en källa och en signeringsidentitet för att kontrollera kompatibiliteten med den här enheten.",
+            "rerun_needed": "Kör kompatibilitetskontrollen för att kunna installera den här IPA-filen.",
+            "blocking": "Installationen är blockerad: åtgärda felen nedan",
+            "ready": "Redo att signera",
+            "bundle_id": "Paket-ID",
+            "application_identifier": "Applikationsidentifierare vid signering",
+            "unchanged": "oförändrat",
+            "removed_extensions": "Borttagna tillägg",
+            "none": "Inga",
+            "device": "Enhet och plattform",
+            "device_ok": "Täcks av profilen",
+            "device_warning": "Täcks, med varningar",
+            "device_problem": "Täcks inte av profilen"
+        },
+        "report": {
+            "title": "Signeringsrapport",
+            "plan": "Använd signeringsplan",
+            "verified": "Den signerade appen har verifierats"
+        },
+        "codes": {
+            "upload_too_large": "Filen är för stor.",
+            "p12_invalid": "Filen är inte en läsbar PKCS#12-fil (.p12).",
+            "p12_wrong_password": "Fel lösenord för P12-filen.",
+            "p12_password_unsupported": "P12-lösenordet innehåller tecken som PKCS#12-filer inte kan använda, till exempel emojier. Exportera P12-filen igen med ett annat lösenord.",
+            "p12_no_private_key": "P12-filen innehåller ingen privat nyckel.",
+            "p12_no_certificate": "P12-filen innehåller inget certifikat som matchar dess privata nyckel.",
+            "p12_key_mismatch": "Den privata nyckeln matchar inte certifikatet.",
+            "p12_ambiguous": "P12-filen innehåller flera identiteter. Exportera ett enda certifikat med dess privata nyckel.",
+            "p12_unsupported": "P12-filen använder ett format, en kryptering eller en nyckeltyp som inte stöds.",
+            "certificate_not_code_signing": "Certifikatet är inte giltigt för kodsignering.",
+            "certificate_expired": "Certifikatet har gått ut.",
+            "certificate_not_yet_valid": "Certifikatet är inte giltigt ännu.",
+            "certificate_no_team": "Certifikatet saknar identifierare för Apple-utvecklarteam.",
+            "revocation_not_checked": "Återkallelse inte kontrollerad",
+            "profile_invalid": "Provisioneringsprofilen är ogiltig eller kan inte läsas.",
+            "profile_signature_invalid": "Provisioneringsprofilen är inte signerad av Apple eller har en ogiltig signatur.",
+            "profile_expired": "Provisioneringsprofilen har gått ut.",
+            "profile_not_installable": "App Store-profiler kan inte användas för att installera appar på enheter.",
+            "profile_certificate_mismatch": "Provisioneringsprofilen innehåller inte det här certifikatet.",
+            "profile_team_mismatch": "Provisioneringsprofilen tillhör ett annat team än certifikatet.",
+            "identity_expiring_soon": "Går snart ut",
+            "identity_duplicate": "Det finns redan en identitet med samma certifikat och provisioneringsprofil.",
+            "identity_not_found": "Signeringsidentiteten finns inte längre.",
+            "identity_in_use": "Signeringsidentiteten används av en pågående installation. Försök igen när den är klar.",
+            "identity_referenced": "Installerade appar använder fortfarande den här signeringsidentiteten.",
+            "key_unavailable": "Den här installationens signeringsnyckel är inte tillgänglig, så den privata nyckeln kan inte låsas upp.",
+            "key_mismatch": "Den privata nyckeln förseglades med en annan signeringsnyckel. Återställ den ursprungliga nyckelfilen eller importera identiteten igen.",
+            "sealed_key_corrupt": "Den sparade privata nyckeln är skadad. Importera identiteten igen.",
+            "workspace_failed": "Den tillfälliga signeringskatalogen kunde inte förberedas.",
+            "device_platform_unknown": "Enhetens plattform är okänd.",
+            "device_unreachable": "Det gick inte att nå enheten.",
+            "profile_platform_mismatch": "Provisioneringsprofilen stöder inte enhetens plattform.",
+            "ipa_platform_mismatch": "Appen är inte byggd för enhetens plattform.",
+            "ipa_platform_unknown": "Det gick inte att avgöra vilken plattform appen är byggd för.",
+            "device_not_provisioned": "Enheten finns inte med i provisioneringsprofilen.",
+            "ipa_invalid": "IPA-filen är ogiltig eller kan inte läsas.",
+            "ipa_path_rejected": "IPA-filen är inte en uppladdad eller installerad IPA. Ladda upp den igen.",
+            "nested_bundles_not_signed": "En app som ligger inuti en annan app kan inte signeras med provisioneringsprofilen.",
+            "bundle_identifier_rewritten": "Paket-ID:t ändras till det anpassade paket-ID:t; apptilläggens paket-ID:n följer med.",
+            "extension_removed": "Ett tillägg tas bort från appen.",
+            "application_identifier_mismatch": "Applikationsidentifieraren skulle inte matcha provisioneringsprofilen.",
+            "wildcard_requires_binary_entitlements": "Den körbara filen innehåller inga entitlements, så jokerteckenprofilen kan inte ge den den förväntade applikationsidentifieraren.",
+            "entitlements_missing": "Provisioneringsprofilen beviljar inte vissa entitlements som appen begär.",
+            "entitlement_value_changed": "Vissa entitlements skulle signeras med andra värden än appen begär.",
+            "application_identifier_from_profile": "Det här paketet signeras med provisioneringsprofilens applikationsidentifierare, inte sin egen. Appgrupper, delning av nyckelring, pushnotiser och iCloud kanske inte fungerar.",
+            "custom_identifier_invalid": "Det anpassade paket-ID:t är ogiltigt: använd bara bokstäver, siffror, bindestreck och punkter.",
+            "incompatible": "IPA-filen, provisioneringsprofilen och enheten är inte kompatibla.",
+            "engine_failed": "Signeringsmotorn misslyckades.",
+            "signed_output_missing": "Signeringsmotorn skapade ingen signerad IPA-fil.",
+            "signed_bundles_mismatch": "Den signerade IPA-filen innehåller inte de förväntade apparna och tilläggen.",
+            "signed_bundle_identifier_mismatch": "Ett signerat paket har ett oväntat paket-ID.",
+            "signed_profile_mismatch": "Ett signerat paket innehåller inte identitetens provisioneringsprofil.",
+            "signed_certificate_mismatch": "Ett signerat paket är inte signerat med identitetens certifikat.",
+            "signed_entitlements_invalid": "Ett signerat paket har oväntade entitlements.",
+            "transport_failed": "Det gick inte att nå enheten, eller så avvisade den installationen.",
+            "pairing_record_invalid": "Enhetens parkopplingspost saknas eller kan inte läsas. Parkoppla enheten igen.",
+            "certificate_invalid": "Det sparade certifikatet kan inte läsas. Importera identiteten igen."
+        }
+    },
+    "quickstart": {
+        "title": "Koppla ihop Apple TV:n med NAS:en",
+        "subtitle": "Tre steg: hitta tv:n, parkoppla den och importera en tvOS-IPA för signering och installation. Verktyget är gratis.",
+        "state_waiting": "Väntar på tv",
+        "state_pairing": "Klar för parkoppling",
+        "state_ready": "Klar att installera",
+        "step1_title": "Hitta Apple TV:n",
+        "step1_desc": "Håll servern och Apple TV:n på samma nätverk. TV:er i parkopplingsläge visas här automatiskt.",
+        "step2_title": "Anslut och parkoppla",
+        "step2_desc": "Öppna Inställningar → Fjärrkontroller och enheter → Fjärrapp och enheter på Apple TV:n och starta parkopplingen från listan.",
+        "step3_title": "Ladda ner IPA och installera",
+        "step3_desc": "Ladda ner Apple TV-IPA:n från den officiella webbplatsen och importera den här för signering. Gratis Apple-konton signerar i ca 7 dagar; förnyelse görs automatiskt före utgång.",
+        "scanning": "Söker i det lokala nätverket…",
+        "none_found": "Inget hittat? Kontrollera att Apple TV:n är i parkopplingsläge, eller ange en IP manuellt.",
+        "rescan": "Sök igen",
+        "manual_ip": "Ange IP manuellt",
+        "pair_now": "Starta parkoppling",
+        "choose_ipa": "Välj en IPA",
+        "download_ipa": "Ladda ner officiell tvOS-IPA",
+        "free_note": "Verktyget är alltid gratis: att installera andra legitima tvOS-IPA:er kräver aldrig köp av SongLib.",
+        "summary_title": "{{count}} Apple TV ansluten",
+        "summary_open_apps": "Öppna appar & förnyelse",
+        "summary_open_devices": "Hantera enheter",
+        "summary_no_renewal": "Ingen förnyelse registrerad än",
+        "summary_renewal_ok": "Senaste förnyelse {{date}} lyckades",
+        "summary_renewal_fail": "Senaste förnyelse {{date}} misslyckades — kontrollera appen"
+    },
+    "devices": {
+        "title": "Apple TV-enheter",
+        "subtitle": "Hitta, parkoppla och hantera de Apple TV:er verktyget når.",
+        "filter_paired": "Parkopplade",
+        "filter_pairable": "Parkopplingsbara",
+        "filter_all": "Alla",
+        "rescan": "Sök igen",
+        "scanning_hint": "Söker efter Apple TV:er i parkopplingsläge i nätverket…",
+        "empty_title": "Ingen Apple TV hittad",
+        "empty_hint": "Kontrollera att tv:n är på samma nätverk och har öppnat Inställningar → Fjärrkontroller och enheter → Fjärrapp och enheter, eller lägg till den via IP.",
+        "empty_action": "Lägg till enhet",
+        "status_paired": "Ansluten",
+        "status_pairable": "Väntar på parkoppling",
+        "status_unpaired": "Ej ansluten",
+        "status_added": "Tillagd",
+        "action_install": "Installera appar",
+        "action_pair": "Starta parkoppling",
+        "action_forget": "Ta bort",
+        "action_forget_confirm": "Bekräfta borttagning",
+        "forget_done": "Enhet borttagen",
+        "manual_title": "Ange IP manuellt",
+        "manual_desc": "För Tailscale-adresser eller nätverk där upptäckt är isolerad.",
+        "manual_placeholder": "t.ex. 192.168.1.120",
+        "manual_action": "Anslut"
+    },
+    "apps": {
+        "title": "Appar & förnyelse",
+        "subtitle": "Hantera installerade tvOS-appar, signeringens giltighet och automatisk förnyelse.",
+        "stat_total": "Installerade appar",
+        "stat_expiring": "Går ut inom 7 dagar",
+        "stat_renewal_ok": "Senaste förnyelsen lyckades",
+        "stat_renewal_fail": "Senaste förnyelsen misslyckades",
+        "stat_renewal_none": "Ingen förnyelse registrerad än",
+        "empty_title": "Inga appar installerade än",
+        "empty_hint": "Parkoppla en Apple TV först och välj sedan \"Installera appar\" på enheten för att importera en IPA.",
+        "empty_action": "Till enheterna"
+    },
+    "explore": {
+        "eyebrow": "SONGLIB AMP · FOR APPLE TV",
+        "title": "Utforska SongLib",
+        "intro": "SongLib Amp är en privat musikspelare för Apple TV. Anslut ditt självhostade bibliotek, spela i ursprungligt format och njut av skivomslag och synkade texter på storskärmen.",
+        "sources_label": "Musikservrar som stöds",
+        "ch1_caption": "Spelar nu · officiell skärmbild",
+        "ch1_title": "Uppspelning i ursprungligt format",
+        "ch1_desc": "FLAC och ALAC avkodas direkt utan tvingande transkodning; interna och publika adresser växlar automatiskt.",
+        "ch1_point1": "Skivomslag och fulla uppspelningskontroller",
+        "ch1_point2": "Valbar servertranskodning med valfri bithastighet",
+        "ch2_caption": "Helskärmstexter · officiell skärmbild",
+        "ch2_title": "Synkade texter på storskärm",
+        "ch2_desc": "Radvis synkade texter med förstorad aktuell rad, finjustering av tidslinje och helskärmsläge.",
+        "ch2_point1": "Texter läses från ditt bibliotek och försöker igen automatiskt",
+        "ch2_point2": "Spellistan nås från båda spelarvyerna",
+        "ch3_caption": "Bibliotek · officiell skärmbild",
+        "ch3_title": "Ditt eget bibliotek",
+        "ch3_desc": "Bläddra i NAS-musiken efter låtar, album, artister och spellistor, med sökning, favoriter och spellista.",
+        "ch3_point1": "Flera servrar och bibliotek i en vy",
+        "ch3_point2": "Pro slår samman och avdubblar över bibliotek",
+        "features_title": "Varför spela NAS-musik med SongLib",
+        "feature1_title": "Musiken stannar på ditt NAS",
+        "feature1_desc": "Ansluter till stödda och testade musikservrar. Filerna styrs av dig — ingen tredjepartsvärd.",
+        "feature2_title": "Byggd för Apple TVs storskärm",
+        "feature2_desc": "Skivomslag, synkade texter och helskärmsuppspelning designad för vardagsrummet.",
+        "feature3_title": "Mer än ett bibliotek",
+        "feature3_desc": "Pro samlar flera källor och andra utgivna funktioner, med val efter kvalitet eller hastighet.",
+        "get_title": "Skaffa SongLib",
+        "get_desc": "Ladda ner Apple TV-IPA:n från den officiella webbplatsen (osignerad, egen signering krävs). Verktyget innehåller aldrig en IPA.",
+        "get_tv": "Ladda ner för Apple TV"
     }
-  },
-  "settings": {
-    "toast": {
-      "save_success": "Inställningarna har sparats",
-      "notify_success": "Aviseringen har skickats"
-    },
-    "notification": {
-      "title": "Aviseringar",
-      "toggle": {
-        "label": "Aktivera"
-      },
-      "type": {
-        "label": "Aviseringstyp"
-      },
-      "weixin": {
-        "title": "WeCom",
-        "corp_id": "Företags-ID",
-        "corp_secret": "Företagshemlig nyckel",
-        "agent_id": "Agent-ID",
-        "touser": "Mottagare"
-      },
-      "email": {
-        "smtp_host": "SMTP-server",
-        "smtp_port": "SMTP-port",
-        "username": "Användarnamn",
-        "password": "Lösenord",
-        "from": "Avsändaradress",
-        "to": "Mottagaradress"
-      },
-      "webhook": {
-        "url": "URL",
-        "url_placeholder": "Stöder mallvariablerna {{title}} och {{message}}",
-        "method": "HTTP-metod",
-        "content_type": "Innehållstyp",
-        "header": "HTTP-rubriker",
-        "header_placeholder": "Avgränsa flera rubriker med semikolon, t.ex.: Authorization: Bearer token; X-Custom: value",
-        "body": "Begärans innehåll",
-        "body_placeholder": "Stöder mallvariablerna {{title}} och {{message}}\nExempel: {\"title\": \"{{title}}\", \"message\": \"{{message}}\"}"
-      },
-      "button": {
-        "submit": "Spara",
-        "send_test": "Skicka testavisering"
-      }
-    },
-    "refresh": {
-      "title": "Automatisk appförnyelse",
-      "toggle": {
-        "label": "Aktivera"
-      },
-      "iphone_toggle": {
-        "label": "Automatisk förnyelse på iPhone",
-        "tips": "Förnyelse på iPhone begränsas inte av det inställda tidsintervallet. Ett förnyelseförsök görs när iPhone är ansluten till Wi-Fi."
-      },
-      "mode": {
-        "label": "Förnyelseläge",
-        "day_before_expired": "En dag före utgångsdatum",
-        "custom": "Anpassat"
-      },
-      "advance_days": {
-        "label": "Dagar i förväg",
-        "1_day": "1 dag",
-        "2_days": "2 dagar",
-        "3_days": "3 dagar"
-      },
-      "run_time": {
-        "label": "Tidsintervall för körning",
-        "format_tips": "Linux crontab-format; begränsas av förnyelseläget"
-      },
-      "button": {
-        "submit": "Spara"
-      }
-    },
-    "update": {
-      "title": "Nya appversioner",
-      "interval": {
-        "label": "Sök efter nya versioner",
-        "off": "Av",
-        "every_hour": "Varje timme",
-        "every_hours": "Var {{num}}:e timme"
-      },
-      "github_token": {
-        "label": "GitHub-token",
-        "placeholder": "ghp_... (valfritt)",
-        "tips": "Valfri personlig åtkomsttoken för GitHub API. Den höjer API-gränsen och ger stöd för privata GitHub-repon. För en finmaskig token, ge Contents: Read-only för de repon du vill använda.",
-        "configured_placeholder": "Konfigurerad - ange ett nytt värde för att ersätta",
-        "clear": "Ta bort"
-      },
-      "tips": "Appar som installerats från ett GitHub-repo eller en AltStore-källa kontrolleras i bakgrunden, och du aviseras om nya versioner när aviseringar är aktiverade. Automatiska versionsuppdateringar installeras under tidsintervallet för automatisk appförnyelse, även om appen ännu inte behöver förnyas. GitHub tillåter 60 oautentiserade förfrågningar per timme.",
-      "task_disabled": "Automatisk appförnyelse är avstängd: nya versioner upptäcks fortfarande, men versionsuppdateringar installeras inte automatiskt.",
-      "button": {
-        "submit": "Spara"
-      }
-    },
-    "sources": {
-      "title": "AltStore-källor",
-      "list": {
-        "label": "Sparade källor",
-        "empty": "Inga sparade källor ännu."
-      },
-      "add": {
-        "label": "Lägg till en källa"
-      },
-      "tips": "Sparade källor kan bläddras i och sökas från läget Källa på installationssidan.",
-      "delete_confirm": "Ta bort {{name}} från de sparade källorna? Appar som följer den påverkas inte.",
-      "button": {
-        "add": "Lägg till",
-        "delete": "Ta bort",
-        "cancel": "Avbryt",
-        "confirm": "Bekräfta"
-      },
-      "toast": {
-        "added": "{{name}} har sparats",
-        "deleted": "{{name}} har tagits bort"
-      }
-    },
-    "network": {
-      "title": "Nätverksinställningar",
-      "proxy_toggle": {
-        "label": "Aktivera proxy"
-      },
-      "http_proxy": {
-        "label": "HTTP-proxy",
-        "placeholder": "t.ex. http://proxy.example.com:8080"
-      },
-      "https_proxy": {
-        "label": "HTTPS-proxy",
-        "placeholder": "t.ex. http://proxy.example.com:8080"
-      },
-      "button": {
-        "submit": "Spara"
-      }
-    },
-    "advanced": {
-      "title": "Avancerat",
-      "update_coreadi": "Uppdatera CoreADI",
-      "update_coreadi_confirm": "Vill du verkligen uppdatera CoreADI-biblioteken?",
-      "anisette_server": "Anisette-server",
-      "anisette_server_default_tag": "Standard",
-      "anisette_server_tips": "Lämna tomt för att använda standardservern. Om anropen fortfarande misslyckas efter att du bytt server, försök återställa eller ta bort kontots Anisette-data.",
-      "save": "Spara",
-      "reset_anisette": "Anisette-data",
-      "reset_anisette_empty": "Inget konto har sparad Anisette-data.",
-      "reset_anisette_confirm": "Vill du verkligen återställa Anisette-data för {{email}}? En ny enhetsidentitet skapas vid nästa användning, så kontot måste logga in igen.",
-      "remove_anisette_confirm": "Det här kontot är inte längre inloggat. Vill du ta bort dess kvarvarande Anisette-data?",
-      "reset": "Återställ",
-      "delete": "Ta bort",
-      "cancel": "Avbryt",
-      "confirm": "Bekräfta",
-      "toast": {
-        "downloading": "Laddar ned…",
-        "success": "Uppdateringen är klar",
-        "failed": "Uppdateringen misslyckades",
-        "reset_success": "Anisette-data för {{email}} har återställts",
-        "reset_failed": "Återställningen misslyckades",
-        "remove_success": "Anisette-data för {{email}} har tagits bort",
-        "remove_failed": "Borttagningen misslyckades",
-        "server_success": "Anisette-servern har sparats",
-        "server_failed": "Det gick inte att spara Anisette-servern"
-      }
-    }
-  },
-  "account": {
-    "status_labels": {
-      "valid": "Giltigt",
-      "invalid": "Ogiltigt"
-    },
-    "select_account": "Välj konto",
-    "select_placeholder": "Välj ett konto",
-    "table": {
-      "header": {
-        "email": "E-post",
-        "account": "Konto",
-        "status": "Status",
-        "machine_name": "Datornamn"
-      },
-      "button": {
-        "certificate": "Certifikat",
-        "devices": "Enheter",
-        "logout": "Logga ut"
-      },
-      "empty": "Inga konton hittades"
-    },
-    "dialog": {
-      "logout_confirm": {
-        "title": "Vill du verkligen logga ut från {{name}}?"
-      }
-    },
-    "toast": {
-      "delete_success": "Kontot har tagits bort",
-      "delete_failed": "Kunde inte ta bort kontot",
-      "logout_success": "Kontot har loggats ut",
-      "logout_failed": "Kunde inte logga ut från kontot"
-    },
-    "heading": {
-      "apple_accounts": "Apple-konton"
-    }
-  },
-  "source_dialog": {
-    "title_track": "Följ nya versioner av {{name}}",
-    "title": "Nya versioner av {{name}}",
-    "installed_version": "Installerad version",
-    "installed_build": "Installerat bygge",
-    "checked_at": "Senast kontrollerad",
-    "never": "Aldrig",
-    "already_installed": "Den installerade versionen är redan {{version}}",
-    "untrack_confirm": "Sluta följa nya versioner av {{name}}?",
-    "button": {
-      "untrack": "Sluta följa",
-      "save": "Spara",
-      "install": "Installera",
-      "cancel": "Avbryt",
-      "confirm": "Bekräfta"
-    },
-    "toast": {
-      "saved": "Källan har sparats",
-      "untracked": "Följer inte längre {{name}}"
-    }
-  },
-  "certificate": {
-    "modal": {
-      "title": "Certifikathantering – {{email}}",
-      "import_title": "Importera certifikat",
-      "export_title": "Exportera certifikat"
-    },
-    "button": {
-      "import": "Importera"
-    },
-    "import": {
-      "file_selected": "Vald fil: {{name}}"
-    },
-    "import_form": {
-      "password_label": "Certifikatlösenord",
-      "password_placeholder": "Ange P12-lösenord (valfritt)"
-    },
-    "export_form": {
-      "password_label": "P12-lösenord",
-      "password_placeholder": "Ange P12-lösenord"
-    },
-    "table": {
-      "header": {
-        "serial": "Serienummer",
-        "name": "Namn",
-        "machine_name": "Datornamn",
-        "expiration": "Utgångsdatum"
-      },
-      "button": {
-        "revoke": "Återkalla",
-        "export": "Exportera",
-        "import": "Importera"
-      }
-    },
-    "dialog": {
-      "revoke_confirm": {
-        "title": "Vill du verkligen återkalla certifikatet {{serial}}?"
-      }
-    },
-    "toast": {
-      "revoke_success": "Certifikatet har återkallats",
-      "revoke_failed": "Kunde inte återkalla certifikatet",
-      "export_success": "Exporten lyckades",
-      "export_failed": "Exporten misslyckades",
-      "export_password_required": "Ange certifikatlösenordet",
-      "import_success": "Importen lyckades",
-      "import_failed": "Importen misslyckades"
-    },
-    "no_certificates": "Inga certifikat hittades"
-  },
-  "device": {
-    "modal": {
-      "title": "Enheter – {{email}}"
-    },
-    "table": {
-      "header": {
-        "name": "Namn",
-        "udid": "UDID",
-        "platform": "Plattform"
-      },
-      "empty": "Inga enheter hittades"
-    },
-    "toast": {
-      "delete_success": "Enheten har tagits bort",
-      "delete_failed": "Kunde inte ta bort enheten"
-    }
-  },
-  "tools": {
-    "ssdp": {
-      "title": "SSDP-skanner",
-      "pairable_label": "Tjänstetyp för parkopplingsbara enheter: _remotepairing-manual-pairing._tcp"
-    }
-  },
-  "addDevice": {
-    "title": "Lägg till ny enhet",
-    "tabs": {
-      "appletv": "Apple TV",
-      "iphone": "iPhone"
-    },
-    "appletv": {
-      "device_label": "Apple TV-enhet",
-      "ip_placeholder": "t.ex. 192.168.1.120",
-      "ip_tips": "Apple TV:n måste vara i parkopplingsläge för att kunna hittas och anslutas; stöder en lokal IP-adress eller en Tailscale IP-adress",
-      "pairing_step1": "Öppna Inställningar → Fjärrkontroller och enheter → Fjärrapp och enheter på Apple TV:n för att gå in i parkopplingsläge.",
-      "pairing_step2": "Uppdatera enhetslistan och välj Apple TV:n, klicka sedan på Starta parkoppling.",
-      "no_device": "IP-adressen matchar ingen hittad Apple TV. Uppdatera listan och välj en enhet.",
-      "submit": "Starta parkoppling"
-    },
-    "iphone": {
-      "warning1": "Se till att utvecklarläget är aktiverat på iPhone och att systemversionen är iOS 17.4+.",
-      "warning2": "Använd <a href=\"https://github.com/jkcoxson/idevice_pair\" target=\"_blank\" class=\"link\">idevice_pair</a> för att exportera parkopplingsfilen i RPPairing-läge och aktivera Wireless Debugging.",
-      "warning3": "Automatisk uppdatering på iPhone är inte garanterat stabil; iPhone måste vara upplåst för att fjärruppdatering ska fungera.",
-      "warning4": "Anslutning via en Tailscale IP-adress kräver att iPhone är ansluten till Wi-Fi.",
-      "device_label": "iPhone-enhet",
-      "device_placeholder": "t.ex. 192.168.1.205, eller välj en enhet",
-      "device_tips": "iPhone måste låsas upp för att kunna hittas och anslutas; stöder en lokal IP-adress eller en Tailscale IP-adress",
-      "upload_label": "Ladda upp parkopplingsfil",
-      "no_device": "Kunde inte hitta iPhone-tunneltjänsten. iPhone måste vara ansluten till Wi-Fi (endast mobildata fungerar inte); kontrollera att den är upplåst och nåbar i samma nätverk eller via Tailscale.",
-      "submit": "Starta anslutning"
-    },
-    "toast": {
-      "device_required": "Ange eller välj en enhets IP-adress",
-      "file_required": "Ladda upp en parkopplingsfil först"
-    }
-  },
-  "laboratory": {
-    "title": "Anslut iPhone",
-    "tips": {
-      "step1": "Kontrollera att utvecklarläget är aktiverat på din iPhone och att iOS 17.4 eller senare är installerat.",
-      "step2": "Ladda ned <a href=\"https://github.com/jkcoxson/idevice_pair\" target=\"_blank\" class=\"link\">idevice_pair</a>, anslut din iPhone och exportera en parkopplingsfil i läget <b>RPPairing</b>.",
-      "step3": "Använd idevice_pair för att aktivera trådlös felsökning.",
-      "step4": "Kontrollera att din iPhone går att hitta under <a href=\"/#/tools\" class=\"link\">Verktyg</a>.",
-      "step5": "Automatisk förnyelse på iPhone är inte garanterat tillförlitlig. Enheten måste vara upplåst för att fjärrförnyelse ska fungera korrekt.",
-      "step6": "Förnyelse fungerar bara i det lokala nätverket: den fungerar inte korrekt via VPN eller Tailscale."
-    },
-    "form": {
-      "device_label": "Välj motsvarande enhet",
-      "device_placeholder": "Välj en enhet",
-      "device_unlock": "Din iPhone måste vara upplåst för att hittas",
-      "refresh": "Förnya",
-      "refresh_devices": "Uppdatera enhetslistan",
-      "upload_label": "Ladda upp parkopplingsfil",
-      "submit": "Skicka"
-    },
-    "toast": {
-      "import_success": "Importen lyckades",
-      "import_failed": "Importen misslyckades: {{msg}}",
-      "load_devices_failed": "Kunde inte läsa in enhetslistan: {{msg}}"
-    },
-    "dialog": {
-      "override": {
-        "title": "Bekräfta överskrivning",
-        "content": "En parkopplingsfil med samma namn finns redan. Vill du skriva över den?",
-        "cancel": "Avbryt",
-        "confirm": "Skriv över"
-      }
-    }
-  },
-  "identity": {
-    "title": "Signeringsidentiteter (externt certifikat)",
-    "subtitle": "P12-certifikat och provisioneringsprofiler som används för att signera appar utan Apple-ID.",
-    "notice": "Signering med ett importerat certifikat kräver inget Apple-ID i atvloadly. Appar kan installeras tills certifikatet eller provisioneringsprofilen går ut; Apple kan ändå återkalla certifikatet tidigare, och atvloadly kontrollerar inte återkallelse.",
-    "button": {
-      "import": "Importera P12",
-      "replace_profile": "Byt profil",
-      "copy": "Kopiera",
-      "copy_fingerprint": "Kopiera SHA-1-fingeravtrycket",
-      "done": "Klar"
-    },
-    "table": {
-      "header": {
-        "identity": "Identitet",
-        "certificate": "Certifikat",
-        "profile": "Provisioneringsprofil",
-        "validity": "Giltighet",
-        "status": "Status"
-      },
-      "empty": "Ingen signeringsidentitet har importerats"
-    },
-    "fields": {
-      "team": "Team",
-      "expires": "Går ut {{date}}",
-      "certificate_validity": "Certifikat: {{from}} → {{to}}",
-      "profile_validity": "Profil: {{from}} → {{to}}",
-      "devices_one": "{{count}} enhet",
-      "devices": "{{count}} enheter",
-      "all_devices": "Alla enheter (enterprise)"
-    },
-    "status": {
-      "in_use": "Används av en pågående installation",
-      "used_by_one": "Används av {{count}} app",
-      "used_by": "Används av {{count}} appar",
-      "unused": "Används inte av någon app"
-    },
-    "import_modal": {
-      "title": "Importera en signeringsidentitet",
-      "name_label": "Namn (valfritt)",
-      "name_placeholder": "Certifikatets namn används som standard",
-      "p12_label": "Certifikat (.p12)",
-      "password_label": "P12-lösenord",
-      "password_placeholder": "Lämna tomt om P12-filen saknar lösenord",
-      "password_tips": "Lösenordet används bara för att dekryptera P12-filen vid importen och sparas aldrig.",
-      "profile_label": "Provisioneringsprofil (.mobileprovision)",
-      "submit": "Importera",
-      "files_required": "Välj en P12-fil och en provisioneringsprofil.",
-      "issues_title": "Identiteten importerades med följande anmärkningar:"
-    },
-    "replace_modal": {
-      "title": "Byt profil för {{name}}",
-      "current": "Nuvarande profil: {{name}}",
-      "tips": "Den nya provisioneringsprofilen måste innehålla identitetens certifikat. Installerade appar behåller sin nuvarande signatur tills de installeras om.",
-      "submit": "Byt"
-    },
-    "dialog": {
-      "delete_confirm": {
-        "title": "Ta bort signeringsidentiteten {{name}}?"
-      },
-      "referenced": {
-        "title": "Identiteten används av installerade appar",
-        "content_one": "{{count}} installerad app använder {{name}}. Efter borttagningen kan den inte längre installeras om med den här identiteten. Ta bort ändå?",
-        "content": "{{count}} installerade appar använder {{name}}. Efter borttagningen kan de inte längre installeras om med den här identiteten. Ta bort ändå?",
-        "confirm": "Ta bort ändå"
-      }
-    },
-    "toast": {
-      "import_success": "Signeringsidentiteten har importerats",
-      "replace_success": "Provisioneringsprofilen har bytts",
-      "delete_success": "Signeringsidentiteten har tagits bort",
-      "copied": "Fingeravtrycket har kopierats",
-      "copy_failed": "Det gick inte att kopiera fingeravtrycket"
-    }
-  },
-  "signing": {
-    "mode": {
-      "apple_id": "Apple-ID",
-      "external_certificate": "Externt certifikat"
-    },
-    "severity": {
-      "error": "Blockerande",
-      "warning": "Varningar",
-      "info": "Information"
-    },
-    "issues": {
-      "show_more": "Visa {{count}} fler…",
-      "show_less": "Visa färre"
-    },
-    "classes": {
-      "identity": "Signeringsidentitet",
-      "signing": "Signering",
-      "transport": "Enhetsanslutning"
-    },
-    "profile_kinds": {
-      "development": "Utveckling",
-      "ad_hoc": "Ad hoc",
-      "enterprise": "Enterprise",
-      "app_store": "App Store"
-    },
-    "plan": {
-      "title": "Kompatibilitetskontroll",
-      "run_check": "Kontrollera igen",
-      "view_details": "Visa detaljer",
-      "uploading": "Laddar upp IPA-filen för kompatibilitetskontrollen…",
-      "downloading": "Laddar ner IPA-filen från källan för kompatibilitetskontrollen…",
-      "checking": "Kontrollerar IPA-filen, identiteten och enheten…",
-      "check_failed": "Kompatibilitetskontrollen misslyckades",
-      "pending": "Välj en IPA-fil eller en version från en källa och en signeringsidentitet för att kontrollera kompatibiliteten med den här enheten.",
-      "rerun_needed": "Kör kompatibilitetskontrollen för att kunna installera den här IPA-filen.",
-      "blocking": "Installationen är blockerad: åtgärda felen nedan",
-      "ready": "Redo att signera",
-      "bundle_id": "Paket-ID",
-      "application_identifier": "Applikationsidentifierare vid signering",
-      "unchanged": "oförändrat",
-      "removed_extensions": "Borttagna tillägg",
-      "none": "Inga",
-      "device": "Enhet och plattform",
-      "device_ok": "Täcks av profilen",
-      "device_warning": "Täcks, med varningar",
-      "device_problem": "Täcks inte av profilen"
-    },
-    "report": {
-      "title": "Signeringsrapport",
-      "plan": "Använd signeringsplan",
-      "verified": "Den signerade appen har verifierats"
-    },
-    "codes": {
-      "upload_too_large": "Filen är för stor.",
-      "p12_invalid": "Filen är inte en läsbar PKCS#12-fil (.p12).",
-      "p12_wrong_password": "Fel lösenord för P12-filen.",
-      "p12_password_unsupported": "P12-lösenordet innehåller tecken som PKCS#12-filer inte kan använda, till exempel emojier. Exportera P12-filen igen med ett annat lösenord.",
-      "p12_no_private_key": "P12-filen innehåller ingen privat nyckel.",
-      "p12_no_certificate": "P12-filen innehåller inget certifikat som matchar dess privata nyckel.",
-      "p12_key_mismatch": "Den privata nyckeln matchar inte certifikatet.",
-      "p12_ambiguous": "P12-filen innehåller flera identiteter. Exportera ett enda certifikat med dess privata nyckel.",
-      "p12_unsupported": "P12-filen använder ett format, en kryptering eller en nyckeltyp som inte stöds.",
-      "certificate_not_code_signing": "Certifikatet är inte giltigt för kodsignering.",
-      "certificate_expired": "Certifikatet har gått ut.",
-      "certificate_not_yet_valid": "Certifikatet är inte giltigt ännu.",
-      "certificate_no_team": "Certifikatet saknar identifierare för Apple-utvecklarteam.",
-      "revocation_not_checked": "Återkallelse inte kontrollerad",
-      "profile_invalid": "Provisioneringsprofilen är ogiltig eller kan inte läsas.",
-      "profile_signature_invalid": "Provisioneringsprofilen är inte signerad av Apple eller har en ogiltig signatur.",
-      "profile_expired": "Provisioneringsprofilen har gått ut.",
-      "profile_not_installable": "App Store-profiler kan inte användas för att installera appar på enheter.",
-      "profile_certificate_mismatch": "Provisioneringsprofilen innehåller inte det här certifikatet.",
-      "profile_team_mismatch": "Provisioneringsprofilen tillhör ett annat team än certifikatet.",
-      "identity_expiring_soon": "Går snart ut",
-      "identity_duplicate": "Det finns redan en identitet med samma certifikat och provisioneringsprofil.",
-      "identity_not_found": "Signeringsidentiteten finns inte längre.",
-      "identity_in_use": "Signeringsidentiteten används av en pågående installation. Försök igen när den är klar.",
-      "identity_referenced": "Installerade appar använder fortfarande den här signeringsidentiteten.",
-      "key_unavailable": "Den här installationens signeringsnyckel är inte tillgänglig, så den privata nyckeln kan inte låsas upp.",
-      "key_mismatch": "Den privata nyckeln förseglades med en annan signeringsnyckel. Återställ den ursprungliga nyckelfilen eller importera identiteten igen.",
-      "sealed_key_corrupt": "Den sparade privata nyckeln är skadad. Importera identiteten igen.",
-      "workspace_failed": "Den tillfälliga signeringskatalogen kunde inte förberedas.",
-      "device_platform_unknown": "Enhetens plattform är okänd.",
-      "device_unreachable": "Det gick inte att nå enheten.",
-      "profile_platform_mismatch": "Provisioneringsprofilen stöder inte enhetens plattform.",
-      "ipa_platform_mismatch": "Appen är inte byggd för enhetens plattform.",
-      "ipa_platform_unknown": "Det gick inte att avgöra vilken plattform appen är byggd för.",
-      "device_not_provisioned": "Enheten finns inte med i provisioneringsprofilen.",
-      "ipa_invalid": "IPA-filen är ogiltig eller kan inte läsas.",
-      "ipa_path_rejected": "IPA-filen är inte en uppladdad eller installerad IPA. Ladda upp den igen.",
-      "nested_bundles_not_signed": "En app som ligger inuti en annan app kan inte signeras med provisioneringsprofilen.",
-      "bundle_identifier_rewritten": "Paket-ID:t ändras till det anpassade paket-ID:t; apptilläggens paket-ID:n följer med.",
-      "extension_removed": "Ett tillägg tas bort från appen.",
-      "application_identifier_mismatch": "Applikationsidentifieraren skulle inte matcha provisioneringsprofilen.",
-      "wildcard_requires_binary_entitlements": "Den körbara filen innehåller inga entitlements, så jokerteckenprofilen kan inte ge den den förväntade applikationsidentifieraren.",
-      "entitlements_missing": "Provisioneringsprofilen beviljar inte vissa entitlements som appen begär.",
-      "entitlement_value_changed": "Vissa entitlements skulle signeras med andra värden än appen begär.",
-      "application_identifier_from_profile": "Det här paketet signeras med provisioneringsprofilens applikationsidentifierare, inte sin egen. Appgrupper, delning av nyckelring, pushnotiser och iCloud kanske inte fungerar.",
-      "custom_identifier_invalid": "Det anpassade paket-ID:t är ogiltigt: använd bara bokstäver, siffror, bindestreck och punkter.",
-      "incompatible": "IPA-filen, provisioneringsprofilen och enheten är inte kompatibla.",
-      "engine_failed": "Signeringsmotorn misslyckades.",
-      "signed_output_missing": "Signeringsmotorn skapade ingen signerad IPA-fil.",
-      "signed_bundles_mismatch": "Den signerade IPA-filen innehåller inte de förväntade apparna och tilläggen.",
-      "signed_bundle_identifier_mismatch": "Ett signerat paket har ett oväntat paket-ID.",
-      "signed_profile_mismatch": "Ett signerat paket innehåller inte identitetens provisioneringsprofil.",
-      "signed_certificate_mismatch": "Ett signerat paket är inte signerat med identitetens certifikat.",
-      "signed_entitlements_invalid": "Ett signerat paket har oväntade entitlements.",
-      "transport_failed": "Det gick inte att nå enheten, eller så avvisade den installationen.",
-      "pairing_record_invalid": "Enhetens parkopplingspost saknas eller kan inte läsas. Parkoppla enheten igen.",
-      "certificate_invalid": "Det sparade certifikatet kan inte läsas. Importera identiteten igen."
-    }
-  }
 }

@@ -1,0 +1,120 @@
+/*
+ * SongLib design tokens — single source of truth for the redesigned UI.
+ * Spec: docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF_20261104.md §4.
+ *
+ * Brand calibration: the gold and ink values are sampled from the official
+ * logo (branding/ios-app-icon-original.png): gold #E3B459 on ink #0D1014.
+ * On light backgrounds the raw gold fails text contrast, so light themes use
+ * a deepened variant for text/lines and keep the raw gold for graphics and
+ * on-dark surfaces.
+ *
+ * New components use only --sl-* tokens. The legacy --atv-* variables in
+ * app.css are mapped onto these tokens so untouched pages inherit the new
+ * palette during the migration.
+ */
+
+:root {
+  /* radii */
+  --sl-radius-sm: 10px;
+  --sl-radius-md: 14px;
+  --sl-radius-card: 20px;
+  --sl-radius-hero: 24px;
+
+  /* elevation */
+  --sl-shadow-card: 0 8px 28px rgba(25, 42, 35, .045);
+  --sl-shadow-popover: 0 18px 40px rgba(25, 42, 35, .12);
+
+  /* motion */
+  --sl-motion-fast: 160ms;
+  --sl-motion-normal: 220ms;
+
+  /* type */
+  --sl-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+
+  /* layout metrics */
+  --sl-topbar-h: 64px;
+  --sl-topbar-h-mobile: 56px;
+  --sl-sidebar-w: 216px;
+  --sl-sidebar-rail: 68px;
+  --sl-content-max: 1240px;
+}
+
+html[data-theme="winter"],
+html[data-theme="light"] {
+  --sl-bg: #F6F7F7;
+  --sl-panel: #FFFFFF;
+  --sl-panel-soft: #F1F3F3;
+  --sl-panel-hover: #EBEFEE;
+  --sl-text: #1F2927;
+  --sl-text-muted: #5F6D69;
+  --sl-text-faint: #788480;
+  --sl-border: #E3E8E6;
+
+  /* brand, sampled from the logo */
+  --sl-gold: #A87D28;
+  --sl-gold-bright: #E3B459;
+  --sl-gold-soft: #F6EDDA;
+  --sl-brand-ink: #0D1014;
+
+  /* actions */
+  --sl-primary: #243B33;
+  --sl-primary-hover: #325044;
+  --sl-primary-contrast: #FFFFFF;
+  --sl-focus: #366FCA;
+
+  /* status semantics */
+  --sl-success: #24775A;
+  --sl-success-soft: #E4F2EB;
+  --sl-warning: #9B6716;
+  --sl-warning-soft: #F8EFDD;
+  --sl-danger: #B84242;
+  --sl-danger-soft: #F9E9E9;
+
+  /* daisyUI legacy theme alignment: primary buttons across untouched pages
+     follow the same deep-green action color instead of theme blue. */
+  --p: 159 24% 19%;
+  --pf: 159 22% 25%;
+  --pc: 0 0% 100%;
+}
+
+html[data-theme="dark"] {
+  --sl-bg: #121917;
+  --sl-panel: #1A2420;
+  --sl-panel-soft: #202D27;
+  --sl-panel-hover: #28362F;
+  --sl-text: #F3F5F2;
+  --sl-text-muted: #B8C2BC;
+  --sl-text-faint: #8B9791;
+  --sl-border: #34443C;
+
+  --sl-gold: #E3B459;
+  --sl-gold-bright: #E3B459;
+  --sl-gold-soft: #2E2A1C;
+  --sl-brand-ink: #0D1014;
+
+  --sl-primary: #E7ECE8;
+  --sl-primary-hover: #FFFFFF;
+  --sl-primary-contrast: #17241D;
+  --sl-focus: #83B3FF;
+
+  --sl-success: #5FBF97;
+  --sl-success-soft: #1E3329;
+  --sl-warning: #E0A94F;
+  --sl-warning-soft: #352914;
+  --sl-danger: #E58A8A;
+  --sl-danger-soft: #3A2323;
+
+  --p: 140 12% 92%;
+  --pf: 140 14% 100%;
+  --pc: 152 22% 11%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

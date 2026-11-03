@@ -103,15 +103,17 @@ test("Serbian Cyrillic and Latin translations remain equivalent", () => {
   }
 });
 
-test("README pages link all supported languages and both logo themes", () => {
+test("upstream README pages link all supported languages and both logo themes", () => {
+  // The root README.md is the SongLib installer front page; the upstream
+  // ATVLoadly readme set lives in docs/upstream/ and docs/readme/.
   const readmes = [
-    ["README.md", "English"],
+    ["docs/upstream/README.md", "English"],
     ["docs/readme/README_sv.md", "Svenska"],
     ["docs/readme/README_cn.md", "中文"],
     ["docs/readme/README_sr.md", "Српски (ћирилица)"],
     ["docs/readme/README_sr_Latn.md", "Srpski (latinica)"],
   ];
-  const english = readFileSync(new URL("../../../README.md", import.meta.url), "utf8");
+  const english = readFileSync(new URL("../../../docs/upstream/README.md", import.meta.url), "utf8");
   const headingCount = (document) => [...document.matchAll(/^#{2,3} /gm)].length;
 
   for (const [file, label] of readmes) {
@@ -139,6 +141,21 @@ test("README pages link all supported languages and both logo themes", () => {
       assert.equal(headingCount(document), headingCount(english), `${file}: incomplete sections`);
     }
   }
+});
+
+test("SongLib installer README keeps the public-repo boundaries", () => {
+  const document = readFileSync(new URL("../../../README.md", import.meta.url), "utf8");
+  // Front page must name the product and the official slogan, stay free-tool
+  // first, and attribute the upstream project.
+  assert.ok(document.includes("你的音乐 自成一屿"), "README: official slogan missing");
+  assert.ok(document.includes("songlib.playsong.cn"), "README: official site link missing");
+  assert.ok(document.includes("AGPL-3.0"), "README: license missing");
+  assert.ok(document.includes("bitxeno/atvloadly"), "README: upstream attribution missing");
+  assert.ok(document.includes("不需要购买音屿"), "README: free-tool boundary missing");
+  assert.ok(document.includes("./marketing/tv/"), "README: official TV screenshots missing");
+  // The old front page dumped the entire upstream README inline; that content
+  // now lives in docs/upstream/README.md.
+  assert.ok(!document.includes("./docs/preview/logo.svg"), "README: must not render the upstream logo as its own");
 });
 
 test("Swedish distinguishes signing renewal from version updates", () => {

@@ -584,6 +584,19 @@
         </div>
       </form>
     </section>
+    <!-- Advanced tools moved out of the main navigation per the IA spec:
+         expert / immature features live here, not in the sidebar. -->
+    <section class="section bg-base-100">
+      <h2 class="atv-section-heading">{{ $t('settings.tools.title') }}</h2>
+      <div class="sl-tools-row">
+        <router-link class="sl-btn sl-btn--secondary" :to="{ name: 'tools' }">
+          {{ $t('nav.tools') }}
+        </router-link>
+        <router-link class="sl-btn sl-btn--secondary" :to="{ name: 'laboratory' }">
+          {{ $t('nav.laboratory') }}
+        </router-link>
+      </div>
+    </section>
   </div>
 </template>
           
@@ -1188,5 +1201,17 @@ form {
     word-break: break-all;
     line-height: 1.35;
   }
+}
+
+.sl-tools-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sl-tools-row .sl-btn {
+  min-height: 38px;
+  padding: 7px 16px;
+  font-size: 13.5px;
 }
 </style>

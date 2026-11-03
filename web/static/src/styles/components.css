@@ -1,0 +1,296 @@
+/*
+ * Shared redesigned components (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF_20261104.md §5).
+ * New Vue components compose these classes; they only rely on --sl-* tokens.
+ */
+
+/* ---- cards ---- */
+
+.sl-card {
+  background: var(--sl-panel);
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-card);
+  box-shadow: var(--sl-shadow-card);
+}
+
+.sl-card--soft {
+  background: var(--sl-panel-soft);
+  box-shadow: none;
+}
+
+.sl-card-pad {
+  padding: 24px;
+}
+
+@media (max-width: 767px) {
+  .sl-card-pad {
+    padding: 16px;
+  }
+}
+
+/* ---- typography helpers (max five levels per screen) ---- */
+
+.sl-h1 {
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sl-text);
+}
+
+.sl-h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  color: var(--sl-text);
+}
+
+.sl-h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 650;
+  color: var(--sl-text);
+}
+
+.sl-body {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--sl-text-muted);
+}
+
+.sl-caption {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--sl-text-faint);
+}
+
+@media (max-width: 767px) {
+  .sl-h1 {
+    font-size: 28px;
+    line-height: 1.3;
+  }
+}
+
+/* ---- buttons ---- */
+
+.sl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 1px solid transparent;
+  border-radius: var(--sl-radius-md);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 680;
+  letter-spacing: .01em;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--sl-motion-fast) ease, border-color var(--sl-motion-fast) ease,
+    color var(--sl-motion-fast) ease, transform var(--sl-motion-fast) ease;
+}
+
+.sl-btn:active {
+  transform: translateY(1px);
+}
+
+.sl-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sl-btn--primary {
+  background: var(--sl-primary);
+  color: var(--sl-primary-contrast);
+}
+
+.sl-btn--primary:hover:not(:disabled),
+.sl-btn--primary:focus-visible {
+  background: var(--sl-primary-hover);
+}
+
+.sl-btn--secondary {
+  background: var(--sl-panel);
+  border-color: var(--sl-border);
+  color: var(--sl-text);
+}
+
+.sl-btn--secondary:hover:not(:disabled),
+.sl-btn--secondary:focus-visible {
+  border-color: var(--sl-text-faint);
+  background: var(--sl-panel-hover);
+}
+
+.sl-btn--tertiary {
+  background: transparent;
+  color: var(--sl-text-muted);
+  min-height: 40px;
+  padding-inline: 12px;
+}
+
+.sl-btn--tertiary:hover:not(:disabled),
+.sl-btn--tertiary:focus-visible {
+  color: var(--sl-text);
+  background: var(--sl-panel-hover);
+}
+
+.sl-btn--danger {
+  background: transparent;
+  border-color: var(--sl-border);
+  color: var(--sl-danger);
+}
+
+.sl-btn--danger:hover:not(:disabled),
+.sl-btn--danger:focus-visible {
+  background: var(--sl-danger-soft);
+  border-color: var(--sl-danger);
+}
+
+.sl-btn--gold {
+  background: var(--sl-gold-bright);
+  color: var(--sl-brand-ink);
+}
+
+.sl-btn--gold:hover:not(:disabled),
+.sl-btn--gold:focus-visible {
+  filter: brightness(.94);
+}
+
+/* Mobile: primary actions run the full width. */
+@media (max-width: 767px) {
+  .sl-btn--primary,
+  .sl-btn--gold {
+    width: 100%;
+  }
+}
+
+/* ---- chips & status ---- */
+
+.sl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border: 1px solid var(--sl-border);
+  border-radius: 999px;
+  background: var(--sl-panel-soft);
+  color: var(--sl-text-muted);
+  font-size: 12.5px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.sl-chip--pro {
+  border-color: transparent;
+  background: var(--sl-gold-soft);
+  color: var(--sl-gold);
+}
+
+.sl-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 640;
+}
+
+.sl-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* Icon + label + colour triple-encode every state (never colour alone). */
+.sl-status--success { color: var(--sl-success); }
+.sl-status--success .sl-status-dot { background: var(--sl-success); }
+
+.sl-status--warning { color: var(--sl-warning); }
+.sl-status--warning .sl-status-dot { background: var(--sl-warning); }
+
+.sl-status--danger { color: var(--sl-danger); }
+.sl-status--danger .sl-status-dot { background: var(--sl-danger); }
+
+.sl-status--muted { color: var(--sl-text-muted); }
+.sl-status--muted .sl-status-dot { background: var(--sl-text-faint); }
+
+/* ---- empty states (total height 220–320px, content-sized) ---- */
+
+.sl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 220px;
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.sl-empty-icon {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  color: var(--sl-text-faint);
+}
+
+.sl-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sl-empty h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--sl-text);
+}
+
+.sl-empty p {
+  margin: 0;
+  max-width: 34em;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--sl-text-muted);
+}
+
+/* ---- focus visibility ---- */
+
+.sl-focusable:focus-visible,
+.sl-btn:focus-visible,
+.sl-iconbtn:focus-visible,
+.sl-navitem:focus-visible {
+  outline: 2px solid var(--sl-focus);
+  outline-offset: 3px;
+}
+
+/* ---- misc ---- */
+
+.sl-divider {
+  border: 0;
+  border-top: 1px solid var(--sl-border);
+  margin: 16px 0;
+}
+
+.sl-link {
+  color: var(--sl-text);
+  text-decoration: underline;
+  text-decoration-color: var(--sl-border);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--sl-motion-fast) ease, color var(--sl-motion-fast) ease;
+}
+
+.sl-link:hover,
+.sl-link:focus-visible {
+  color: var(--sl-gold);
+  text-decoration-color: var(--sl-gold);
+}
