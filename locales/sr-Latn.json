@@ -61,8 +61,6 @@
         "version": "Verzija",
         "build_date": "Datum izrade",
         "product": "SongLib Apple TV instalator",
-        "maintainer": "Održavalac",
-        "maintainer_name": "6uos",
         "website": "Veb sajt",
         "credits_title": "Otvoreni kod i zahvalnice",
         "credits_body": "Projekat je zasnovan na ATVLoadly (AGPL-3.0); autorska prava i obaveza izvornog koda su zadržani. Jezgro za potpisivanje dolazi iz izvornog projekta.",
@@ -187,7 +185,7 @@
             "source": "Izvorni kod",
             "license": "AGPL-3.0 licenca",
             "upstream": "Izvorni projekat ATVLoadly",
-            "upstream_note": "Održava 6uos, zasnovano na ATVLoadly (AGPL-3.0). Izvorni projekat je tehnička osnova, odvojen od SongLib proizvoda."
+            "upstream_note": "Zasnovano na ATVLoadly (AGPL-3.0). Izvorni projekat je tehnička osnova, odvojen od SongLib proizvoda."
         },
         "risk_title": "{{count}} aplikacija ističe uskoro ili je već istekla",
         "risk_open": "Otvori aplikacije i obnovu",

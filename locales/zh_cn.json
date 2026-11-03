@@ -61,8 +61,6 @@
         "version": "版本",
         "build_date": "构建日期",
         "product": "音屿-Apple TV音乐播放器安装助手",
-        "maintainer": "维护者",
-        "maintainer_name": "6uos",
         "website": "官方网站",
         "credits_title": "开源与致谢",
         "credits_body": "本项目基于 ATVLoadly（AGPL-3.0）改造，保留上游版权与对应源码义务；签名核心能力来自上游项目。",
@@ -187,7 +185,7 @@
             "source": "公开源码",
             "license": "AGPL-3.0 许可证",
             "upstream": "上游 ATVLoadly",
-            "upstream_note": "安装助手由 6uos 维护，基于 ATVLoadly（AGPL-3.0）改造；上游为技术来源，独立于音屿商业产品。"
+            "upstream_note": "基于 ATVLoadly（AGPL-3.0）改造；上游为技术来源，独立于音屿商业产品。"
         },
         "risk_title": "{{count}} 个应用的签名即将到期或已过期",
         "risk_open": "查看应用与续签",

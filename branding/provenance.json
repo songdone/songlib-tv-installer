@@ -13,5 +13,15 @@
     "packaging/fnos/songlibtvinstaller/app/ui/images/icon_256.png": 256,
     "packaging/fnos/songlibtvinstaller/app/ui/images/icon_512.png": 512,
     "web/static/public/songlib-mark.png": 512
+  },
+  "logo_lockup_svg": {
+    "source": "产品所有者提供的官方横版组合标（CorelDRAW 导出，金岛形 + 音屿 SongLib Amp 字标，2026-11-04）",
+    "sha256": "0bb3e9513f2bbe51bfc94755d7ef58a87acaa841a9326f6fe46f585aff8b4b16",
+    "viewBox": "0 0 349.24 142.88",
+    "usage": "深色底的登录页与横版品牌场景；字标为奶白色，不用于浅色背景",
+    "outputs": [
+      "branding/songlib-logo-lockup.svg",
+      "web/static/public/songlib-logo.svg"
+    ]
   }
 }

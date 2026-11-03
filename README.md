@@ -2,7 +2,7 @@
 
 **你的音乐 自成一屿** —— 这是 [音屿 SongLib Amp](https://songlib.playsong.cn/)（Apple TV 私人音乐播放器）的官方安装助手：一个免费、开源的 Apple TV IPA 自签与自动续签工具，运行在飞牛 fnOS 或 Docker 上。
 
-由 **6uos** 维护，基于 [ATVLoadly](https://github.com/bitxeno/atvloadly)（AGPL-3.0）改造；签名与续签内核来自上游项目，上游版权与对应源码义务完整保留。
+基于 [ATVLoadly](https://github.com/bitxeno/atvloadly)（AGPL-3.0）改造；签名与续签内核来自上游项目，上游版权与对应源码义务完整保留。
 
 > 音屿播放器是独立的商业产品，与安装助手分开维护：播放器客户端、授权服务与官网在私有仓库开发。安装助手永久免费，安装其他合法 tvOS IPA 不需要购买音屿。
 

@@ -133,6 +133,15 @@ func (a *managementAuth) mount(server *fiber.App) {
 		if c.Path() == "/management/login" {
 			return c.Next()
 		}
+		// Public brand assets referenced by the login page itself (favicon and
+		// logo): no secrets, safe to serve before authentication. Everything
+		// else stays behind the session.
+		if c.Method() == "GET" {
+			switch c.Path() {
+			case "/songlib-logo.svg", "/songlib-mark.png":
+				return c.Next()
+			}
+		}
 		token := sha256.Sum256([]byte(c.Cookies("sl_management")))
 		a.mu.Lock()
 		session, ok := a.sessions[token]
@@ -223,7 +232,7 @@ html{background:#0D0F11}
 body{min-height:100vh;margin:0;display:grid;place-items:center;padding:32px 20px;color:#EAE6DE;font:14px/1.6 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;background:radial-gradient(90vmax 90vmax at 12% -8%,rgba(227,180,89,.10),transparent 62%),radial-gradient(80vmax 80vmax at 96% 110%,rgba(122,152,124,.07),transparent 60%),#0D0F11}
 .auth-card{width:min(420px,100%);padding:36px 34px 30px;border-radius:22px;background:rgba(30,29,27,.94);box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),inset 0 1px 0 rgba(255,255,255,.06),0 40px 90px -40px rgba(0,0,0,.75);animation:pop .7s cubic-bezier(.16,1,.3,1) both}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
-.auth-logo{display:block;width:64px;height:64px;margin:2px auto 18px;border-radius:16px}
+.auth-logo{display:block;width:208px;height:auto;margin:6px auto 22px}
 .auth-card h1{margin:0;font-size:18px;font-weight:800;text-align:center;letter-spacing:.2px}
 .auth-card .desc{margin:8px auto 22px;text-align:center;color:#A39C90;font-size:13.5px}
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
@@ -241,12 +250,12 @@ input::placeholder{color:#79736A}
 .hintline{margin:16px 0 0;text-align:center;font-size:12px;color:#79736A}
 </style></head>
 <body><form class="auth-card" novalidate>
-<img class="auth-logo" src="/songlib-mark.png" alt="音屿">
+<img class="auth-logo" src="/songlib-logo.svg" alt="音屿 SongLib Amp">
 <h1>音屿-Apple TV音乐播放器安装助手</h1>
 <p class="desc">登录 NAS 管理服务。此密码与 Apple 账户、音屿激活码分别管理。</p>
 <div class="field"><label for="mg-password">管理密码</label><div class="ifield"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><input id="mg-password" type="password" autocomplete="current-password" required maxlength="200" placeholder="8–64 位管理密码" autofocus></div></div>
 <button class="go" type="submit">登录</button>
 <p role="status" id="status" class="status"></p>
-<p class="hintline">音屿 SongLib Amp · 安装助手由 6uos 维护</p>
+<p class="hintline">音屿 SongLib Amp</p>
 </form>
 <script>document.querySelector('form').onsubmit=async e=>{e.preventDefault();const r=await fetch('/management/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.querySelector('input').value})});if(r.ok)location.href='/';else document.querySelector('#status').textContent=r.status===429?'尝试过多，请稍后重试':'登录失败，请检查管理密码';};</script></body></html>`

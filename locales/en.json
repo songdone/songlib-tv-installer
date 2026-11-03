@@ -61,8 +61,6 @@
         "version": "Version",
         "build_date": "Build date",
         "product": "SongLib Apple TV Installer",
-        "maintainer": "Maintainer",
-        "maintainer_name": "6uos",
         "website": "Website",
         "credits_title": "Open source & credits",
         "credits_body": "This project is built on ATVLoadly (AGPL-3.0); upstream copyrights and the corresponding source obligation are preserved. The signing core comes from the upstream project.",
@@ -187,7 +185,7 @@
             "source": "Source code",
             "license": "AGPL-3.0 license",
             "upstream": "Upstream ATVLoadly",
-            "upstream_note": "Maintained by 6uos, based on ATVLoadly (AGPL-3.0). The upstream project is the technical origin, separate from the SongLib product."
+            "upstream_note": "Based on ATVLoadly (AGPL-3.0). The upstream project is the technical origin, separate from the SongLib product."
         },
         "risk_title": "{{count}} app(s) expiring soon or already expired",
         "risk_open": "Open apps & renewal",

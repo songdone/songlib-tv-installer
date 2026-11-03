@@ -112,7 +112,7 @@
             <img src="/songlib-mark.png" alt="音屿" />
             <div>
               <h3 class="sl-plan-name">{{ $t("about.product") }}</h3>
-              <p class="sl-hint">{{ $t("about.maintainer") }}: {{ $t("about.maintainer_name") }} · v{{ appVersion }} ({{ buildDate }})</p>
+              <p class="sl-hint">v{{ appVersion }} ({{ buildDate }})</p>
             </div>
           </div>
           <p class="sl-hint" style="margin: 12px 0 0">{{ $t("about.credits_body") }}</p>
