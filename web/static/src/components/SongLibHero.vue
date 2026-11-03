@@ -21,10 +21,10 @@
         <div class="sl-hero-ctas">
           <!-- Primary action opens the real in-app install wizard, not an
                external page (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF §6). -->
-          <router-link class="sl-btn sl-btn--primary" :to="{ name: 'add-device' }">
+          <router-link class="sl-btn sl-pri" :to="{ name: 'add-device' }">
             {{ $t("home.hero.cta_install") }}
           </router-link>
-          <router-link class="sl-btn sl-btn--secondary" :to="{ name: 'explore' }">
+          <router-link class="sl-btn" :to="{ name: 'explore' }">
             {{ $t("home.hero.cta_learn") }}
           </router-link>
         </div>
@@ -32,8 +32,8 @@
         <!-- Other product entry points: iOS is a product link to the official
              site only; unreleased Mac stays a plain note, never a fake button. -->
         <div class="sl-hero-others">
-          <a class="sl-btn sl-btn--tertiary" :href="links.ios" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.cta_ios") }}</a>
-          <a v-if="links.mac" class="sl-btn sl-btn--tertiary" :href="links.mac" target="_blank" rel="noopener noreferrer">Mac</a>
+          <a class="sl-btn sl-ghost" :href="links.ios" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.cta_ios") }}</a>
+          <a v-if="links.mac" class="sl-btn sl-ghost" :href="links.mac" target="_blank" rel="noopener noreferrer">Mac</a>
           <span v-else class="sl-caption">{{ $t("home.hero.mac_pending") }}</span>
         </div>
 
@@ -41,8 +41,8 @@
              verified URL; there is deliberately no "not configured" stub. -->
         <div class="sl-hero-purchase" v-if="links.basic || links.pro">
           <span class="sl-caption">{{ $t("home.hero.purchase_title") }}</span>
-          <a v-if="links.basic" class="sl-btn sl-btn--gold sl-hero-purchase-btn" :href="links.basic" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_basic") }}</a>
-          <a v-if="links.pro" class="sl-btn sl-btn--gold sl-hero-purchase-btn" :href="links.pro" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_pro") }}</a>
+          <a v-if="links.basic" class="sl-btn sl-pri sl-hero-purchase-btn" :href="links.basic" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_basic") }}</a>
+          <a v-if="links.pro" class="sl-btn sl-pri sl-hero-purchase-btn" :href="links.pro" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_pro") }}</a>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ onMounted(async () => {
 
 <style lang="postcss" scoped>
 .sl-hero {
-  border-radius: var(--sl-radius-hero);
+  border-radius: var(--sl-radius-xl);
   padding: 2px;
   background: linear-gradient(135deg, var(--sl-gold-soft), transparent 38%, var(--sl-gold-soft));
 }
@@ -85,9 +85,9 @@ onMounted(async () => {
   align-items: center;
   padding: clamp(24px, 2.8vw, 40px);
   border: 1px solid var(--sl-border);
-  border-radius: calc(var(--sl-radius-hero) - 2px);
-  background: var(--sl-panel);
-  box-shadow: var(--sl-shadow-card);
+  border-radius: calc(var(--sl-radius-xl) - 2px);
+  background: var(--sl-surface);
+  box-shadow: var(--sl-shadow);
 }
 
 /* ---- copy column ---- */
@@ -100,8 +100,8 @@ onMounted(async () => {
   padding: 4px 12px;
   border: 1px solid var(--sl-border);
   border-radius: 999px;
-  background: var(--sl-panel-soft);
-  color: var(--sl-text-muted);
+  background: var(--sl-surface-2);
+  color: var(--sl-muted);
   font-size: 0.72rem;
   font-weight: 750;
   letter-spacing: 0.09em;
@@ -124,7 +124,7 @@ onMounted(async () => {
 .sl-hero-desc {
   margin: 0 0 16px;
   max-width: 32em;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   font-size: 14.5px;
   line-height: 1.75;
 }
@@ -145,7 +145,7 @@ onMounted(async () => {
   padding: 5px 12px;
   border: 1px solid var(--sl-border);
   border-radius: 999px;
-  background: var(--sl-panel-soft);
+  background: var(--sl-surface-2);
   color: var(--sl-text);
   font-size: 12.5px;
   font-weight: 650;

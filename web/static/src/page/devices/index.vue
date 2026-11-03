@@ -1,29 +1,33 @@
 <template>
   <div class="sl-page">
-    <header class="sl-devices-head">
-      <h1 class="sl-h2">{{ $t("devices.title") }}</h1>
-      <p class="sl-body">{{ $t("devices.subtitle") }}</p>
-    </header>
+    <div class="sl-page-head">
+      <div>
+        <h1 class="sl-h1">{{ $t("devices.title") }}</h1>
+        <p class="sl-desc">{{ $t("devices.subtitle") }}</p>
+      </div>
+      <div class="sl-head-acts">
+        <button type="button" class="sl-btn" :disabled="scanning" @click="refresh">
+          <span class="sl-spin" v-if="scanning"></span>
+          {{ $t("devices.rescan") }}
+        </button>
+      </div>
+    </div>
 
     <div class="sl-devices-toolbar">
-      <div class="join" role="tablist">
+      <div class="sl-seg" role="tablist">
         <button
           v-for="filter in filters"
           :key="filter"
           type="button"
           role="tab"
-          class="btn join-item sl-filter"
-          :class="{ 'sl-filter--active': activeFilter === filter }"
+          class="sl-seg-btn"
+          :class="{ 'sl-on': activeFilter === filter }"
           :aria-selected="activeFilter === filter"
           @click="activeFilter = filter"
         >
           {{ $t("devices.filter_" + filter) }}
         </button>
       </div>
-      <button type="button" class="sl-btn sl-btn--secondary sl-scan" :disabled="scanning" @click="refresh">
-        <span class="loading loading-spinner loading-xs" v-if="scanning"></span>
-        {{ $t("devices.rescan") }}
-      </button>
     </div>
 
     <!-- Scanning feedback: never a bare blank area. -->
@@ -38,13 +42,13 @@
       <div class="sl-empty-icon"><AppleTVIcon /></div>
       <h3>{{ $t("devices.empty_title") }}</h3>
       <p>{{ $t("devices.empty_hint") }}</p>
-      <router-link class="sl-btn sl-btn--primary" :to="{ name: 'add-device' }">
+      <router-link class="sl-btn sl-pri" :to="{ name: 'add-device' }">
         {{ $t("devices.empty_action") }}
       </router-link>
     </div>
 
     <div v-else class="sl-dev-grid">
-      <div v-for="device in filteredDevices" :key="device.id" class="sl-card sl-card-pad sl-dev">
+      <div v-for="device in filteredDevices" :key="device.id" class="sl-card sl-pad sl-dev">
         <div class="sl-dev-icon" aria-hidden="true">
           <AppleTVIcon />
         </div>
@@ -60,14 +64,14 @@
         <div class="sl-dev-actions">
           <router-link
             v-if="device.status === 'paired'"
-            class="sl-btn sl-btn--primary sl-dev-btn"
+            class="sl-btn sl-pri sl-dev-btn"
             :to="{ name: 'install', params: { id: device.id } }"
           >
             {{ $t("devices.action_install") }}
           </router-link>
           <router-link
             v-else-if="device.status === 'pairable'"
-            class="sl-btn sl-btn--primary sl-dev-btn"
+            class="sl-btn sl-pri sl-dev-btn"
             :to="{ name: 'pair', params: { id: device.id } }"
           >
             {{ $t("devices.action_pair") }}
@@ -75,7 +79,7 @@
           <button
             v-if="device.manual"
             type="button"
-            class="sl-btn sl-btn--danger sl-dev-btn"
+            class="sl-btn sl-danger sl-dev-btn"
             :class="{ 'sl-dev-btn--armed': forgetConfirmId === device.id }"
             @click="forgetDevice(device)"
           >
@@ -86,8 +90,8 @@
     </div>
 
     <!-- Manual entry: a compact secondary path, kept visible but quiet. -->
-    <section class="sl-section">
-      <div class="sl-card sl-card-pad sl-manual">
+    <section class="sl-section-gap">
+      <div class="sl-card sl-pad sl-manual">
         <div class="sl-manual-text">
           <h3 class="sl-h3">{{ $t("devices.manual_title") }}</h3>
           <p class="sl-body">{{ $t("devices.manual_desc") }}</p>
@@ -100,7 +104,7 @@
             :placeholder="$t('devices.manual_placeholder')"
             :aria-label="$t('devices.manual_title')"
           />
-          <button type="submit" class="sl-btn sl-btn--secondary" :disabled="!manualIp.trim()">
+          <button type="submit" class="sl-btn" :disabled="!manualIp.trim()">
             {{ $t("devices.manual_action") }}
           </button>
         </form>
@@ -193,14 +197,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.sl-devices-head {
-  margin-bottom: 20px;
-}
-
-.sl-devices-head .sl-body {
-  margin-top: 4px;
-}
-
 .sl-devices-toolbar {
   display: flex;
   align-items: center;
@@ -210,36 +206,26 @@ export default {
   margin-bottom: 20px;
 }
 
-.sl-filter {
-  min-height: 38px;
-  padding: 6px 18px;
-  border: 1px solid var(--sl-border);
-  background: var(--sl-panel);
-  color: var(--sl-text-muted);
-  font-size: 13.5px;
-  font-weight: 650;
-  text-transform: none;
-  border-radius: 0;
+.sl-seg-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--sl-muted);
+  cursor: pointer;
+  transition: color .2s, background .2s;
 }
 
-.sl-filter:first-child {
-  border-radius: var(--sl-radius-sm) 0 0 var(--sl-radius-sm);
-}
-
-.sl-filter:last-child {
-  border-radius: 0 var(--sl-radius-sm) var(--sl-radius-sm) 0;
-}
-
-.sl-filter--active {
-  background: var(--sl-primary);
-  border-color: var(--sl-primary);
-  color: var(--sl-primary-contrast);
-}
-
-.sl-scan {
-  min-height: 38px;
-  padding: 7px 16px;
-  font-size: 13.5px;
+.sl-seg-btn.sl-on {
+  color: var(--sl-text);
+  background: var(--sl-hover);
+  box-shadow: inset 0 0 0 1px var(--sl-border-strong);
 }
 
 .sl-dev-grid {
@@ -261,9 +247,9 @@ export default {
   justify-content: center;
   width: 46px;
   height: 46px;
-  border-radius: var(--sl-radius-md);
-  background: var(--sl-panel-soft);
-  color: var(--sl-text-muted);
+  border-radius: var(--sl-radius-sm);
+  background: color-mix(in srgb, var(--sl-accent) 12%, transparent);
+  color: var(--sl-accent);
   flex-shrink: 0;
 }
 
@@ -300,8 +286,8 @@ export default {
 }
 
 .sl-dev-btn--armed {
-  background: var(--sl-danger-soft);
-  border-color: var(--sl-danger);
+  background: color-mix(in srgb, var(--sl-danger) 9%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sl-danger) 35%, transparent);
 }
 
 .sl-manual {
@@ -326,15 +312,16 @@ export default {
   min-height: 42px;
   padding: 8px 14px;
   border: 1px solid var(--sl-border);
-  border-radius: var(--sl-radius-sm);
-  background: var(--sl-panel);
+  border-radius: 11px;
+  background: var(--sl-bg-soft);
   color: var(--sl-text);
   font-size: 14px;
+  font-family: inherit;
   min-width: 220px;
 }
 
 .sl-input:focus-visible {
-  outline: 2px solid var(--sl-focus);
+  outline: 2px solid color-mix(in srgb, var(--sl-accent) 65%, transparent);
   outline-offset: 1px;
 }
 

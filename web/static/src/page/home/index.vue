@@ -4,7 +4,7 @@
 
     <!-- Quick start: full three-step guide before any TV is paired, then a
          single summary card (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF §7). -->
-    <section class="sl-section">
+    <section class="sl-section-gap">
       <QuickStartStepper
         :devices="devices"
         :compact="devicesLoaded && pairedDevices.length > 0"
@@ -16,30 +16,30 @@
     <!-- One concise renewal-risk line when something needs attention; the
          detailed list lives in the apps view. -->
     <section class="sl-section sl-section--tight" v-if="attentionApps.length > 0">
-      <div class="sl-card sl-card-pad sl-risk">
+      <div class="sl-card sl-pad sl-risk">
         <span class="sl-status sl-status--warning sl-risk-label">
           <span class="sl-status-dot" aria-hidden="true"></span>
           {{ $t("home.risk_title", { count: attentionApps.length }) }}
         </span>
-        <router-link class="sl-btn sl-btn--secondary sl-risk-btn" :to="{ name: 'apps' }">
+        <router-link class="sl-btn sl-risk-btn" :to="{ name: 'apps' }">
           {{ $t("home.risk_open") }}
         </router-link>
       </div>
     </section>
 
     <!-- Device summary: real cards replace any empty placeholder. -->
-    <section class="sl-section" v-if="devicesLoaded && (pairedDevices.length > 0 || pairableDevices.length > 0)">
+    <section class="sl-section-gap" v-if="devicesLoaded && (pairedDevices.length > 0 || pairableDevices.length > 0)">
       <h2 class="sl-section-title">{{ $t("home.devices_title") }}</h2>
       <div class="sl-dev-grid">
         <DeviceStatusCard v-for="device in previewDevices" :key="device.id" :device="device" />
       </div>
-      <router-link class="sl-btn sl-btn--tertiary sl-more" :to="{ name: 'devices' }">
+      <router-link class="sl-btn sl-ghost sl-more" :to="{ name: 'devices' }">
         {{ $t("home.devices_open") }}
       </router-link>
     </section>
 
     <!-- Recent app / renewal snapshot: statuses from the real app list only. -->
-    <section class="sl-section" v-if="latestApps.length > 0">
+    <section class="sl-section-gap" v-if="latestApps.length > 0">
       <h2 class="sl-section-title">{{ $t("home.apps_title") }}</h2>
       <div class="sl-card">
         <ul class="sl-apps">
@@ -56,15 +56,15 @@
           </li>
         </ul>
       </div>
-      <router-link class="sl-btn sl-btn--tertiary sl-more" :to="{ name: 'apps' }">
+      <router-link class="sl-btn sl-ghost sl-more" :to="{ name: 'apps' }">
         {{ $t("home.apps_open") }}
       </router-link>
     </section>
 
     <!-- Pre-install safety notes: visible on the first screen, not buried. -->
-    <section class="sl-section">
+    <section class="sl-section-gap">
       <h2 class="sl-section-title">{{ $t("home.safety.title") }}</h2>
-      <div class="sl-card sl-card-pad sl-safety">
+      <div class="sl-card sl-pad sl-safety">
         <ul>
           <li>{{ $t("home.safety.item1") }}</li>
           <li>{{ $t("home.safety.item2") }}</li>
@@ -275,7 +275,7 @@ export default {
   height: 40px;
   border-radius: 10px;
   overflow: hidden;
-  background: var(--sl-panel-soft);
+  background: var(--sl-surface-2);
   flex-shrink: 0;
 }
 
@@ -287,7 +287,7 @@ export default {
 
 .sl-apps-initial {
   font-weight: 750;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
 }
 
 .sl-apps-name {
@@ -326,7 +326,7 @@ export default {
   margin: 0;
   padding-left: 18px;
   list-style: disc;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   font-size: 13.5px;
   line-height: 1.65;
 }

@@ -589,10 +589,10 @@
     <section class="section bg-base-100">
       <h2 class="atv-section-heading">{{ $t('settings.tools.title') }}</h2>
       <div class="sl-tools-row">
-        <router-link class="sl-btn sl-btn--secondary" :to="{ name: 'tools' }">
+        <router-link class="sl-btn" :to="{ name: 'tools' }">
           {{ $t('nav.tools') }}
         </router-link>
-        <router-link class="sl-btn sl-btn--secondary" :to="{ name: 'laboratory' }">
+        <router-link class="sl-btn" :to="{ name: 'laboratory' }">
           {{ $t('nav.laboratory') }}
         </router-link>
       </div>

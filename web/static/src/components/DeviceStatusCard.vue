@@ -1,5 +1,5 @@
 <template>
-  <div class="sl-card sl-card-pad sl-dev">
+  <div class="sl-card sl-pad sl-dev">
     <div class="sl-dev-icon" aria-hidden="true">
       <AppleTVIcon />
     </div>
@@ -15,14 +15,14 @@
     <div class="sl-dev-action">
       <router-link
         v-if="device.status === 'paired'"
-        class="sl-btn sl-btn--primary sl-dev-btn"
+        class="sl-btn sl-pri sl-dev-btn"
         :to="{ name: 'install', params: { id: device.id } }"
       >
         {{ $t("devices.action_install") }}
       </router-link>
       <router-link
         v-else-if="device.status === 'pairable'"
-        class="sl-btn sl-btn--primary sl-dev-btn"
+        class="sl-btn sl-pri sl-dev-btn"
         :to="{ name: 'pair', params: { id: device.id } }"
       >
         {{ $t("devices.action_pair") }}
@@ -75,8 +75,8 @@ import AppleTVIcon from "@/assets/icons/appletv.svg";
   width: 46px;
   height: 46px;
   border-radius: var(--sl-radius-md);
-  background: var(--sl-panel-soft);
-  color: var(--sl-text-muted);
+  background: var(--sl-surface-2);
+  color: var(--sl-muted);
   flex-shrink: 0;
 }
 

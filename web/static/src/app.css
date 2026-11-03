@@ -14,51 +14,51 @@
 html[data-theme="winter"],
 html[data-theme="light"] {
   --atv-brand-gold: var(--sl-gold);
-  --atv-brand-gold-strong: var(--sl-gold);
-  --atv-brand-gold-soft: var(--sl-gold-soft);
-  --atv-brand-ink: var(--sl-brand-ink);
+  --atv-brand-gold-strong: var(--sl-accent-strong);
+  --atv-brand-gold-soft: color-mix(in srgb, var(--sl-accent-soft) 22%, transparent);
+  --atv-brand-ink: var(--sl-gold-ink);
   --atv-ink: var(--sl-text);
-  --atv-muted: var(--sl-text-muted);
+  --atv-muted: var(--sl-muted);
   --atv-canvas: var(--sl-bg);
-  --atv-surface: var(--sl-panel);
-  --atv-surface-alt: var(--sl-panel-soft);
-  --atv-surface-hover: var(--sl-panel-hover);
+  --atv-surface: var(--sl-surface);
+  --atv-surface-alt: var(--sl-surface-2);
+  --atv-surface-hover: var(--sl-hover);
   --atv-border: var(--sl-border);
-  --atv-nav-bg: var(--sl-panel);
-  --atv-accent: var(--sl-primary);
-  --atv-accent-hover: var(--sl-primary-hover);
-  --atv-accent-soft: var(--sl-panel-soft);
-  --atv-accent-soft-hover: var(--sl-panel-hover);
+  --atv-nav-bg: var(--sl-topbar);
+  --atv-accent: var(--sl-accent);
+  --atv-accent-hover: var(--sl-accent-strong);
+  --atv-accent-soft: var(--sl-surface-2);
+  --atv-accent-soft-hover: var(--sl-hover);
   --atv-danger: var(--sl-danger);
   --atv-danger-hover: var(--sl-danger);
-  --atv-danger-soft: var(--sl-danger-soft);
-  --atv-shadow: var(--sl-shadow-card);
-  --atv-menu-shadow: var(--sl-shadow-popover);
+  --atv-danger-soft: color-mix(in srgb, var(--sl-danger) 9%, transparent);
+  --atv-shadow: var(--sl-shadow);
+  --atv-menu-shadow: var(--sl-shadow-hover);
   --atv-page-background: none;
 }
 
 html[data-theme="dark"] {
   --atv-brand-gold: var(--sl-gold);
-  --atv-brand-gold-strong: var(--sl-gold-bright);
-  --atv-brand-gold-soft: var(--sl-gold-soft);
-  --atv-brand-ink: var(--sl-brand-ink);
+  --atv-brand-gold-strong: var(--sl-accent-strong);
+  --atv-brand-gold-soft: color-mix(in srgb, var(--sl-accent-soft) 16%, transparent);
+  --atv-brand-ink: var(--sl-gold-ink);
   --atv-ink: var(--sl-text);
-  --atv-muted: var(--sl-text-muted);
+  --atv-muted: var(--sl-muted);
   --atv-canvas: var(--sl-bg);
-  --atv-surface: var(--sl-panel);
-  --atv-surface-alt: var(--sl-panel-soft);
-  --atv-surface-hover: var(--sl-panel-hover);
+  --atv-surface: var(--sl-surface);
+  --atv-surface-alt: var(--sl-surface-2);
+  --atv-surface-hover: var(--sl-hover);
   --atv-border: var(--sl-border);
-  --atv-nav-bg: var(--sl-panel);
-  --atv-accent: var(--sl-text);
-  --atv-accent-hover: var(--sl-gold);
-  --atv-accent-soft: var(--sl-panel-soft);
-  --atv-accent-soft-hover: var(--sl-panel-hover);
+  --atv-nav-bg: var(--sl-topbar);
+  --atv-accent: var(--sl-accent);
+  --atv-accent-hover: var(--sl-accent-strong);
+  --atv-accent-soft: var(--sl-surface-2);
+  --atv-accent-soft-hover: var(--sl-hover);
   --atv-danger: var(--sl-danger);
   --atv-danger-hover: var(--sl-danger);
-  --atv-danger-soft: var(--sl-danger-soft);
-  --atv-shadow: var(--sl-shadow-card);
-  --atv-menu-shadow: var(--sl-shadow-popover);
+  --atv-danger-soft: color-mix(in srgb, var(--sl-danger) 12%, transparent);
+  --atv-shadow: var(--sl-shadow);
+  --atv-menu-shadow: var(--sl-shadow-hover);
   --atv-page-background: none;
 }
 

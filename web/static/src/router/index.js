@@ -51,6 +51,17 @@ const routes = [
     ],
   },
   {
+    path: "/purchase",
+    component: () => import("@/page/layout.vue"),
+    children: [
+      {
+        path: "",
+        name: "purchase",
+        component: () => import("@/page/purchase/index.vue"),
+      },
+    ],
+  },
+  {
     path: "/add-device",
     component: () => import("@/page/layout.vue"),
     children: [

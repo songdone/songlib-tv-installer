@@ -1,17 +1,17 @@
 <template>
   <!-- Summary card: shown on the workbench once at least one Apple TV is
        paired; the full stepper stays available on the devices page. -->
-  <div v-if="compact" class="sl-card sl-card-pad sl-qs">
+  <div v-if="compact" class="sl-card sl-pad sl-qs">
     <div class="sl-qs-summary">
       <div class="sl-qs-summary-text">
         <h3 class="sl-h3">{{ $t("quickstart.summary_title", { count: paired.length }) }}</h3>
         <p class="sl-body">{{ renewalLine }}</p>
       </div>
       <div class="sl-qs-summary-actions">
-        <router-link class="sl-btn sl-btn--primary" :to="{ name: 'apps' }">
+        <router-link class="sl-btn sl-pri" :to="{ name: 'apps' }">
           {{ $t("quickstart.summary_open_apps") }}
         </router-link>
-        <router-link class="sl-btn sl-btn--tertiary" :to="{ name: 'devices' }">
+        <router-link class="sl-btn sl-ghost" :to="{ name: 'devices' }">
           {{ $t("quickstart.summary_open_devices") }}
         </router-link>
       </div>
@@ -19,7 +19,7 @@
   </div>
 
   <!-- Full three-step guide: the single empty-state block for first use. -->
-  <div v-else class="sl-card sl-card-pad sl-qs">
+  <div v-else class="sl-card sl-pad sl-qs">
     <header class="sl-qs-head">
       <h3 class="sl-h2">{{ $t("quickstart.title") }}</h3>
       <p class="sl-body">{{ $t("quickstart.subtitle") }}</p>
@@ -49,7 +49,7 @@
                   <span class="sl-qs-device-icon"><AppleTVIcon /></span>
                   {{ device.name }}
                 </span>
-                <router-link class="sl-btn sl-btn--primary sl-qs-pair" :to="{ name: 'pair', params: { id: device.id } }">
+                <router-link class="sl-btn sl-pri sl-qs-pair" :to="{ name: 'pair', params: { id: device.id } }">
                   {{ $t("quickstart.pair_now") }}
                 </router-link>
               </li>
@@ -58,10 +58,10 @@
           <p class="sl-caption sl-qs-hint" v-else>{{ $t("quickstart.none_found") }}</p>
 
           <div class="sl-qs-actions">
-            <button type="button" class="sl-btn sl-btn--secondary" :disabled="scanning" @click="refresh">
+            <button type="button" class="sl-btn" :disabled="scanning" @click="refresh">
               {{ $t("quickstart.rescan") }}
             </button>
-            <router-link class="sl-btn sl-btn--tertiary" :to="{ name: 'add-device' }">
+            <router-link class="sl-btn sl-ghost" :to="{ name: 'add-device' }">
               {{ $t("quickstart.manual_ip") }}
             </router-link>
           </div>
@@ -93,10 +93,10 @@
         </div>
         <p class="sl-body">{{ $t("quickstart.step3_desc") }}</p>
         <div class="sl-qs-actions">
-          <router-link v-if="paired.length > 0" class="sl-btn sl-btn--primary" :to="{ name: 'install', params: { id: paired[0].id } }">
+          <router-link v-if="paired.length > 0" class="sl-btn sl-pri" :to="{ name: 'install', params: { id: paired[0].id } }">
             {{ $t("quickstart.choose_ipa") }}
           </router-link>
-          <a class="sl-btn sl-btn--secondary" :href="links.download" target="_blank" rel="noopener noreferrer">
+          <a class="sl-btn" :href="links.download" target="_blank" rel="noopener noreferrer">
             {{ $t("quickstart.download_ipa") }}
           </a>
         </div>
@@ -218,13 +218,13 @@ import AppleTVIcon from "@/assets/icons/appletv.svg";
   padding: 18px;
   border: 1px solid var(--sl-border);
   border-radius: var(--sl-radius-md);
-  background: var(--sl-panel-soft);
+  background: var(--sl-surface-2);
 }
 
 .sl-qs-step--current {
-  background: var(--sl-panel);
+  background: var(--sl-surface);
   border-color: var(--sl-gold);
-  box-shadow: var(--sl-shadow-card);
+  box-shadow: var(--sl-shadow);
 }
 
 .sl-qs-step-head {
@@ -241,8 +241,8 @@ import AppleTVIcon from "@/assets/icons/appletv.svg";
   width: 26px;
   height: 26px;
   border-radius: 999px;
-  background: var(--sl-primary);
-  color: var(--sl-primary-contrast);
+  background: var(--sl-accent);
+  color: var(--sl-accent-on);
   font-size: 0.8rem;
   font-weight: 750;
   flex-shrink: 0;
@@ -250,7 +250,7 @@ import AppleTVIcon from "@/assets/icons/appletv.svg";
 
 .sl-qs-step--current .sl-qs-num {
   background: var(--sl-gold-bright);
-  color: var(--sl-brand-ink);
+  color: var(--sl-gold-ink);
 }
 
 .sl-qs-state {
@@ -287,7 +287,7 @@ import AppleTVIcon from "@/assets/icons/appletv.svg";
   padding: 8px 12px;
   border: 1px solid var(--sl-border);
   border-radius: var(--sl-radius-sm);
-  background: var(--sl-panel);
+  background: var(--sl-surface);
 }
 
 .sl-qs-device {
@@ -307,7 +307,7 @@ import AppleTVIcon from "@/assets/icons/appletv.svg";
   display: inline-flex;
   width: 20px;
   height: 20px;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   flex-shrink: 0;
 }
 

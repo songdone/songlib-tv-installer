@@ -1,13 +1,23 @@
 <template>
   <div class="sl-page sl-explore">
-    <header class="sl-explore-head">
-      <p class="sl-explore-eyebrow">{{ $t("explore.eyebrow") }}</p>
-      <h1 class="sl-h1">{{ $t("explore.title") }}</h1>
-      <p class="sl-body sl-explore-intro">{{ $t("explore.intro") }}</p>
-      <div class="sl-explore-sources" :aria-label="$t('explore.sources_label')">
-        <span v-for="s in sources" :key="s" class="sl-chip">{{ s }}</span>
+    <div class="sl-page-head">
+      <div>
+        <p class="sl-eyebrow">{{ $t("explore.eyebrow") }}</p>
+        <h1 class="sl-h1">{{ $t("explore.title") }}</h1>
+        <p class="sl-desc">{{ $t("explore.intro") }}</p>
+        <div class="sl-explore-sources" :aria-label="$t('explore.sources_label')">
+          <span v-for="s in sources" :key="s" class="sl-chip">{{ s }}</span>
+        </div>
       </div>
-    </header>
+      <div class="sl-head-acts">
+        <router-link class="sl-btn sl-pri" :to="{ name: 'purchase' }">
+          {{ $t("explore.go_purchase") }}
+        </router-link>
+        <a class="sl-btn" :href="links.download" target="_blank" rel="noopener noreferrer">
+          {{ $t("explore.download_tv") }}
+        </a>
+      </div>
+    </div>
 
     <!-- Chapter 1 · Now playing (official screenshot) -->
     <section class="sl-explore-chapter">
@@ -58,18 +68,18 @@
     </section>
 
     <!-- Feature summary: three modules, Pro clearly marked. -->
-    <section class="sl-section">
+    <section class="sl-section-gap">
       <h2 class="sl-section-title">{{ $t("explore.features_title") }}</h2>
       <div class="sl-feature-grid">
-        <div class="sl-card sl-card-pad sl-feature">
+        <div class="sl-card sl-pad sl-feature">
           <h3 class="sl-h3">{{ $t("explore.feature1_title") }}</h3>
           <p class="sl-body">{{ $t("explore.feature1_desc") }}</p>
         </div>
-        <div class="sl-card sl-card-pad sl-feature">
+        <div class="sl-card sl-pad sl-feature">
           <h3 class="sl-h3">{{ $t("explore.feature2_title") }}</h3>
           <p class="sl-body">{{ $t("explore.feature2_desc") }}</p>
         </div>
-        <div class="sl-card sl-card-pad sl-feature">
+        <div class="sl-card sl-pad sl-feature">
           <h3 class="sl-h3">
             {{ $t("explore.feature3_title") }}
             <span class="sl-chip sl-chip--pro">Pro</span>
@@ -80,34 +90,34 @@
     </section>
 
     <!-- Product entry points: real links only; unreleased Mac is plain text. -->
-    <section class="sl-section">
-      <div class="sl-card sl-card-pad sl-explore-cta">
+    <section class="sl-section-gap">
+      <div class="sl-card sl-pad sl-explore-cta">
         <div class="sl-explore-cta-text">
           <h3 class="sl-h3">{{ $t("explore.get_title") }}</h3>
           <p class="sl-body">{{ $t("explore.get_desc") }}</p>
         </div>
         <div class="sl-explore-cta-actions">
-          <a class="sl-btn sl-btn--primary" :href="links.download" target="_blank" rel="noopener noreferrer">
+          <a class="sl-btn sl-pri" :href="links.download" target="_blank" rel="noopener noreferrer">
             {{ $t("explore.get_tv") }}
           </a>
-          <a class="sl-btn sl-btn--secondary" :href="links.ios" target="_blank" rel="noopener noreferrer">
+          <a class="sl-btn" :href="links.ios" target="_blank" rel="noopener noreferrer">
             {{ $t("home.hero.cta_ios") }}
           </a>
-          <a v-if="links.mac" class="sl-btn sl-btn--secondary" :href="links.mac" target="_blank" rel="noopener noreferrer">Mac</a>
+          <a v-if="links.mac" class="sl-btn" :href="links.mac" target="_blank" rel="noopener noreferrer">Mac</a>
           <span v-else class="sl-caption">{{ $t("home.hero.mac_pending") }}</span>
         </div>
       </div>
     </section>
 
     <!-- Purchase module: only rendered with verified URLs from config. -->
-    <section class="sl-section" v-if="links.basic || links.pro">
-      <div class="sl-card sl-card-pad sl-explore-cta">
+    <section class="sl-section-gap" v-if="links.basic || links.pro">
+      <div class="sl-card sl-pad sl-explore-cta">
         <div class="sl-explore-cta-text">
           <h3 class="sl-h3">{{ $t("home.hero.purchase_title") }}</h3>
         </div>
         <div class="sl-explore-cta-actions">
-          <a v-if="links.basic" class="sl-btn sl-btn--gold" :href="links.basic" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_basic") }}</a>
-          <a v-if="links.pro" class="sl-btn sl-btn--gold" :href="links.pro" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_pro") }}</a>
+          <a v-if="links.basic" class="sl-btn sl-pri" :href="links.basic" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_basic") }}</a>
+          <a v-if="links.pro" class="sl-btn sl-pri" :href="links.pro" target="_blank" rel="noopener noreferrer">{{ $t("home.hero.purchase_pro") }}</a>
         </div>
       </div>
     </section>
@@ -138,24 +148,6 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.sl-explore-head {
-  max-width: 640px;
-  margin-bottom: 32px;
-}
-
-.sl-explore-eyebrow {
-  margin: 0 0 10px;
-  color: var(--sl-gold);
-  font-size: 12.5px;
-  font-weight: 750;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.sl-explore-intro {
-  margin-top: 10px;
-}
-
 .sl-explore-sources {
   display: flex;
   flex-wrap: wrap;
@@ -186,7 +178,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   font-size: 14px;
   line-height: 1.65;
 }

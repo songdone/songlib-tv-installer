@@ -1,33 +1,35 @@
 <template>
   <div class="sl-page">
-    <header class="sl-apps-head">
+    <div class="sl-page-head">
       <div>
-        <h1 class="sl-h2">{{ $t("apps.title") }}</h1>
-        <p class="sl-body">{{ $t("apps.subtitle") }}</p>
+        <h1 class="sl-h1">{{ $t("apps.title") }}</h1>
+        <p class="sl-desc">{{ $t("apps.subtitle") }}</p>
       </div>
-      <button
-        type="button"
-        class="sl-btn sl-btn--secondary sl-apps-check"
-        v-if="hasTrackedApps"
-        :disabled="checkingUpdates"
-        @click="checkUpdates"
-      >
-        <span class="loading loading-spinner loading-xs" v-if="checkingUpdates"></span>
-        {{ $t("home.source.check_updates") }}
-      </button>
-    </header>
+      <div class="sl-head-acts">
+        <button
+          type="button"
+          class="sl-btn"
+          v-if="hasTrackedApps"
+          :disabled="checkingUpdates"
+          @click="checkUpdates"
+        >
+          <span class="sl-spin" v-if="checkingUpdates"></span>
+          {{ $t("home.source.check_updates") }}
+        </button>
+      </div>
+    </div>
 
     <!-- Status summary: real numbers only; empty state stays textual. -->
     <div class="sl-apps-stats" v-if="list.length > 0">
-      <div class="sl-card sl-card-pad sl-stat">
+      <div class="sl-card sl-pad sl-stat">
         <span class="sl-stat-num">{{ list.length }}</span>
         <span class="sl-caption">{{ $t("apps.stat_total") }}</span>
       </div>
-      <div class="sl-card sl-card-pad sl-stat" :class="{ 'sl-stat--warning': expiringSoon.length > 0 }">
+      <div class="sl-card sl-pad sl-stat" :class="{ 'sl-stat--warning': expiringSoon.length > 0 }">
         <span class="sl-stat-num">{{ expiringSoon.length }}</span>
         <span class="sl-caption">{{ $t("apps.stat_expiring") }}</span>
       </div>
-      <div class="sl-card sl-card-pad sl-stat">
+      <div class="sl-card sl-pad sl-stat">
         <span class="sl-status" :class="lastRenewal && !lastRenewal.success ? 'sl-status--danger' : 'sl-status--success'">
           <span class="sl-status-dot" aria-hidden="true"></span>
           {{ lastRenewal ? (lastRenewal.success ? $t("apps.stat_renewal_ok") : $t("apps.stat_renewal_fail")) : $t("apps.stat_renewal_none") }}
@@ -41,7 +43,7 @@
       <div class="sl-empty-icon"><AppsIcon /></div>
       <h3>{{ $t("apps.empty_title") }}</h3>
       <p>{{ $t("apps.empty_hint") }}</p>
-      <router-link class="sl-btn sl-btn--primary" :to="{ name: 'devices' }">
+      <router-link class="sl-btn sl-pri" :to="{ name: 'devices' }">
         {{ $t("apps.empty_action") }}
       </router-link>
     </div>
@@ -92,25 +94,25 @@
           <div class="sl-app-card-actions">
             <button
               type="button"
-              class="sl-btn sl-btn--primary sl-app-btn"
+              class="sl-btn sl-pri sl-app-btn"
               v-if="item.source.latest_build_id"
               :disabled="isInstalling(item)"
               @click="updateApp(item)"
             >{{ $t("home.table.button.update") }}</button>
             <button
               type="button"
-              class="sl-btn sl-btn--secondary sl-app-btn"
+              class="sl-btn sl-app-btn"
               v-else
               @click="refreshApp(item)"
             >{{ isExternalApp(item) ? $t("home.table.button.reinstall") : $t("home.table.button.refresh") }}</button>
             <button
               type="button"
-              class="sl-btn sl-btn--tertiary sl-app-btn"
+              class="sl-btn sl-ghost sl-app-btn"
               @click="openSourceDialog(item)"
             >{{ item.source.kind ? $t("home.source.manage") : $t("home.source.track") }}</button>
             <button
               type="button"
-              class="sl-btn sl-btn--danger sl-app-btn"
+              class="sl-btn sl-danger sl-app-btn"
               @click="confirmDeleteId === item.ID ? deleteApp(item) : (confirmDeleteId = item.ID)"
             >{{ confirmDeleteId === item.ID ? $t("home.table.button.confirm_delete") : $t("home.table.button.delete") }}</button>
           </div>
@@ -815,7 +817,7 @@ import AppsIcon from "@/assets/icons/apps.svg";
   height: 56px;
   border-radius: 12px;
   overflow: hidden;
-  background: var(--sl-panel-soft);
+  background: var(--sl-surface-2);
   flex-shrink: 0;
 }
 
@@ -828,7 +830,7 @@ import AppsIcon from "@/assets/icons/apps.svg";
 .sl-app-initial {
   font-size: 1.2rem;
   font-weight: 750;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
 }
 
 .sl-app-card-badge {
@@ -876,11 +878,11 @@ import AppsIcon from "@/assets/icons/apps.svg";
 }
 
 .sl-app-card-device {
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
 }
 
 .sl-app-card-log {
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   text-decoration: none;
 }
 
@@ -945,11 +947,11 @@ html[data-theme="dark"] .atv-expiry {
 }
 
 :deep(.popper) {
-  background: var(--sl-panel);
+  background: var(--sl-surface);
   padding: 12px;
   border-radius: 12px;
   border: 1px solid var(--sl-border);
-  box-shadow: var(--sl-shadow-popover);
+  box-shadow: var(--sl-shadow-hover);
   color: var(--sl-text);
   word-break: break-all;
   text-align: justify;

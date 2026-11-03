@@ -47,13 +47,13 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   font-size: 13px;
   font-weight: 600;
 }
 
 .sl-footer-line a {
-  color: var(--sl-text-muted);
+  color: var(--sl-muted);
   text-decoration: none;
   transition: color var(--sl-motion-fast) ease;
 }

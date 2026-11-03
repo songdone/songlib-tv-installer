@@ -106,8 +106,8 @@ onUnmounted(stop);
   border-radius: var(--sl-radius-md);
   overflow: hidden;
   border: 1px solid var(--sl-border);
-  background: var(--sl-brand-ink);
-  box-shadow: var(--sl-shadow-popover);
+  background: var(--sl-gold-ink);
+  box-shadow: var(--sl-shadow-hover);
 }
 
 .sl-tv-shot {

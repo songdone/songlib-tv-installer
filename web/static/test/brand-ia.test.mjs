@@ -7,21 +7,26 @@ const read = (rel) => readFileSync(new URL(rel, import.meta.url), "utf8");
 
 // ---- AppShell / navigation ---------------------------------------------
 
-test("AppShell sidebar carries the six main destinations and no upstream chrome", () => {
+test("AppShell sidebar carries the destinations and no upstream chrome", () => {
   const layout = read("../src/page/layout.vue");
-  for (const route of ['home', 'devices', 'apps', 'account', 'explore', 'settings']) {
+  for (const route of ['home', 'devices', 'apps', 'account', 'explore', 'purchase']) {
     assert.ok(
-      layout.includes(`name: '${route}'`),
-      `sidebar must link to ${route}`,
+      layout.includes(`name: "${route}"`),
+      `navigation must link to ${route}`,
     );
   }
+  // Sidebar navigation frame (kept from the previous iteration): desktop
+  // sidebar + mobile drawer, purchase reachable as a first-level entry.
+  assert.ok(layout.includes("sl-sidebar"), "sidebar navigation must exist");
+  assert.ok(layout.includes("sl-sidebar--open"), "mobile drawer state must exist");
+  assert.ok(layout.includes("sl-sidebar-scrim"), "drawer scrim must exist");
+  assert.ok(layout.includes(`name: "settings"`), "settings stays in the sidebar");
   // The topbar GitHub entry points at the public installer repo.
   assert.ok(layout.includes("https://github.com/songdone/songlib-tv-installer"));
   // The old donate modal is gone; upstream support links survive only inside
   // the About credits, clearly attributed.
   assert.ok(!layout.includes("showDonateModal"), "donate modal must be removed");
   assert.ok(layout.includes("sponsors/bitxeno"), "upstream support links must stay in About credits");
-  assert.ok(!layout.includes('href="https://github.com/bitxeno/atvloadly" target="_blank">\n            <label'), "topbar must not link upstream");
   // Brand naming rules.
   assert.ok(layout.includes("音屿-Apple TV音乐播放器安装助手"));
   assert.ok(layout.includes("音屿 TV 安装助手"));
@@ -108,13 +113,31 @@ test("hero primary CTA opens the in-app wizard, not an external page", () => {
 
 test("design tokens exist and are theme-complete", () => {
   const tokens = read("../src/styles/tokens.css");
-  for (const token of ["--sl-gold", "--sl-primary", "--sl-bg", "--sl-panel", "--sl-danger", "--sl-focus"]) {
+  for (const token of ["--sl-gold", "--sl-accent", "--sl-bg", "--sl-surface", "--sl-border", "--sl-danger", "--sl-topbar", "--sl-heading"]) {
     assert.ok(tokens.includes(token), `tokens.css must define ${token}`);
   }
-  // Brand gold is calibrated from the logo (#E3B459), not invented.
-  assert.ok(tokens.includes("#E3B459"), "raw logo gold must be present for dark surfaces");
+  // Brand gold is calibrated from the logo (#E3B459), not invented — and no
+  // FrpDeck palette value (#E6BE7A) is copied.
+  assert.ok(tokens.includes("#E3B459"), "raw logo gold must be present");
+  assert.ok(!tokens.includes("#E6BE7A"), "FrpDeck gold must not be copied");
   assert.ok(existsSync(new URL("../src/styles/layout.css", import.meta.url)));
   assert.ok(existsSync(new URL("../src/styles/components.css", import.meta.url)));
+});
+
+test("purchase page keeps the FrpDeck plan language with gated commerce", () => {
+  const purchase = read("../src/page/purchase/index.vue");
+  assert.ok(purchase.includes("sl-plan"), "plan cards must use the FrpDeck plan pattern");
+  assert.ok(purchase.includes("sl-cmp"), "comparison table must exist");
+  assert.ok(purchase.includes("sl-steps"), "redemption steps must exist");
+  assert.ok(purchase.includes("sl-faq"), "FAQ must exist");
+  // Commerce red lines: no invented prices, no machine-code activation box.
+  for (const banned of ["¥8.8", "¥18", "¥6", "机器码", "兑换码激活", "FD2.", "FDV"]) {
+    assert.ok(!purchase.includes(banned), `purchase page must not contain ${banned}`);
+  }
+  // Purchase CTAs render only from verified config links.
+  assert.match(purchase, /v-if="links\.basic"/);
+  assert.match(purchase, /v-if="links\.pro"/);
+  assert.ok(purchase.includes("songlib-config"), "links come from the verified config source");
 });
 
 test("index.html favicon and title follow the brand", () => {
