@@ -822,6 +822,21 @@ details.sl-faq > div p + p { margin-top: 8px; }
   background: color-mix(in srgb, var(--sl-gold) 13%, transparent);
 }
 
+.sl-plan-price {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: var(--sl-text);
+  font-variant-numeric: tabular-nums;
+  margin-top: 6px;
+  line-height: 1.1;
+}
+
+.sl-plan-price span {
+  font-size: 17px;
+  margin-right: 2px;
+}
+
 .sl-plan-note {
   color: var(--sl-muted);
   font-size: 12px;

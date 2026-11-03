@@ -12,6 +12,10 @@ export const SONGLIB_DEFAULT_LINKS = {
   trial: null,
   basic: null,
   pro: null,
+  // Plan prices in cents (分) — only ever filled from a verified channel
+  // entry by /songlib/config; never hardcoded here.
+  basic_price: null,
+  pro_price: null,
   source: "/source",
   license: "/license",
 };

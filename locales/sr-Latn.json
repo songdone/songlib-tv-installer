@@ -1100,6 +1100,7 @@
         "faq4_q": "Mogu li ovde nalepiti kod za aktivaciju plejera?",
         "faq4_a": "Ne. Instalator namerno nema polje za kod: aktivacija se obavlja u plejeru ili preko zvanične tačke. Tako je besplatni alat potpuno odvojen od kupovine.",
         "faq5_q": "Šta ako dugme za kupovinu nedostaje?",
-        "faq5_a": "Linkovi za kupovinu pojavljuju se tek kada je zvanični kanal proveren. Poređenje i songlib.playsong.cn su uvek dostupni za informacije."
+        "faq5_a": "Linkovi za kupovinu pojavljuju se tek kada je zvanični kanal proveren. Poređenje i songlib.playsong.cn su uvek dostupni za informacije.",
+        "trial_link": "Proba na zvaničnom sajtu"
     }
 }

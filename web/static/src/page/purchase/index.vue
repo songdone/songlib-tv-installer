@@ -10,6 +10,9 @@
         <a class="sl-btn" :href="links.download" target="_blank" rel="noopener noreferrer">
           {{ $t("purchase.download_tv") }}
         </a>
+        <a v-if="links.trial" class="sl-btn" :href="links.trial" target="_blank" rel="noopener noreferrer">
+          {{ $t("purchase.trial_link") }}
+        </a>
         <router-link class="sl-btn sl-pri" :to="{ name: 'explore' }">
           {{ $t("purchase.explore") }}
         </router-link>
@@ -33,6 +36,11 @@
             {{ $t("purchase.basic_name") }}
             <span class="sl-plan-tag">{{ $t("purchase.basic_tag") }}</span>
           </h2>
+          <!-- Price mirrors the licensing backend's verified amount (cents);
+               it renders only while the purchase link itself is verified. -->
+          <div v-if="links.basic_price !== null && links.basic_price !== undefined" class="sl-plan-price">
+            <span>¥</span>{{ Math.floor(links.basic_price / 100) }}
+          </div>
           <p class="sl-plan-note">{{ $t("purchase.basic_note") }}</p>
           <ul class="sl-plan-feats">
             <li>{{ $t("purchase.basic_f1") }}</li>
@@ -56,6 +64,9 @@
             {{ $t("purchase.pro_name") }}
             <span class="sl-plan-tag">Pro</span>
           </h2>
+          <div v-if="links.pro_price !== null && links.pro_price !== undefined" class="sl-plan-price">
+            <span>¥</span>{{ Math.floor(links.pro_price / 100) }}
+          </div>
           <p class="sl-plan-note">{{ $t("purchase.pro_note") }}</p>
           <ul class="sl-plan-feats">
             <li>{{ $t("purchase.pro_f1") }}</li>
@@ -192,7 +203,7 @@ export default {
   components: { HomeFooter },
   data() {
     return {
-      links: { ...SONGLIB_DEFAULT_LINKS },
+      links: { ...SONGLIB_DEFAULT_LINKS, basic_price: null, pro_price: null },
       // Verified, released feature differences (official site copy). Rows must
       // match what the player actually ships; adjust only with the product.
       rows: [

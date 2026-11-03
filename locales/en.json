@@ -1100,6 +1100,7 @@
         "faq4_q": "Can I paste a redemption code here to activate the player?",
         "faq4_a": "No. This installer intentionally has no code box: activation happens in the SongLib player or through the official entry. This keeps the free signing tool fully separate from purchases.",
         "faq5_q": "What if the purchase button is missing?",
-        "faq5_a": "Purchase links appear only after the official channel is verified. Meanwhile the comparison and the official site (songlib.playsong.cn) stay available for information."
+        "faq5_a": "Purchase links appear only after the official channel is verified. Meanwhile the comparison and the official site (songlib.playsong.cn) stay available for information.",
+        "trial_link": "Trial on the official site"
     }
 }
