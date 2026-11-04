@@ -1,29 +1,40 @@
 #!/bin/sh
-# Called after the user saves 应用设置. If the wizard port changed, re-render the
-# compose/ui entry from cmd/prepare and recreate the container so it binds live.
+# Called after the user saves 运行设置. fnOS re-renders the container from the
+# packaged compose on save and re-opens this dialog with empty inputs, so the
+# semantics are: empty port = keep current port; empty domains = keep current
+# domains; "-" in domains = clear them. Apply (re-render + recreate) only when
+# something actually changed.
 set -eu
-p=${wizard_port:-}
-[ -n "$p" ] || exit 0                     # nothing surfaced from the settings page
-case "$p" in ''|*[!0-9]*) exit 0 ;; esac
-[ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || exit 0
-# 端口被其他服务占用时明确拒绝（exit 1 + TRIM_TEMP_LOGFILE 弹给用户），旧容器保持运行不受影响
-hex=$(printf '%04X' "$p")
-if awk -v h=":$hex" '$4=="0A" && substr($2,length($2)-4)==h{f=1} END{exit !f}' /proc/net/tcp /proc/net/tcp6 2>/dev/null; then
-    printf '管理端口 %s 已被其他服务占用，请换一个端口再保存。\n' "$p" > "${TRIM_TEMP_LOGFILE:-/dev/stderr}"
-    exit 1
-fi
 : "${TRIM_PKGVAR:?缺少飞牛应用数据目录}"
-old=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
-[ "$p" = "$old" ] && exit 0               # unchanged: nothing to do
-sh "$(dirname "$0")/prepare"
-# 飞牛以应用根目录名为 compose 项目名；从应用根执行，项目名才能对上
-cd "${TRIM_APPDEST:?}/.."
 f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
+old_port=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
+old_hosts=$(sed -n 's/.*SONGLIB_ALLOWED_HOSTS: *"\([^"]*\)".*/\1/p' "$f" 2>/dev/null | head -n 1)
+
+p=${wizard_port:-}
+case $p in ''|*[!0-9]*) p=$old_port ;; esac
+[ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || p=$old_port
+hosts=${wizard_allowed_hosts:-}
+case $hosts in *[!a-zA-Z0-9.,-]*) hosts='' ;; esac
+hosts=${hosts:-$old_hosts}
+[ "$hosts" = "-" ] && hosts=''
+
+[ "$p" = "$old_port" ] && [ "$hosts" = "$old_hosts" ] && exit 0   # nothing changed
+
+# 新端口被其他服务占用时明确拒绝（exit 1 + TRIM_TEMP_LOGFILE 弹给用户），旧容器保持运行
+if [ "$p" != "$old_port" ]; then
+    hex=$(printf '%04X' "$p")
+    if awk -v h=":$hex" '$4=="0A" && substr($2,length($2)-4)==h{f=1} END{exit !f}' /proc/net/tcp /proc/net/tcp6 2>/dev/null; then
+        printf '管理端口 %s 已被其他服务占用，请换一个端口再保存。\n' "$p" > "${TRIM_TEMP_LOGFILE:-/dev/stderr}"
+        exit 1
+    fi
+fi
+
+sh "$(dirname "$0")/prepare"
 log="$TRIM_PKGVAR/info.log"
 { if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \
    || docker-compose -f "$f" up -d --force-recreate >>"$log" 2>&1; then
-    printf '%s port changed %s -> %s, container recreated\n' "$(date '+%F %T')" "$old" "$p" >>"$log"
+    printf '%s settings applied: port %s -> %s, hosts [%s]\n' "$(date '+%F %T')" "$old_port" "$p" "$hosts" >>"$log"
   else
-    printf '%s port changed %s -> %s but container recreate failed; restart the app manually\n' "$(date '+%F %T')" "$old" "$p" >>"$log"
+    printf '%s settings apply FAILED for port %s hosts [%s]; old container keeps running\n' "$(date '+%F %T')" "$p" "$hosts" >>"$log"
   fi; } || true
 exit 0

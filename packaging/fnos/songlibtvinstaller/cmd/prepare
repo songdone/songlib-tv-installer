@@ -33,6 +33,7 @@ if [ -z "$hosts" ] && [ -f "$TRIM_APPDEST/docker/docker-compose.yaml" ]; then
  hosts=$(sed -n 's/.*SONGLIB_ALLOWED_HOSTS: *"\([^"]*\)".*/\1/p' "$TRIM_APPDEST/docker/docker-compose.yaml" | head -n 1)
 fi
 case $hosts in ''|*[!a-zA-Z0-9.,-]*) hosts='' ;; esac
+[ "$hosts" = "-" ] && hosts=''   # “-”=清除已保存域名（应用设置里约定）
 uid=${TRIM_UID:-$(id -u)};gid=${TRIM_GID:-$(id -g)}
 # Render the compose file itself, as in the tested reference packages.
 awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" -v hosts="$hosts" '
