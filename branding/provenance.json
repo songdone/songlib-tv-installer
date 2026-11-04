@@ -23,5 +23,30 @@
       "branding/songlib-logo-lockup.svg",
       "web/static/public/songlib-logo.svg"
     ]
+  },
+  "plan_covers": {
+    "说明": "购买页套餐卡主图（音屿官方商品图，含授权/设备数宣示，由所有者提供并要求展示）",
+    "covers": {
+      "pro": {
+        "source": "产品所有者提供的官方商品主图（1254×1254，2026-11-04）",
+        "sha256_original": "145c4dfa95a9c69dd0a9a255abff4ba483e753d62e12f8e830068a76691e6bae",
+        "web_copy": {
+          "path": "web/static/public/plan/cover-pro.jpg",
+          "width": 800,
+          "quality": 82,
+          "sha256": "c33893f34f3730050080c453d6d05e3ea452c0e3a88ed18bfa0fba13952710a6"
+        }
+      },
+      "basic": {
+        "source": "产品所有者提供的官方商品主图（1254×1254，2026-11-04）",
+        "sha256_original": "a22c8de77e63135bc1c03970dcc192807ccb07866553a31f7a92fc5abcd80816",
+        "web_copy": {
+          "path": "web/static/public/plan/cover-basic.jpg",
+          "width": 800,
+          "quality": 82,
+          "sha256": "bff6c1a25e2669e0c5da322093c540592cecce8952bbbe6d6b0569b158a2a956"
+        }
+      }
+    }
   }
 }

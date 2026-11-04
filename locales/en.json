@@ -1066,7 +1066,6 @@
         "pro_f5": "Online discovery with source modules, library curator",
         "buy_basic": "Buy Basic",
         "buy_pro": "Buy Pro",
-        "see_official": "See songlib.playsong.cn",
         "price_note": "Prices and purchase channels follow the official site at the time of purchase; this page never bundles an IPA and never activates a license by itself.",
         "steps_title": "How to buy and activate",
         "steps_sub": "Activation happens in the SongLib player or the official site — never inside this installer.",
@@ -1101,6 +1100,7 @@
         "faq4_a": "No. This installer intentionally has no code box: activation happens in the SongLib player or through the official entry. This keeps the free signing tool fully separate from purchases.",
         "faq5_q": "What if the purchase button is missing?",
         "faq5_a": "Purchase links appear only after the official channel is verified. Meanwhile the comparison and the official site (songlib.playsong.cn) stay available for information.",
-        "trial_link": "Trial on the official site"
+        "trial_link": "Trial on the official site",
+        "cover_alt": "official product cover"
     }
 }

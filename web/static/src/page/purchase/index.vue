@@ -30,7 +30,7 @@
          verified channel the card stays informative, never a dead button. -->
     <div class="sl-plans">
       <article class="sl-plan">
-        <img class="sl-plan-art" src="/tv/playing.jpg" alt="音屿 基础版 · Apple TV 播放界面（官方截图）" loading="lazy" />
+        <img class="sl-plan-art" src="/plan/cover-basic.jpg" :alt="$t('purchase.basic_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
         <div class="sl-plan-body">
           <h2 class="sl-plan-name">
             {{ $t("purchase.basic_name") }}
@@ -48,17 +48,14 @@
             <li>{{ $t("purchase.basic_f3") }}</li>
             <li>{{ $t("purchase.basic_f4") }}</li>
           </ul>
-          <a v-if="links.basic" class="sl-btn sl-pri sl-plan-cta" :href="links.basic" target="_blank" rel="noopener noreferrer">
+          <a class="sl-btn sl-pri sl-plan-cta" :href="links.basic" target="_blank" rel="noopener noreferrer">
             {{ $t("purchase.buy_basic") }}
-          </a>
-          <a v-else class="sl-plan-muted-cta" :href="links.website" target="_blank" rel="noopener noreferrer">
-            {{ $t("purchase.see_official") }}
           </a>
         </div>
       </article>
 
       <article class="sl-plan">
-        <img class="sl-plan-art" src="/tv/lyrics.jpg" alt="音屿 Pro · Apple TV 全屏歌词（官方截图）" loading="lazy" />
+        <img class="sl-plan-art" src="/plan/cover-pro.jpg" :alt="$t('purchase.pro_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
         <div class="sl-plan-body">
           <h2 class="sl-plan-name">
             {{ $t("purchase.pro_name") }}
@@ -75,11 +72,8 @@
             <li>{{ $t("purchase.pro_f4") }}</li>
             <li>{{ $t("purchase.pro_f5") }}</li>
           </ul>
-          <a v-if="links.pro" class="sl-btn sl-pri sl-plan-cta" :href="links.pro" target="_blank" rel="noopener noreferrer">
+          <a class="sl-btn sl-pri sl-plan-cta" :href="links.pro" target="_blank" rel="noopener noreferrer">
             {{ $t("purchase.buy_pro") }}
-          </a>
-          <a v-else class="sl-plan-muted-cta" :href="links.website" target="_blank" rel="noopener noreferrer">
-            {{ $t("purchase.see_official") }}
           </a>
         </div>
       </article>
@@ -196,7 +190,7 @@
 
 <script>
 import HomeFooter from "@/components/HomeFooter.vue";
-import { songlibConfig, SONGLIB_DEFAULT_LINKS } from "@/utils/songlib-config.mjs";
+import { songlibConfig, SONGLIB_DEFAULT_LINKS, SONGLIB_16688_SHOP } from "@/utils/songlib-config.mjs";
 
 export default {
   name: "Purchase",
@@ -220,7 +214,15 @@ export default {
     };
   },
   mounted() {
-    songlibConfig().then((config) => Object.assign(this.links, config));
+    songlibConfig().then((config) => {
+      Object.assign(this.links, config);
+      // Owner decision 2026-11-04: purchase buttons always point at 16688 —
+      // the storefront by default, the verified goods page (with price) once
+      // the channel reports it. "null" from config means "not yet verified",
+      // never "hide the button".
+      if (!this.links.basic) this.links.basic = SONGLIB_16688_SHOP;
+      if (!this.links.pro) this.links.pro = SONGLIB_16688_SHOP;
+    });
   },
 };
 </script>

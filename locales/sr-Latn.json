@@ -1066,7 +1066,6 @@
         "pro_f5": "Onlajn otkrivanje sa modulima izvora, kustos biblioteke",
         "buy_basic": "Kupite Basic",
         "buy_pro": "Kupite Pro",
-        "see_official": "Pogledajte songlib.playsong.cn",
         "price_note": "Cene i kanali kupovine prate zvanični sajt u trenutku kupovine. Ova stranica nikada ne sadrži IPA i sama ne aktivira licencu.",
         "steps_title": "Kako kupiti i aktivirati",
         "steps_sub": "Aktivacija se obavlja u SongLib plejeru ili na zvaničnom sajtu — nikada u ovom instalatoru.",
@@ -1101,6 +1100,7 @@
         "faq4_a": "Ne. Instalator namerno nema polje za kod: aktivacija se obavlja u plejeru ili preko zvanične tačke. Tako je besplatni alat potpuno odvojen od kupovine.",
         "faq5_q": "Šta ako dugme za kupovinu nedostaje?",
         "faq5_a": "Linkovi za kupovinu pojavljuju se tek kada je zvanični kanal proveren. Poređenje i songlib.playsong.cn su uvek dostupni za informacije.",
-        "trial_link": "Proba na zvaničnom sajtu"
+        "trial_link": "Proba na zvaničnom sajtu",
+        "cover_alt": "zvanična proizvodna slika"
     }
 }

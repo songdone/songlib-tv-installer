@@ -1066,7 +1066,6 @@
         "pro_f5": "Online-upptäckt med källmoduler, biblioteksvakt",
         "buy_basic": "Köp Basic",
         "buy_pro": "Köp Pro",
-        "see_official": "Se songlib.playsong.cn",
         "price_note": "Priser och köpkanaler följer den officiella webbplatsen vid köpetillfället. Denna sida innehåller aldrig en IPA och aktiverar aldrig en licens själv.",
         "steps_title": "Så köper och aktiverar du",
         "steps_sub": "Aktiveringen sker i SongLib-spelaren eller på den officiella webbplatsen — aldrig i det här verktyget.",
@@ -1101,6 +1100,7 @@
         "faq4_a": "Nej. Verktyget har medvetet ingen kodruta: aktivering sker i spelaren eller via den officiella punkten. Så hålls gratisverktyget helt skilt från köp.",
         "faq5_q": "Vad gör jag om köpknappen saknas?",
         "faq5_a": "Köplänkar visas först när den officiella kanalen verifierats. Jämförelsen och songlib.playsong.cn är alltid tillgängliga för information.",
-        "trial_link": "Prov på den officiella webbplatsen"
+        "trial_link": "Prov på den officiella webbplatsen",
+        "cover_alt": "officiellt produktomslag"
     }
 }
