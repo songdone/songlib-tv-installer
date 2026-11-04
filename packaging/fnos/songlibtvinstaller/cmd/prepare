@@ -37,7 +37,6 @@ uid=${TRIM_UID:-$(id -u)};gid=${TRIM_GID:-$(id -g)}
 # Render the compose file itself, as in the tested reference packages.
 awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" -v hosts="$hosts" '
  /songlib:port/ { print "      - \""port":80\" # songlib:port";next }
- /songlib:user/ { print "    user: \""uid":"gid"\" # songlib:user";next }
  /songlib:mdns-env/ { print "      ZEROCONF_ENABLED: \""mdns"\" # songlib:mdns-env";next }
  /songlib:hosts/ { if(hosts!=""){line=$0;gsub(/<hosts>/,hosts,line);print line};next }
  /songlib:socket/ { if(mdns=="true")print;next }

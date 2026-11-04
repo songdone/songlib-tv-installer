@@ -1,5 +1,5 @@
 appname = songlibtvinstaller
-version = 1.0.5
+version = 1.0.6
 display_name = 音屿-Apple TV音乐播放器安装助手
 desc = NAS 里收藏了不少歌，也想在客厅的 Apple TV 上好好听一听？<br>音屿安装助手就是为这件事做的小工具。把它装在飞牛 NAS 上，连接家里的 Apple TV，再把从官网下载的 tvOS IPA 导入进来，就能按页面提示完成配对、签名和安装。安装过的应用和签名到期时间，也可以在这里集中查看与管理。<br>你可以用它安装音屿 SongLib Amp，也可以导入其他来源可靠、合法的 tvOS 应用安装包。<b>安装助手免费使用，不要求购买音屿播放器。</b><br><br><b>主要功能</b><br>· 连接 Apple TV：局域网发现、手动输入设备地址、配对引导。<br>· 导入并安装 IPA：使用个人签名账户或适用的证书为 tvOS 应用签名并安装到电视。<br>· 查看和管理续签：查看签名有效期、设置自动续签；遇到失败时可以检查原因并重试。<br>· 音屿下载入口：通过音屿官网获取播放器最新安装包，播放器更新无需等 FPK 同步上架。<br>· 通用安装工具：不限定只能安装音屿播放器；其他符合条件的 tvOS IPA 同样可以使用。<br><br><b>认识音屿 SongLib Amp</b><br>你的音乐 自成一屿。<br>音屿是一款专为私人音乐库打造的播放器。家里 NAS 和音乐服务器里的收藏，可以在电视大屏上用更舒服的方式浏览和播放。你可以在安装助手中查看音屿的介绍，前往官网了解功能、下载电视版，以及选择是否试用或购买独立的播放器授权。<br>官网：<a href="https://songlib.playsong.cn/">songlib.playsong.cn</a>
 platform = all
@@ -14,4 +14,4 @@ checkport = false
 ctl_stop = true
 
 distributor_url = https://t.me/+hegV0V11Jxc3MmE9
-changelog = 支持在应用设置中填写外网访问域名（反向代理场景），未填域名将返回 403；修复 HTTPS 反代后无法登录的问题；版本号与发布版本同步。
+changelog = 修复启用失败：容器配置与发布镜像对齐（移除与上游入口冲突的只读/非 root 限制），健康检查恢复正常。
