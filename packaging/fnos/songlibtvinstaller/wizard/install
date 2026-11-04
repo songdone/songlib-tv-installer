@@ -10,7 +10,7 @@
         "type": "text",
         "field": "wizard_port",
         "label": "管理端口",
-        "initValue": "5533",
+        "initValue": "15533",
         "rules": [
           {
             "required": true,
