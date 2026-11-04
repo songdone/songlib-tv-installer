@@ -59,7 +59,9 @@ jobs:
           echo "COMMIT=$(git rev-parse --verify HEAD)" >> $GITHUB_OUTPUT
           # Dockerfile 与 entrypoint 都按 atvloadly 引用主程序名；仓库改名不能影响产物名
           echo "APP_NAME=atvloadly" >> $GITHUB_OUTPUT
-          echo "REPO=$(echo 'github.com/${{ github.repository }}')" >> $GITHUB_OUTPUT
+                    # ldflags -X 必须用 go.mod 的模块路径（bitxeno/atvloadly），
+          # 用仓库路径会导致版本号打不进二进制（一直显示源码里的旧值）
+          echo "REPO=github.com/bitxeno/atvloadly" >> $GITHUB_OUTPUT
           echo "BRANCH=${{ steps.metadata.outputs.repository_default_branch }}" >> $GITHUB_OUTPUT
 
           if [ ! -z $DOCKER_TOKEN ]; then echo "PUSH_DOCKERHUB=1" >> $GITHUB_OUTPUT; fi
