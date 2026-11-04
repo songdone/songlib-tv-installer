@@ -95,8 +95,21 @@ func loadManagementAuth(dataDir string) (*managementAuth, error) {
 	_ = os.Chmod(path, 0600)
 	return &managementAuth{hash: hash, sessions: map[[32]byte]managementSession{}, attempts: map[string]attempt{}}, nil
 }
+// requestProtocol resolves the effective scheme. Behind an owner-deployed
+// reverse proxy (frp tunnel / LAN gateway — the direct peer is always a
+// private or loopback address on the paths this boundary allows), the
+// X-Forwarded-Proto header is the only signal that the browser used HTTPS;
+// ignoring it breaks same-origin for the login POST and Secure cookies.
+func requestProtocol(c *fiber.Ctx) string {
+	if p := c.Get("X-Forwarded-Proto"); p == "https" || p == "http" {
+		if ip := net.ParseIP(c.IP()); ip != nil && (ip.IsPrivate() || ip.IsLoopback()) {
+			return p
+		}
+	}
+	return c.Protocol()
+}
 func sameOrigin(c *fiber.Ctx) bool {
-	return c.Get("Origin") != "" && c.Get("Origin") == c.Protocol()+"://"+string(c.Request().Host())
+	return c.Get("Origin") != "" && c.Get("Origin") == requestProtocol(c)+"://"+string(c.Request().Host())
 }
 func allowedHost(c *fiber.Ctx) bool {
 	host := string(c.Request().Host())
@@ -208,7 +221,7 @@ func (a *managementAuth) mount(server *fiber.App) {
 		}
 		a.sessions[sha256.Sum256([]byte(token))] = managementSession{csrf, time.Now().Add(time.Hour)}
 		a.mu.Unlock()
-		c.Cookie(&fiber.Cookie{Name: "sl_management", Value: token, HTTPOnly: true, Secure: c.Protocol() == "https", SameSite: "Strict", Path: "/", MaxAge: 3600})
+		c.Cookie(&fiber.Cookie{Name: "sl_management", Value: token, HTTPOnly: true, Secure: requestProtocol(c) == "https", SameSite: "Strict", Path: "/", MaxAge: 3600})
 		return c.JSON(fiber.Map{"csrf": csrf})
 	})
 	server.Get("/management/session", func(c *fiber.Ctx) error { return c.JSON(fiber.Map{"csrf": c.Locals("management_csrf")}) })

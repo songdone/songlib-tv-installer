@@ -4,6 +4,7 @@ services:
     pull_policy: missing
     environment:
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
+      SONGLIB_ALLOWED_HOSTS: "<hosts>" # songlib:hosts
     ports:
       - "${wizard_port:-5533}:80" # songlib:port
     volumes:

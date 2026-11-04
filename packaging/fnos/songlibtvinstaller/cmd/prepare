@@ -26,12 +26,20 @@ fi
 mdns=false
 if [ -S /var/run/dbus/system_bus_socket ] && [ -S /var/run/avahi-daemon/socket ]; then mdns=true; fi
 printf '%s\n' "$mdns" > "$TRIM_PKGVAR/discovery-enabled"
+# 外网域名白名单：向导新值优先；重渲染（未填新值）时保留上一次已渲染的值，
+# 避免用户在应用设置里填过的域名被一次无关的配置保存冲掉。
+hosts=${wizard_allowed_hosts:-}
+if [ -z "$hosts" ] && [ -f "$TRIM_APPDEST/docker/docker-compose.yaml" ]; then
+ hosts=$(sed -n 's/.*SONGLIB_ALLOWED_HOSTS: *"\([^"]*\)".*/\1/p' "$TRIM_APPDEST/docker/docker-compose.yaml" | head -n 1)
+fi
+case $hosts in ''|*[!a-zA-Z0-9.,-]*) hosts='' ;; esac
 uid=${TRIM_UID:-$(id -u)};gid=${TRIM_GID:-$(id -g)}
 # Render the compose file itself, as in the tested reference packages.
-awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" '
- /songlib:port/ { print "      - \""port":5533\" # songlib:port";next }
+awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" -v hosts="$hosts" '
+ /songlib:port/ { print "      - \""port":80\" # songlib:port";next }
  /songlib:user/ { print "    user: \""uid":"gid"\" # songlib:user";next }
  /songlib:mdns-env/ { print "      ZEROCONF_ENABLED: \""mdns"\" # songlib:mdns-env";next }
+ /songlib:hosts/ { if(hosts!=""){line=$0;gsub(/<hosts>/,hosts,line);print line};next }
  /songlib:socket/ { if(mdns=="true")print;next }
  {print}
 ' "$TRIM_APPDEST/docker/docker-compose.yaml.template" > "$TRIM_APPDEST/docker/docker-compose.yaml.new"
