@@ -6,9 +6,11 @@
 
 - 服务：`go build` 本地二进制 + `-ldflags -X ...web.salesConfigURL=http://127.0.0.1:5610/api/v1/sales-config`，销售配置指向本地桩服务，**未连接真实官网/16688**。
 - 登录：隔离数据目录 `/tmp` 下的测试密码，未使用任何真实凭证。
-- 开放态（01–03、05）：桩返回 `trial.open=true` 与商品价 `basic=6800`、`pro=12850`（分）。
+- 开放态（01–03、05）：桩返回 `trial.open=true` 与商品价 `basic=600`、`pro=1800`（分），取自官网在售的 ¥6 / ¥18；桩只是本地替身，不代表线上接口已部署。
 - 未开放态（04）：桩返回空 `plans`、`trial.open=false`，模拟真实后端的默认状态。
 - 主题：01–04 浅色，05 深色。
+
+> **线上现状（2026-11-04 实测）**：`https://songlib.playsong.cn/api/v1/sales-config`、`https://license.playsong.cn/v1/sales-config` 均返回 404。真实部署里 `/songlib/config` 拿不到价格、核验链接与体验状态，购买页会显示商品页按钮但不显示价格、体验卡显示「暂未开放」。截图里的价格与可领取状态是桩数据，不能当作线上行为。
 
 ## 文件
 
