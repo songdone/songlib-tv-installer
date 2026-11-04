@@ -221,7 +221,7 @@ func (a *managementAuth) mount(server *fiber.App) {
 	})
 }
 
-// FrpDeck auth-card language (pages.css .auth/.auth-card) rebuilt inline with
+// The auth-card language (pages.css .auth/.auth-card) rebuilt inline with
 // the SongLib brand palette (gold #E3B459 sampled from the official logo).
 // The form logic and session behaviour are unchanged.
 const managementLoginHTML = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>音屿-Apple TV音乐播放器安装助手</title>

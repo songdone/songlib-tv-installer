@@ -1,6 +1,6 @@
 <template>
-  <!-- LegalCredits (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF §5): version, source,
-       license and upstream attribution — never delete the upstream credits. -->
+  <!-- LegalCredits: version, source, license and upstream attribution —
+       never delete the upstream credits. -->
   <footer class="sl-footer">
     <div class="sl-footer-line">
       <span class="sl-footer-version">{{ $t("home.footer.version_label") }} {{ version }}</span>

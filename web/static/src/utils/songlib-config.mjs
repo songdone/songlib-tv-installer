@@ -3,7 +3,7 @@
 // The Go backend serves fixed trusted origins at /songlib/config and only
 // forwards buy URLs that came back verified from the official site. UI
 // components must not invent or hardcode extra commercial links: anything the
-// backend does not send stays hidden (docs/UI_PRODUCT_REDESIGN_HANDOFF_20261104.md §6).
+// backend does not send stays hidden.
 //
 // Owner-confirmed goods pages on the 16688 storefront (2026-11-04). Each plan
 // points at its own product page — the storefront is never used as a stand-in

@@ -20,7 +20,7 @@
 
         <div class="sl-hero-ctas">
           <!-- Primary action opens the real in-app install wizard, not an
-               external page (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF §6). -->
+               external page. -->
           <router-link class="sl-btn sl-pri" :to="{ name: 'add-device' }">
             {{ $t("home.hero.cta_install") }}
           </router-link>

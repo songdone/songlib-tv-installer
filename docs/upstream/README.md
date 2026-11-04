@@ -5,7 +5,7 @@
 - 当前交付：一个 `platform=all` 的轻量 FPK，x86/ARM 共用，由 DockerHub 多架构镜像自动匹配。
 - 镜像：[666uos/songlib-tv-installer:0.1.3](https://hub.docker.com/r/666uos/songlib-tv-installer/tags)。
 - 默认中文，管理密码8–64位；使用既有音屿圆角图标，提供256/512素材。
-- [构建与运行](docs/OPERATIONS.md) · [当前版本说明](docs/RELEASE-0.1.3.md) · [安全说明](docs/SECURITY.md) · [验收矩阵](docs/TEST_MATRIX.md) · [第三方声明](THIRD_PARTY_NOTICES.md)。
+- [构建与运行](docs/OPERATIONS.md) · [当前版本说明](docs/RELEASE-0.1.3.md) · [安全说明](docs/SECURITY.md) · [第三方声明](THIRD_PARTY_NOTICES.md)。
 
 本地两架构启动及登录已验证；真实 fnOS、Apple TV 配对/签装与长期续签仍需设备验收。源码已提交不代表已完成上架或生产部署。
 
@@ -201,5 +201,5 @@ The private keys are stored encrypted with a deployment key file (`signing.key_f
 
 正式名称：**音屿-Apple TV音乐播放器安装助手**。本体永久免费，音屿播放器独立商业授权，不捆绑IPA。
 
-本地开发/打包见 [操作手册](docs/OPERATIONS.md)、[安全说明](docs/SECURITY.md)、[真实设备待测矩阵](docs/TEST_MATRIX.md)、[来源](docs/UPSTREAM.md)。
+本地开发/打包见 [操作手册](docs/OPERATIONS.md)、[安全说明](docs/SECURITY.md)、[来源](docs/UPSTREAM.md)。
 运行界面可下载对应源码，AGPL-3.0适用。当前为本地开发验收，不宣称已上架或完成Apple TV签装/长期续签测试。

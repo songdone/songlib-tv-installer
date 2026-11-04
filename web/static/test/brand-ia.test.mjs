@@ -120,16 +120,16 @@ test("design tokens exist and are theme-complete", () => {
     assert.ok(tokens.includes(token), `tokens.css must define ${token}`);
   }
   // Brand gold is calibrated from the logo (#E3B459), not invented — and no
-  // FrpDeck palette value (#E6BE7A) is copied.
+  // third-party palette values are not copied.
   assert.ok(tokens.includes("#E3B459"), "raw logo gold must be present");
-  assert.ok(!tokens.includes("#E6BE7A"), "FrpDeck gold must not be copied");
+  assert.ok(!tokens.includes("#E6BE7A"), "upstream gold must not be copied");
   assert.ok(existsSync(new URL("../src/styles/layout.css", import.meta.url)));
   assert.ok(existsSync(new URL("../src/styles/components.css", import.meta.url)));
 });
 
-test("purchase page keeps the FrpDeck plan language with gated commerce", () => {
+test("purchase page keeps the shared plan-card language with gated commerce", () => {
   const purchase = read("../src/page/purchase/index.vue");
-  assert.ok(purchase.includes("sl-plan"), "plan cards must use the FrpDeck plan pattern");
+  assert.ok(purchase.includes("sl-plan"), "plan cards must use the shared plan-card pattern");
   assert.ok(purchase.includes("sl-cmp"), "comparison table must exist");
   assert.ok(purchase.includes("sl-steps"), "redemption steps must exist");
   assert.ok(purchase.includes("sl-faq"), "FAQ must exist");

@@ -63,3 +63,26 @@ runtime.env
 packaging/fnos/songlibtvinstaller/cmd/offline-image/
 packaging/fnos/songlibtvinstaller/cmd/offline-registry
 !packaging/fnos/songlibtvinstaller/cmd/main
+
+# ---- 内部研发资料与敏感文件（2026-11-04 审计新增）----
+# 交接/检查点/验收类文档默认放私有仓，不进公开仓
+docs/*HANDOFF_*.md
+docs/DEVELOPMENT_CHECKPOINT_*.md
+docs/UI_COMPONENT_MAPPING_*.md
+docs/FNOS_VERIFICATION.md
+docs/TEST_MATRIX.md
+docs/preview/purchase-*/
+evidence/
+# 授权后端与商户配置（属私有仓 licensing/，这里兜底）
+sales.env
+sales-contract.json
+licensing/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+bootstrap.json
+signing.key
+orders.key
+data/keys/
+# 本地临时输出
+.playwright-cli/

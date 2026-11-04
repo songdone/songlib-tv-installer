@@ -1,9 +1,9 @@
 /*
- * SongLib shared components — FrpDeck visual language (FRPDECK_GLOBAL_UI
- * _SYSTEM_HANDOFF_20261104.md §3/§5) rebuilt on --sl-* tokens with the
- * SongLib brand. Names keep the .sl- prefix so the Vue pages migrate
- * mechanically; visuals follow FrpDeck: translucent cards, pill buttons,
- * status pills, gradient page titles, spring-ish motion.
+ * SongLib shared components — the 2026-11-04 card-first visual style,
+ * rebuilt on --sl-* tokens with the SongLib brand. Names keep the .sl-
+ * prefix so the Vue pages migrate
+ * mechanically; the style uses translucent cards, pill buttons, status
+ * pills, gradient page titles and spring-ish motion.
  */
 
 /* ---------- shared type helpers (used across pages) ---------- */

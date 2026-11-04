@@ -34,7 +34,7 @@
       <!-- Device type tabs. This FPK's verified, advertised capability is
            Apple TV installation only: the iPhone tab stays hidden behind
            showIphoneTab until iOS sideloading passes end-to-end acceptance
-           (docs/UI_PRODUCT_REDESIGN_HANDOFF_20261104.md §2). The underlying
+           The underlying
            pairing-file code path below is kept intact for that future turn-on
            and for the existing tests. -->
       <div class="join w-full atv-connect-mode" role="tablist">
@@ -166,7 +166,7 @@ export default {
   components: { DeviceComboBox },
   data() {
     return {
-      // Product capability flag (docs/UI_PRODUCT_REDESIGN_HANDOFF_20261104.md
+      // Product capability flag
       // §1/§2): only Apple TV installation is verified and advertised, so the
       // experimental iPhone pairing-file tab is hidden from the UI. Flip to
       // true after end-to-end iPhone acceptance; the underlying code path is

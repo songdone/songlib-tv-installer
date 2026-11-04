@@ -1,9 +1,8 @@
 /*
  * AppShell — previous SongLib sidebar IA (topbar 64px + left sidebar with
- * icon-rail and drawer breakpoints) dressed in the FrpDeck visual language
- * (--sl-* tokens, ambient glow, spring easing). Spec:
- * FRPDECK_GLOBAL_UI_SYSTEM_HANDOFF_20261104.md §3, with the navigation frame
- * kept from the previous iteration per the product owner's decision.
+ * icon-rail and drawer breakpoints) dressed in the 2026-11-04 card-first
+ * visual style (--sl-* tokens, ambient glow, spring easing), with the
+ * navigation frame kept from the previous iteration per the product owner.
  */
 
 .sl-bgfx {

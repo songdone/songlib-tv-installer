@@ -17,7 +17,7 @@ import (
 )
 
 // The browser tab and Apple touch icon use the official SongLib mark, not the
-// upstream ATVLoadly triangle (docs/UI_PRODUCT_REDESIGN_HANDOFF_20261104.md §1).
+// upstream ATVLoadly triangle.
 const songlibMarkPath = "/songlib-mark.png"
 
 func TestBrandIconSource(t *testing.T) {

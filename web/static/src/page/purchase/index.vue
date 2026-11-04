@@ -25,7 +25,7 @@
       <div class="grow">{{ $t("purchase.free_note") }}</div>
     </div>
 
-    <!-- Plan cards (FrpDeck lic-plan language): art left / body right.
+    <!-- Plan cards (shared lic-plan language): art left / body right.
          Prices and purchase CTAs only render from verified config; without a
          verified channel the card stays informative, never a dead button. -->
     <div class="sl-plans">

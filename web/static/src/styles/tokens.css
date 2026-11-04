@@ -1,11 +1,12 @@
 /*
- * SongLib design tokens — FrpDeck-style layering with the SongLib brand.
- * Spec: docs/FRPDECK_GLOBAL_UI_SYSTEM_HANDOFF_20261104.md §3.
+ * SongLib design tokens — layered translucency with the SongLib brand.
+ * The tokens back every SongLib surface: light and dark themes, the
+ * translucent card system and the ambient background.
  *
  * Brand calibration: gold #E3B459 and ink #0D1014 are sampled from the
  * official logo (branding/ios-app-icon-original.png). The light theme deepens
  * the gold to #9A7420 for WCAG-AA text/buttons on warm paper; the raw gold
- * stays for dark surfaces and graphics. No FrpDeck palette values are copied.
+ * stays for dark surfaces and graphics. No third-party palette values are copied.
  *
  * Legacy pages keep working through the --atv-* mapping in app.css; daisyUI
  * primary is aligned to the same accent. New code uses only --sl-*.

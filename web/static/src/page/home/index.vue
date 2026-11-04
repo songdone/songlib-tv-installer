@@ -3,7 +3,7 @@
     <SongLibHero />
 
     <!-- Quick start: full three-step guide before any TV is paired, then a
-         single summary card (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF §7). -->
+         single summary card. -->
     <section class="sl-section-gap">
       <QuickStartStepper
         :devices="devices"

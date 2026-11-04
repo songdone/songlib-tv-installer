@@ -318,7 +318,7 @@ export default {
       pendingUpdates: {},
       confirmDeleteId: null,
       // Row cards up to this many apps; the sortable table takes over beyond
-      // it (docs/VISUAL_SYSTEM_AND_CODEX_HANDOFF §5 AppList).
+      // it.
       CARD_LIMIT: 8,
     };
   },
