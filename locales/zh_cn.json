@@ -242,7 +242,7 @@
         },
         "tips": {
             "warning": "本设备会模拟为一台 MacBook，登陆安装帐号时，请确保身边有 iPhone 手机或已授权设备能正常接收 2FA 验证码，并及时授权验证。",
-            "external": "外部证书模式使用你导入的证书和描述文件签名，不使用任何 Apple ID。应用在证书或描述文件过期前有效，但 Apple 仍可能提前吊销证书；atvloadly 不检查吊销状态。"
+            "external": "外部证书模式使用你导入的证书和描述文件签名，不使用任何 Apple ID。应用在证书或描述文件过期前有效，但 Apple 仍可能提前吊销证书；音屿安装助手不检查吊销状态。"
         },
         "dialog": {
             "input_pin": {
@@ -763,7 +763,7 @@
     "identity": {
         "title": "签名身份（外部证书）",
         "subtitle": "用于在不使用 Apple ID 的情况下签名应用的 P12 证书和描述文件。",
-        "notice": "使用导入的证书签名时，atvloadly 不需要 Apple ID。应用在证书或描述文件过期前可以安装；但 Apple 仍可能提前吊销证书，且 atvloadly 不检查吊销状态。",
+        "notice": "使用导入的证书签名时，音屿安装助手不需要 Apple ID。应用在证书或描述文件过期前可以安装；但 Apple 仍可能提前吊销证书，且 音屿安装助手不检查吊销状态。",
         "button": {
             "import": "导入 P12",
             "replace_profile": "替换描述文件",

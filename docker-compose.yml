@@ -1,9 +1,9 @@
 version: '3.3'
 services:
-  atvloadly:
-    container_name: atvloadly
-    hostname: atvloadly
-    image: bitxeno/atvloadly:latest
+  songlib-tv-installer:
+    container_name: songlib-tv-installer
+    hostname: songlib-tv-installer
+    image: 666uos/songlib-tv-installer:latest
     security_opt:
       - seccomp:unconfined
     volumes:

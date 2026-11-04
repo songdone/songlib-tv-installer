@@ -26,12 +26,12 @@
     "notify": {
         "title": "[{{.name}}] Refresh task execution failed.",
         "content": "Account: {{.account}}\nError: {{.error}}",
-        "batch_title": "atvloadly refresh task execution failed",
+        "batch_title": "SongLib Installer refresh task execution failed",
         "batch_content": "{{.name}}: {{.error}}\n\n",
-        "update_title": "atvloadly: app updates",
+        "update_title": "SongLib Installer: app updates",
         "update_available": "{{.name}}: {{.version}} is available\n",
         "update_attention": "{{.name}}: update needs attention: {{.error}}\n",
-        "update_installed_title": "atvloadly: apps updated",
+        "update_installed_title": "SongLib Installer: apps updated",
         "update_installed": "{{.name}} updated to {{.version}}\n"
     },
     "nav": {
@@ -242,7 +242,7 @@
         },
         "tips": {
             "warning": "This device will emulate a MacBook. When signing in with the installation account, please ensure you have an iPhone or an authorized device nearby to receive 2FA verification codes.",
-            "external": "External certificate mode signs with your imported certificate and provisioning profile, without any Apple ID. The app stays valid until the certificate or the profile expires, unless Apple revokes the certificate earlier; atvloadly does not verify revocation."
+            "external": "External certificate mode signs with your imported certificate and provisioning profile, without any Apple ID. The app stays valid until the certificate or the profile expires, unless Apple revokes the certificate earlier; SongLib Installer does not verify revocation."
         },
         "dialog": {
             "input_pin": {
@@ -763,7 +763,7 @@
     "identity": {
         "title": "Signing identities (external certificate)",
         "subtitle": "P12 certificates and provisioning profiles used to sign apps without an Apple ID.",
-        "notice": "Signing with an imported certificate needs no Apple ID in atvloadly. Apps can be installed until the certificate or the provisioning profile expires; Apple may still revoke the certificate earlier, and atvloadly does not verify revocation.",
+        "notice": "Signing with an imported certificate needs no Apple ID in SongLib Installer. Apps can be installed until the certificate or the provisioning profile expires; Apple may still revoke the certificate earlier, and SongLib Installer does not verify revocation.",
         "button": {
             "import": "Import P12",
             "replace_profile": "Replace profile",

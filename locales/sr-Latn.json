@@ -26,12 +26,12 @@
     "notify": {
         "title": "[{{.name}}] Osvežavanje nije uspelo",
         "content": "Nalog: {{.account}}\nGreška: {{.error}}",
-        "batch_title": "atvloadly: osvežavanje nije uspelo",
+        "batch_title": "SongLib Installer: osvežavanje nije uspelo",
         "batch_content": "{{.name}}: {{.error}}\n\n",
-        "update_title": "atvloadly: dostupna ažuriranja aplikacija",
+        "update_title": "SongLib Installer: dostupna ažuriranja aplikacija",
         "update_available": "{{.name}}: dostupna je verzija {{.version}}\n",
         "update_attention": "{{.name}}: ažuriranje zahteva pažnju: {{.error}}\n",
-        "update_installed_title": "atvloadly: aplikacije su ažurirane",
+        "update_installed_title": "SongLib Installer: aplikacije su ažurirane",
         "update_installed": "{{.name}}: ažurirano na verziju {{.version}}\n"
     },
     "nav": {
@@ -242,7 +242,7 @@
         },
         "tips": {
             "warning": "Ovaj uređaj će se predstavljati kao MacBook. Kada se prijavljujete na nalog za instalaciju, držite iPhone ili drugi ovlašćeni uređaj u blizini radi prijema 2FA verifikacionih kodova.",
-            "external": "Režim spoljnog sertifikata potpisuje aplikaciju uvezenim sertifikatom i provisioning profilom, bez Apple ID naloga. Aplikacija važi dok ne istekne sertifikat ili profil, osim ako Apple ranije ne opozove sertifikat; atvloadly ne proverava opoziv."
+            "external": "Režim spoljnog sertifikata potpisuje aplikaciju uvezenim sertifikatom i provisioning profilom, bez Apple ID naloga. Aplikacija važi dok ne istekne sertifikat ili profil, osim ako Apple ranije ne opozove sertifikat; SongLib Installer ne proverava opoziv."
         },
         "dialog": {
             "input_pin": {
@@ -763,7 +763,7 @@
     "identity": {
         "title": "Identiteti za potpisivanje (spoljni sertifikat)",
         "subtitle": "P12 sertifikati i provisioning profili koji se koriste za potpisivanje aplikacija bez Apple ID naloga.",
-        "notice": "Za potpisivanje uvezenim sertifikatom nije potreban Apple ID u atvloadly-ju. Aplikacije mogu da se instaliraju dok ne istekne sertifikat ili provisioning profil; Apple ipak može ranije da opozove sertifikat, a atvloadly ne proverava opoziv.",
+        "notice": "Za potpisivanje uvezenim sertifikatom nije potreban Apple ID u SongLib Installer-ju. Aplikacije mogu da se instaliraju dok ne istekne sertifikat ili provisioning profil; Apple ipak može ranije da opozove sertifikat, a SongLib Installer ne proverava opoziv.",
         "button": {
             "import": "Uvezi P12",
             "replace_profile": "Zameni profil",
