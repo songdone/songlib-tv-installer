@@ -13,5 +13,51 @@
     "packaging/fnos/songlibtvinstaller/app/ui/images/icon_256.png": 256,
     "packaging/fnos/songlibtvinstaller/app/ui/images/icon_512.png": 512,
     "web/static/public/songlib-mark.png": 512
+  },
+  "logo_lockup_svg": {
+    "source": "产品所有者提供的官方横版组合标（CorelDRAW 导出，金岛形 + 音屿 SongLib Amp 字标，2026-11-04）",
+    "sha256": "0bb3e9513f2bbe51bfc94755d7ef58a87acaa841a9326f6fe46f585aff8b4b16",
+    "viewBox": "0 0 349.24 142.88",
+    "usage": "深色底的登录页与横版品牌场景；字标为奶白色，不用于浅色背景",
+    "outputs": [
+      "branding/songlib-logo-lockup.svg",
+      "web/static/public/songlib-logo.svg"
+    ]
+  },
+  "plan_covers": {
+    "说明": "购买页套餐卡主图（音屿官方商品图，含授权/设备数宣示，由所有者提供并要求展示）",
+    "covers": {
+      "pro": {
+        "source": "产品所有者提供的官方商品主图（1254×1254，2026-11-04）",
+        "sha256_original": "145c4dfa95a9c69dd0a9a255abff4ba483e753d62e12f8e830068a76691e6bae",
+        "web_copy": {
+          "path": "web/static/public/plan/cover-pro.jpg",
+          "width": 800,
+          "quality": 82,
+          "sha256": "c33893f34f3730050080c453d6d05e3ea452c0e3a88ed18bfa0fba13952710a6"
+        }
+      },
+      "basic": {
+        "source": "产品所有者提供的官方商品主图（1254×1254，2026-11-04）",
+        "sha256_original": "a22c8de77e63135bc1c03970dcc192807ccb07866553a31f7a92fc5abcd80816",
+        "web_copy": {
+          "path": "web/static/public/plan/cover-basic.jpg",
+          "width": 800,
+          "quality": 82,
+          "sha256": "bff6c1a25e2669e0c5da322093c540592cecce8952bbbe6d6b0569b158a2a956"
+        }
+      },
+      "trial": {
+        "source": "产品所有者提供的官方商品主图：30 天专业版体验卡（1254×1254，2026-11-04 重出版）",
+        "sha256_original": "56348301e4a976e2527eac47c3719c3fc08ee370bfdb7d65014c87333716375a",
+        "web_copy": {
+          "path": "web/static/public/plan/cover-trial.jpg",
+          "width": 800,
+          "quality": 82,
+          "sha256": "f69fc283ae3837214c91d3ffed28df1362ee9eff8d17530b6bbdb287810e100e"
+        },
+        "change": "所有者按检查点反馈重出图：原图角标「永久授权 · 最多 6 台设备」与 30 天体验卡自相矛盾，新图角标改为「30天·专业版体验卡」；其余画面元素未改动。旧图 sha256_original 为 fedc5f014779d3ade6c612dad7254ad74c46d9047ce68920e5aab268328f7b76。"
+      }
+    }
   }
 }

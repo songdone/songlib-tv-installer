@@ -1,7 +1,7 @@
 appname = songlibtvinstaller
-version = 0.1.3
+version = 1.0.1
 display_name = 音屿-Apple TV音乐播放器安装助手
-desc = 免费 Apple TV IPA 自签安装与自动续签工具。音屿播放器独立授权，收费与飞牛无关。开发验收包，尚未完成真实设备验收，未上架。
+desc = 想在 Apple TV 上听 NAS 里的音乐？用音屿安装助手连接电视、导入 tvOS IPA，按引导完成配对、签名和安装，还能管理签名有效期与自动续签。音屿播放器可从官网下载，安装助手本身免费，也支持安装其他合法 tvOS 应用。
 platform = all
 source = thirdparty
 maintainer = 6uos

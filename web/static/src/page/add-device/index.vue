@@ -12,7 +12,9 @@
         </ul>
       </div>
     </div>
-    <div class="alert atv-warning" v-else>
+    <!-- iPhone-specific guidance only renders while the experimental iPhone
+         tab is enabled (see showIphoneTab in data()). -->
+    <div class="alert atv-warning" v-else-if="showIphoneTab">
       <div class="w-8 shrink-0">
         <WarningIcon />
       </div>
@@ -29,7 +31,12 @@
     <div class="card bg-base-100 atv-connect-card">
       <h2 class="atv-section-heading">{{ $t("addDevice.title") }}</h2>
 
-      <!-- Device type tabs: Apple TV on the left and selected by default -->
+      <!-- Device type tabs. This FPK's verified, advertised capability is
+           Apple TV installation only: the iPhone tab stays hidden behind
+           showIphoneTab until iOS sideloading passes end-to-end acceptance
+           The underlying
+           pairing-file code path below is kept intact for that future turn-on
+           and for the existing tests. -->
       <div class="join w-full atv-connect-mode" role="tablist">
         <button
           type="button"
@@ -46,6 +53,7 @@
           {{ $t("addDevice.tabs.appletv") }}
         </button>
         <button
+          v-if="showIphoneTab"
           type="button"
           role="tab"
           class="btn join-item flex-1 gap-x-2"
@@ -90,8 +98,10 @@
         </button>
       </div>
 
-      <!-- iPhone: pick a device and validate an uploaded pairing file -->
-      <div v-show="activeTab === 'iphone'" class="flex flex-col gap-y-4 mt-2">
+      <!-- iPhone: pick a device and validate an uploaded pairing file.
+           Hidden together with the tab by showIphoneTab; the logic is kept
+           runnable so the manual-pairing tests keep exercising it. -->
+      <div v-show="showIphoneTab && activeTab === 'iphone'" class="flex flex-col gap-y-4 mt-2">
         <div class="form-control w-full">
           <label class="label">
             <span class="label-text">{{ $t("addDevice.iphone.device_label") }}</span>
@@ -156,6 +166,12 @@ export default {
   components: { DeviceComboBox },
   data() {
     return {
+      // Product capability flag
+      // §1/§2): only Apple TV installation is verified and advertised, so the
+      // experimental iPhone pairing-file tab is hidden from the UI. Flip to
+      // true after end-to-end iPhone acceptance; the underlying code path is
+      // kept intact meanwhile.
+      showIphoneTab: false,
       activeTab: "appletv",
       // Minimum spinner duration for the Apple TV list (first load and
       // manual refresh): the devices endpoint answers almost instantly,

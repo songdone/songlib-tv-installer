@@ -16,30 +16,35 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 )
 
-const appleTouchIconPath = "/apple-touch-icon.png"
+// The browser tab and Apple touch icon use the official SongLib mark, not the
+// upstream ATVLoadly triangle.
+const songlibMarkPath = "/songlib-mark.png"
 
-func TestAppleTouchIconSource(t *testing.T) {
-	icon, err := os.ReadFile(filepath.Join("static", "public", "apple-touch-icon.png"))
+func TestBrandIconSource(t *testing.T) {
+	mark, err := os.ReadFile(filepath.Join("static", "public", "songlib-mark.png"))
 	if err != nil {
-		t.Fatalf("read source icon: %v", err)
+		t.Fatalf("read source mark: %v", err)
 	}
-	assertAppleTouchIcon(t, icon)
+	assertSongLibMark(t, mark)
 
 	index, err := os.ReadFile(filepath.Join("static", "index.html"))
 	if err != nil {
 		t.Fatalf("read source index: %v", err)
 	}
-	want := `<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/apple-touch-icon.png" >`
-	if !strings.Contains(string(index), want) {
-		t.Fatalf("source index does not contain %q", want)
+	wantIcon := `<link rel="icon" type="image/png" sizes="512x512" href="/songlib-mark.png" />`
+	if !strings.Contains(string(index), wantIcon) {
+		t.Fatalf("source index does not contain %q", wantIcon)
 	}
-	if !strings.Contains(string(index), `rel="shortcut icon"`) ||
-		!strings.Contains(string(index), `href="/img/app.svg"`) {
-		t.Fatal("source index no longer references the existing SVG favicon")
+	wantTouch := `<link rel="apple-touch-icon" type="image/png" href="/songlib-mark.png" />`
+	if !strings.Contains(string(index), wantTouch) {
+		t.Fatalf("source index does not contain %q", wantTouch)
+	}
+	if strings.Contains(string(index), "/img/app.svg") {
+		t.Fatal("source index still references the upstream SVG favicon")
 	}
 }
 
-func TestAppleTouchIconProductionAsset(t *testing.T) {
+func TestBrandIconProductionAsset(t *testing.T) {
 	assets := StaticAssets()
 	index, err := assets.Open("index.html")
 	if err != nil {
@@ -51,60 +56,50 @@ func TestAppleTouchIconProductionAsset(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read built index: %v", err)
 	}
-	if !strings.Contains(string(indexData), `rel="apple-touch-icon"`) ||
-		!strings.Contains(string(indexData), appleTouchIconPath) {
-		t.Fatal("built index does not reference the Apple touch icon")
+	if !strings.Contains(string(indexData), songlibMarkPath) {
+		t.Fatal("built index does not reference the SongLib mark")
 	}
-	if !strings.Contains(string(indexData), `rel="shortcut icon"`) ||
-		!strings.Contains(string(indexData), `href="/img/app.svg"`) {
-		t.Fatal("built index no longer references the existing SVG favicon")
+	if strings.Contains(string(indexData), "/img/app.svg") {
+		t.Fatal("built index still references the upstream SVG favicon")
 	}
 
-	icon, err := assets.Open("apple-touch-icon.png")
+	mark, err := assets.Open("songlib-mark.png")
 	if err != nil {
-		t.Fatalf("open built icon: %v", err)
+		t.Fatalf("open built mark: %v", err)
 	}
-	defer func() { _ = icon.Close() }()
-	iconData, err := io.ReadAll(icon)
+	defer func() { _ = mark.Close() }()
+	markData, err := io.ReadAll(mark)
 	if err != nil {
-		t.Fatalf("read built icon: %v", err)
+		t.Fatalf("read built mark: %v", err)
 	}
-	assertAppleTouchIcon(t, iconData)
+	assertSongLibMark(t, markData)
 
 	app := fiber.New()
 	app.Use("/", filesystem.New(filesystem.Config{Root: http.FS(assets)}))
-	response, err := app.Test(httptest.NewRequest(http.MethodGet, appleTouchIconPath, nil))
+	response, err := app.Test(httptest.NewRequest(http.MethodGet, songlibMarkPath, nil))
 	if err != nil {
-		t.Fatalf("request icon: %v", err)
+		t.Fatalf("request mark: %v", err)
 	}
 	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode != http.StatusOK {
-		t.Fatalf("icon status = %d, want %d", response.StatusCode, http.StatusOK)
+		t.Fatalf("mark status = %d, want %d", response.StatusCode, http.StatusOK)
 	}
 	if !strings.HasPrefix(response.Header.Get("Content-Type"), "image/png") {
-		t.Fatalf("icon content type = %q, want image/png", response.Header.Get("Content-Type"))
+		t.Fatalf("mark content type = %q, want image/png", response.Header.Get("Content-Type"))
 	}
 }
 
-func assertAppleTouchIcon(t *testing.T, data []byte) {
+func assertSongLibMark(t *testing.T, data []byte) {
 	t.Helper()
-	icon, format, err := image.Decode(bytes.NewReader(data))
+	mark, format, err := image.Decode(bytes.NewReader(data))
 	if err != nil {
-		t.Fatalf("decode icon: %v", err)
+		t.Fatalf("decode mark: %v", err)
 	}
 	if format != "png" {
-		t.Fatalf("icon format = %q, want png", format)
+		t.Fatalf("mark format = %q, want png", format)
 	}
-	if got := icon.Bounds().Size(); got.X != 180 || got.Y != 180 {
-		t.Fatalf("icon dimensions = %dx%d, want 180x180", got.X, got.Y)
-	}
-
-	for y := icon.Bounds().Min.Y; y < icon.Bounds().Max.Y; y++ {
-		for x := icon.Bounds().Min.X; x < icon.Bounds().Max.X; x++ {
-			_, _, _, alpha := icon.At(x, y).RGBA()
-			if alpha != 0xffff {
-				t.Fatalf("icon has transparent pixel at (%d, %d)", x, y)
-			}
-		}
+	// The shipped web mark is the 512x512 master from branding/ICON_512.PNG.
+	if got := mark.Bounds().Size(); got.X != 512 || got.Y != 512 {
+		t.Fatalf("mark dimensions = %dx%d, want 512x512", got.X, got.Y)
 	}
 }

@@ -57,7 +57,8 @@ jobs:
           echo "VERSION=${{ github.ref_name }}" >> $GITHUB_OUTPUT
           echo "BUILDDATE=$(date '+%F-%T')" >> $GITHUB_OUTPUT
           echo "COMMIT=$(git rev-parse --verify HEAD)" >> $GITHUB_OUTPUT
-          echo "APP_NAME=${{ steps.metadata.outputs.repository_name }}" >> $GITHUB_OUTPUT
+          # Dockerfile 与 entrypoint 都按 atvloadly 引用主程序名；仓库改名不能影响产物名
+          echo "APP_NAME=atvloadly" >> $GITHUB_OUTPUT
           echo "REPO=$(echo 'github.com/${{ github.repository }}')" >> $GITHUB_OUTPUT
           echo "BRANCH=${{ steps.metadata.outputs.repository_default_branch }}" >> $GITHUB_OUTPUT
 
@@ -67,7 +68,10 @@ jobs:
 
       # step 4: generate build files
       - name: build frontend
-        run: cd ./web/static && npm install && npm run build
+        run: cd ./web/static && npm install && npm test && npm run build
+      # packaging/Dockerfile 会把源码归档打进镜像，用于留存构建出处
+      - name: Generate source archive
+        run: git archive --format=tar.gz -o build/songlib-source.tar.gz HEAD
       - name: Generate build files
         uses: crazy-max/ghaction-xgo@v4
         env:

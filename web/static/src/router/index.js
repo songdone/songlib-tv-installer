@@ -18,6 +18,50 @@ const routes = [
     ],
   },
   {
+    path: "/devices",
+    component: () => import("@/page/layout.vue"),
+    children: [
+      {
+        path: "",
+        name: "devices",
+        component: () => import("@/page/devices/index.vue"),
+      },
+    ],
+  },
+  {
+    path: "/apps",
+    component: () => import("@/page/layout.vue"),
+    children: [
+      {
+        path: "",
+        name: "apps",
+        component: () => import("@/page/apps/index.vue"),
+      },
+    ],
+  },
+  {
+    path: "/explore",
+    component: () => import("@/page/layout.vue"),
+    children: [
+      {
+        path: "",
+        name: "explore",
+        component: () => import("@/page/explore/index.vue"),
+      },
+    ],
+  },
+  {
+    path: "/purchase",
+    component: () => import("@/page/layout.vue"),
+    children: [
+      {
+        path: "",
+        name: "purchase",
+        component: () => import("@/page/purchase/index.vue"),
+      },
+    ],
+  },
+  {
     path: "/add-device",
     component: () => import("@/page/layout.vue"),
     children: [

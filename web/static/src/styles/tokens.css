@@ -1,0 +1,168 @@
+/*
+ * SongLib design tokens — layered translucency with the SongLib brand.
+ * The tokens back every SongLib surface: light and dark themes, the
+ * translucent card system and the ambient background.
+ *
+ * Brand calibration: gold #E3B459 and ink #0D1014 are sampled from the
+ * official logo (branding/ios-app-icon-original.png). The light theme deepens
+ * the gold to #9A7420 for WCAG-AA text/buttons on warm paper; the raw gold
+ * stays for dark surfaces and graphics. No third-party palette values are copied.
+ *
+ * Legacy pages keep working through the --atv-* mapping in app.css; daisyUI
+ * primary is aligned to the same accent. New code uses only --sl-*.
+ */
+
+:root {
+  --sl-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", sans-serif;
+  --sl-code: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --sl-radius-xs: 8px;
+  --sl-radius-sm: 10px;
+  --sl-radius-md: 14px;
+  --sl-radius: 14px;
+  --sl-radius-lg: 18px;
+  --sl-radius-xl: 22px;
+
+  --sl-space-1: 4px;
+  --sl-space-2: 8px;
+  --sl-space-3: 12px;
+  --sl-space-4: 16px;
+  --sl-space-5: 20px;
+  --sl-space-6: 24px;
+  --sl-space-8: 32px;
+
+  --sl-motion-ease: cubic-bezier(.16, 1, .3, 1);
+  --sl-motion-std: cubic-bezier(.4, 0, .2, 1);
+  --sl-motion-fast: 180ms;
+  --sl-motion-normal: 280ms;
+
+  --sl-top-h: 64px;
+  --sl-top-h-tablet: 112px;
+  --sl-wrap-max: 1480px;
+}
+
+/* ---------- light (default): warm paper, bronze-gold accent ---------- */
+html[data-theme="winter"],
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --sl-bg: #FAF8F4;
+  --sl-bg-soft: #FFFFFF;
+  --sl-surface: rgba(255, 255, 255, .78);
+  --sl-surface-2: rgba(62, 48, 22, .032);
+  --sl-surface-raised: #FFFFFF;
+  --sl-hover: rgba(62, 48, 22, .05);
+  --sl-border: rgba(62, 48, 22, .10);
+  --sl-border-strong: rgba(62, 48, 22, .17);
+
+  --sl-text: #292319;
+  --sl-muted: #756B58;
+  --sl-subtle: #A29885;
+  --sl-muted-strong: #5E564A;
+
+  /* brand, sampled from the logo */
+  --sl-accent: #9A7420;          /* deep bronze: 4.9:1 on #FFF */
+  --sl-accent-strong: #7E5D18;
+  --sl-accent-soft: #E3B459;     /* raw logo gold for graphics/on-dark */
+  --sl-accent-on: #FFFFFF;
+  --sl-gold: #A8792F;            /* text-safe gold (light) */
+  --sl-gold-bright: #E3B459;
+  --sl-gold-ink: #241703;
+  --sl-gold-soft: color-mix(in srgb, #E3B459 20%, transparent);
+
+  --sl-btn: linear-gradient(180deg, #C79A3F, #9A7420);
+  --sl-btn-shadow: 0 8px 22px -10px rgba(154, 116, 32, .55);
+  --sl-heading: linear-gradient(110deg, #6B5A3A 0%, #292319 30%, #9A8A68 55%, #292319 80%);
+
+  --sl-good: #1F7A4D;
+  --sl-success: var(--sl-good);
+  --sl-success-soft: color-mix(in srgb, var(--sl-good) 12%, transparent);
+  --sl-warning: #B26205;
+  --sl-warning-soft: color-mix(in srgb, var(--sl-warning) 12%, transparent);
+  --sl-danger: #C03434;
+  --sl-danger-soft: color-mix(in srgb, var(--sl-danger) 9%, transparent);
+  --sl-info: #2F6BC0;
+
+  --sl-glow-1: rgba(227, 180, 89, .30);
+  --sl-glow-2: rgba(122, 152, 124, .16);
+  --sl-glow-3: rgba(224, 146, 60, .10);
+  --sl-sheen: rgba(255, 255, 255, 0);
+
+  --sl-shadow: 0 20px 50px -28px rgba(74, 52, 16, .25);
+  --sl-shadow-hover: 0 26px 60px -26px rgba(74, 52, 16, .32);
+  --sl-topbar: rgba(250, 248, 244, .74);
+
+  /* daisyUI legacy alignment */
+  --p: 39 63% 35%;
+  --pf: 39 62% 29%;
+  --pc: 0 0% 100%;
+}
+
+/* ---------- dark: logo ink base, raw gold accent ---------- */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --sl-bg: #0D0F11;
+  --sl-bg-soft: #121416;
+  --sl-surface: rgba(30, 29, 27, .94);
+  --sl-surface-2: rgba(255, 255, 255, .034);
+  --sl-surface-raised: #1E1D1B;
+  --sl-hover: rgba(255, 255, 255, .05);
+  --sl-border: rgba(255, 255, 255, .085);
+  --sl-border-strong: rgba(255, 255, 255, .15);
+
+  --sl-text: #EAE6DE;
+  --sl-muted: #A39C90;
+  --sl-subtle: #79736A;
+  --sl-muted-strong: #B8B0A2;
+
+  --sl-accent: #E3B459;
+  --sl-accent-strong: #F0CB84;
+  --sl-accent-soft: #E3B459;
+  --sl-accent-on: #241703;
+  --sl-gold: #E3B459;
+  --sl-gold-bright: #F0CB84;
+  --sl-gold-ink: #241703;
+  --sl-gold-soft: color-mix(in srgb, #E3B459 15%, transparent);
+
+  --sl-btn: linear-gradient(180deg, #F0CB84, #D9A95A);
+  --sl-btn-shadow: 0 8px 24px -10px rgba(227, 180, 89, .55);
+  --sl-heading: linear-gradient(110deg, #A89878 0%, #F2ECE0 28%, #C4B294 52%, #F2ECE0 76%, #A89878 100%);
+
+  --sl-good: #57C890;
+  --sl-success: var(--sl-good);
+  --sl-success-soft: color-mix(in srgb, var(--sl-good) 16%, transparent);
+  --sl-warning: #E0A451;
+  --sl-warning-soft: color-mix(in srgb, var(--sl-warning) 14%, transparent);
+  --sl-danger: #EF8B8B;
+  --sl-danger-soft: color-mix(in srgb, var(--sl-danger) 14%, transparent);
+  --sl-info: #8AB5F5;
+
+  --sl-glow-1: rgba(227, 180, 89, .09);
+  --sl-glow-2: rgba(122, 152, 124, .07);
+  --sl-glow-3: rgba(224, 146, 60, .05);
+  --sl-sheen: rgba(255, 255, 255, .035);
+
+  --sl-shadow: 0 1px 0 rgba(0, 0, 0, .25), 0 18px 44px -28px rgba(0, 0, 0, .75);
+  --sl-shadow-hover: 0 24px 56px -26px rgba(0, 0, 0, .85);
+  --sl-topbar: rgba(13, 15, 17, .8);
+
+  --p: 41 68% 62%;
+  --pf: 45 74% 73%;
+  --pc: 38 82% 8%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+
+  .sl-bgfx .sl-g {
+    animation: none !important;
+  }
+}

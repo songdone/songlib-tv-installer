@@ -1,0 +1,490 @@
+/*
+ * AppShell — previous SongLib sidebar IA (topbar 64px + left sidebar with
+ * icon-rail and drawer breakpoints) dressed in the 2026-11-04 card-first
+ * visual style (--sl-* tokens, ambient glow, spring easing), with the
+ * navigation frame kept from the previous iteration per the product owner.
+ */
+
+.sl-bgfx {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sl-bgfx .sl-g {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.sl-bgfx .sl-g1 {
+  width: 115vmax; height: 115vmax; left: 8%; top: -12%;
+  background: radial-gradient(circle, var(--sl-glow-1), transparent 65%);
+  animation: slGlow1 24s ease-in-out infinite alternate;
+}
+
+.sl-bgfx .sl-g2 {
+  width: 100vmax; height: 100vmax; left: 94%; top: 28%;
+  background: radial-gradient(circle, var(--sl-glow-2), transparent 65%);
+  animation: slGlow2 29s ease-in-out infinite alternate;
+}
+
+.sl-bgfx .sl-g3 {
+  width: 90vmax; height: 90vmax; left: 42%; top: 110%;
+  background: radial-gradient(circle, var(--sl-glow-3), transparent 65%);
+  animation: slGlow3 33s ease-in-out infinite alternate;
+}
+
+/* Work pages keep the glows further out and fainter so tables stay crisp. */
+.sl-bgfx.sl-work .sl-g1 { left: -8%; top: -32%; opacity: .7; }
+.sl-bgfx.sl-work .sl-g2 { left: 106%; top: 16%; opacity: .65; }
+.sl-bgfx.sl-work .sl-g3 { left: 40%; top: 124%; opacity: .6; }
+
+@keyframes slGlow1 { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-42%, -58%) scale(1.14); } }
+@keyframes slGlow2 { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-36%, -40%) scale(1.16); } }
+@keyframes slGlow3 { from { transform: translate(-50%, -50%) scale(1.1); } to { transform: translate(-62%, -42%) scale(1); } }
+
+.sl-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  color: var(--sl-text);
+  font-family: var(--sl-font);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- topbar ---- */
+
+.sl-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: var(--sl-top-h);
+  background: var(--sl-topbar);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border-bottom: 1px solid var(--sl-border);
+}
+
+.sl-topbar-in {
+  max-width: none;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 2.4vw, 32px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sl-topbar-left {
+  min-width: 0;
+}
+
+.sl-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--sl-text);
+  text-decoration: none;
+}
+
+.sl-brand img {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  transition: transform .3s var(--sl-motion-ease), filter .3s var(--sl-motion-ease);
+}
+
+.sl-brand:hover img {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 6px 14px rgba(227, 180, 89, .4));
+}
+
+.sl-brand-name {
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sl-brand-name--short {
+  display: none;
+}
+
+/* Higher specificity than .sl-iconbtn: the CSS minifier merges this rule
+   with .sl-brand-name--short and moves it ahead of .sl-iconbtn, which would
+   otherwise win the tie and keep the hamburger visible on desktop. */
+.sl-topbar .sl-menu-btn {
+  display: none;
+}
+
+/* ---- right-side icon actions ---- */
+
+.sl-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  white-space: nowrap;
+}
+
+.sl-iconbtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  color: var(--sl-muted);
+  background: var(--sl-surface-2);
+  box-shadow: inset 0 0 0 1px var(--sl-border);
+  cursor: pointer;
+  transition: color .2s, background .2s, box-shadow .2s, transform .2s var(--sl-motion-ease);
+  text-decoration: none;
+  padding: 0;
+}
+
+.sl-iconbtn:hover {
+  color: var(--sl-text);
+  background: var(--sl-hover);
+  box-shadow: inset 0 0 0 1px var(--sl-border-strong);
+}
+
+.sl-iconbtn:active {
+  transform: scale(.94);
+}
+
+.sl-iconbtn svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* ---- popover menus ---- */
+
+.sl-pop-anchor {
+  position: relative;
+}
+
+.sl-pop {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  padding: 8px;
+  border-radius: var(--sl-radius);
+  background: var(--sl-surface-raised);
+  box-shadow: inset 0 0 0 1px var(--sl-border-strong), 0 24px 50px -14px rgba(20, 14, 2, .5);
+  animation: slPop .22s var(--sl-motion-ease);
+  transform-origin: top right;
+  color: var(--sl-text);
+}
+
+@keyframes slPop {
+  from { opacity: 0; transform: translateY(8px) scale(.965); }
+  to { opacity: 1; transform: none; }
+}
+
+.sl-pop-t {
+  font-size: 11.5px;
+  color: var(--sl-subtle);
+  padding: 6px 10px;
+  letter-spacing: .06em;
+}
+
+.sl-pop-i {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--sl-text);
+  cursor: pointer;
+}
+
+.sl-pop-i:hover {
+  background: var(--sl-hover);
+}
+
+.sl-pop-i.sl-on {
+  background: color-mix(in srgb, var(--sl-accent) 13%, transparent);
+}
+
+.sl-pop-i .ck {
+  margin-left: auto;
+  color: var(--sl-accent);
+}
+
+.sl-pop hr {
+  border: 0;
+  border-top: 1px solid var(--sl-border);
+  margin: 6px 4px;
+}
+
+.sl-pop .row {
+  display: flex;
+  gap: 6px;
+  padding: 4px 6px 2px;
+}
+
+.sl-pop .row button {
+  flex: 1;
+  padding: 7px 0;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  box-shadow: inset 0 0 0 1px var(--sl-border);
+  color: var(--sl-muted);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.sl-pop .row button.sl-on {
+  color: var(--sl-text);
+  background: var(--sl-hover);
+  box-shadow: inset 0 0 0 1px var(--sl-border-strong);
+}
+
+/* ---- body: sidebar + content ---- */
+
+.sl-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.sl-sidebar {
+  position: sticky;
+  top: var(--sl-top-h);
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  width: 216px;
+  height: calc(100vh - var(--sl-top-h));
+  flex-shrink: 0;
+  padding: 16px 12px;
+  border-right: 1px solid var(--sl-border);
+  background: color-mix(in srgb, var(--sl-bg-soft) 55%, transparent);
+  overflow-y: auto;
+}
+
+.sl-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sl-navitem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: var(--sl-radius-sm);
+  background: none;
+  color: var(--sl-muted);
+  font-size: 13.5px;
+  font-weight: 620;
+  font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--sl-motion-fast) ease, color var(--sl-motion-fast) ease;
+}
+
+.sl-navitem:hover,
+.sl-navitem:focus-visible {
+  background: var(--sl-hover);
+  color: var(--sl-text);
+}
+
+.sl-navitem--active {
+  background: var(--sl-surface-raised);
+  color: var(--sl-text);
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 var(--sl-accent), var(--sl-shadow);
+}
+
+.sl-navitem svg {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+}
+
+.sl-navlabel {
+  white-space: nowrap;
+  line-height: 20px;
+}
+
+.sl-sidebar-foot {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--sl-border);
+}
+
+/* ---- content column ---- */
+
+.sl-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.sl-wrap {
+  max-width: var(--sl-wrap-max);
+  margin: 0 auto;
+  padding: 30px clamp(20px, 2.6vw, 36px) 90px;
+}
+
+.sl-sidebar-scrim {
+  display: none;
+}
+
+/* ---- page entrance motion ---- */
+
+@keyframes slFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.sl-page > * {
+  animation: slFadeUp .55s var(--sl-motion-ease) both;
+}
+
+.sl-page > *:nth-child(2) { animation-delay: .04s; }
+.sl-page > *:nth-child(3) { animation-delay: .08s; }
+.sl-page > *:nth-child(4) { animation-delay: .12s; }
+.sl-page > *:nth-child(5) { animation-delay: .16s; }
+.sl-page > *:nth-child(n+6) { animation-delay: .2s; }
+
+@keyframes slCardIn {
+  from { opacity: 0; transform: translateY(18px) scale(.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.sl-cards > .sl-card {
+  animation: slCardIn .8s var(--sl-motion-ease) both;
+}
+
+.sl-cards > .sl-card:nth-child(2) { animation-delay: .06s; }
+.sl-cards > .sl-card:nth-child(3) { animation-delay: .12s; }
+.sl-cards > .sl-card:nth-child(4) { animation-delay: .18s; }
+.sl-cards > .sl-card:nth-child(n+5) { animation-delay: .24s; }
+
+/* ---- responsive ---- */
+
+@media (max-width: 1439px) {
+  .sl-sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sl-sidebar {
+    width: 68px;
+    padding: 16px 10px;
+  }
+
+  .sl-navitem {
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .sl-navitem .sl-navlabel {
+    display: none;
+  }
+
+  .sl-navitem--active {
+    box-shadow: inset 0 3px 0 var(--sl-accent), var(--sl-shadow);
+  }
+}
+
+@media (max-width: 767px) {
+  .sl-shell {
+    display: block;
+  }
+
+  .sl-body {
+    display: block;
+  }
+
+  .sl-sidebar {
+    /* Drawer: fixed under the top bar, slides in from the left. */
+    position: fixed;
+    top: var(--sl-top-h);
+    left: 0;
+    z-index: 45;
+    width: min(78vw, 300px);
+    height: calc(100vh - var(--sl-top-h));
+    transform: translateX(-104%);
+    transition: transform var(--sl-motion-normal) var(--sl-motion-ease);
+    box-shadow: var(--sl-shadow-hover);
+    background: var(--sl-bg-soft);
+  }
+
+  .sl-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .sl-navitem {
+    justify-content: flex-start;
+  }
+
+  .sl-navitem .sl-navlabel {
+    display: inline;
+  }
+
+  .sl-sidebar-scrim {
+    display: block;
+    position: fixed;
+    inset: var(--sl-top-h) 0 0 0;
+    z-index: 44;
+    background: rgba(13, 15, 17, .38);
+    border: 0;
+    padding: 0;
+  }
+
+  .sl-wrap {
+    padding: 20px 16px 70px;
+  }
+
+  .sl-topbar .sl-menu-btn {
+    display: inline-grid;
+  }
+
+  .sl-brand-name {
+    display: none;
+  }
+
+  .sl-brand-name--short {
+    display: block;
+  }
+}
+
+@media (max-width: 479px) {
+  .sl-wrap {
+    padding: 16px 14px 64px;
+  }
+
+  .sl-brand-name--short {
+    max-width: 34vw;
+  }
+}
