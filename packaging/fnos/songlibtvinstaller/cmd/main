@@ -3,7 +3,11 @@ case "${1:-}" in
  start) exit 0 ;;
  stop) exit 0 ;;
  status)
- port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=5533
+ # Health-check port: persisted choice first, then the host port currently
+ # rendered in the compose (covers native edits), then the packaged default.
+ port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=
+ [ -n "$port" ] || port=$(sed -n 's/.*- "\{1\}\([0-9]\{4,5\}\):5533".*/\1/p' "${TRIM_APPDEST}/docker/docker-compose.yaml" 2>/dev/null | head -n 1)
+ [ -n "$port" ] || port=5533
  curl --noproxy '*' --fail --silent --max-time 3 "http://127.0.0.1:$port/ready" >/dev/null && exit 0
  exit 3 ;;
  *) exit 1 ;;

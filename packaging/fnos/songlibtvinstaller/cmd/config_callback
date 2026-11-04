@@ -1,5 +1,21 @@
-#!/bin/bash
-
-### This script is called after the user change environment variables in application setting page.
-
+#!/bin/sh
+# Called after the user saves 应用设置. If the wizard port changed, re-render the
+# compose/ui entry from cmd/prepare and recreate the container so it binds live.
+set -eu
+p=${wizard_port:-}
+[ -n "$p" ] || exit 0                     # nothing surfaced from the settings page
+case "$p" in ''|*[!0-9]*) exit 0 ;; esac
+[ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || exit 0
+: "${TRIM_PKGVAR:?缺少飞牛应用数据目录}"
+old=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
+[ "$p" = "$old" ] && exit 0               # unchanged: nothing to do
+sh "$(dirname "$0")/prepare"
+f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
+log="$TRIM_PKGVAR/info.log"
+{ if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \
+   || docker-compose -f "$f" up -d --force-recreate >>"$log" 2>&1; then
+    printf '%s port changed %s -> %s, container recreated\n' "$(date '+%F %T')" "$old" "$p" >>"$log"
+  else
+    printf '%s port changed %s -> %s but container recreate failed; restart the app manually\n' "$(date '+%F %T')" "$old" "$p" >>"$log"
+  fi; } || true
 exit 0
