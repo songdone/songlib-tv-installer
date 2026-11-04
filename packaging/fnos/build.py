@@ -18,6 +18,7 @@ with tempfile.TemporaryDirectory(prefix='songlib-fpk-') as td:
   m.save(stage/'app/ui/images'/f'icon_{s}.png')
  for name in ['docker-compose.yaml','docker-compose.yaml.template']:
   c=stage/'app/docker'/name;c.write_text(re.sub(r'^    image:.*$','    image: '+a.image,c.read_text(),flags=re.M))
+ if ':80" # songlib:port' not in c.read_text():raise RuntimeError(name+' drifted: container port must be :80')
  subprocess.run([str(pathlib.Path(a.fnpack).resolve()),'build'],cwd=stage,check=True)
  a.output.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(stage/'songlibtvinstaller.fpk',a.output)
  if a.output.stat().st_size>2*1024*1024:raise RuntimeError('Unexpected payload: FPK must not contain image layers or native helpers')

@@ -1,3 +1,13 @@
 #!/bin/sh
+# fnOS creates the container from the packaged compose BEFORE this callback;
+# re-render and force-recreate so wizard values (port, domains) land in the
+# running container even on a fresh install.
 set -eu
-exec sh "$(dirname "$0")/prepare"
+sh "$(dirname "$0")/prepare"
+f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
+log="$TRIM_PKGVAR/info.log"
+{ if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \
+   || docker-compose -f "$f" up -d --force-recreate >>"$log" 2>&1; then
+    printf '%s install: container recreated from rendered compose\n' "$(date '+%F %T')" >>"$log"
+  fi; } || true
+exit 0

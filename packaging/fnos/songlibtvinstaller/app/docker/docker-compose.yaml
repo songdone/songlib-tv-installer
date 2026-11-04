@@ -5,23 +5,19 @@ services:
     environment:
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
     ports:
-      - "${wizard_port:-5533}:5533" # songlib:port
+      - "${wizard_port:-5533}:80" # songlib:port
     volumes:
       - "${TRIM_PKGVAR:-/var/apps/songlibtvinstaller/var}/data:/data"
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # songlib:socket
       - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket:ro # songlib:socket
-    user: "${TRIM_UID:?fnOS package UID is required}:${TRIM_GID:?fnOS package GID is required}" # songlib:user
-    cap_drop: [ALL]
+    # 与 CI 发布的镜像对齐（根 Dockerfile、上游入口）：容器内以镜像默认用户运行，
+    # 入口脚本需要写 /keep、$HOME/.config；真正的访问边界在应用自身的管理鉴权。
     security_opt: [no-new-privileges:true]
-    read_only: true
-    tmpfs:
-      - /tmp:size=1g,mode=1777
-      - /run:size=16m,mode=1777
     ulimits:
       core: 0
     restart: unless-stopped
     healthcheck:
-      test: [CMD, curl, --fail, --silent, http://127.0.0.1:5533/ready]
+      test: [CMD, curl, --fail, --silent, http://127.0.0.1:80/ready]
       interval: 30s
       timeout: 5s
       retries: 3
