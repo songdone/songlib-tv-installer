@@ -124,12 +124,15 @@ func allowedHost(c *fiber.Ctx) bool {
 	if ip != nil && (ip.IsPrivate() || ip.IsLoopback()) {
 		return true
 	}
+	// No allowlist configured: unrestricted like upstream. The management
+	// password (session + CSRF) is the real boundary; the allowlist is an
+	// opt-in hardening against DNS rebinding for users who want it.
 	for _, h := range strings.Split(os.Getenv("SONGLIB_ALLOWED_HOSTS"), ",") {
 		if h != "" && h == host {
 			return true
 		}
 	}
-	return false
+	return os.Getenv("SONGLIB_ALLOWED_HOSTS") == ""
 }
 func (a *managementAuth) mount(server *fiber.App) {
 	server.Get("/ready", func(c *fiber.Ctx) error {

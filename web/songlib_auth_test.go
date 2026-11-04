@@ -70,8 +70,23 @@ func TestManagementRejectsPublicHostAndMissingPassword(t *testing.T) {
 	a, _ := loadManagementAuth(t.TempDir())
 	server := fiber.New()
 	a.mount(server)
+
+	// No allowlist configured: unrestricted, like upstream - the login page
+	// itself is reachable from any host (the password is the boundary).
 	r, _ := server.Test(httptest.NewRequest("GET", "http://public.example.test/management/login", nil))
+	if r.StatusCode != 200 {
+		t.Fatal(r.StatusCode)
+	}
+
+	// With an allowlist configured: only the listed hosts (plus private and
+	// loopback) may reach the app - the DNS-rebinding hardening is opt-in.
+	t.Setenv("SONGLIB_ALLOWED_HOSTS", "other.example.test")
+	r, _ = server.Test(httptest.NewRequest("GET", "http://public.example.test/management/login", nil))
 	if r.StatusCode != 403 {
+		t.Fatal(r.StatusCode)
+	}
+	r, _ = server.Test(httptest.NewRequest("GET", "http://other.example.test/management/login", nil))
+	if r.StatusCode != 200 {
 		t.Fatal(r.StatusCode)
 	}
 }
