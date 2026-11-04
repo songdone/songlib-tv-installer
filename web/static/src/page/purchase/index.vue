@@ -80,9 +80,30 @@
     </div>
     <p class="sl-hint" style="margin: 10px 0 0">{{ $t("purchase.price_note") }}</p>
 
-    <!-- How to buy / activate. The installer itself never handles codes. -->
-    <section class="sl-section-gap">
-      <div class="sl-card sl-pad">
+    <!-- Experience card and activation guide share the same two-column grid
+         as the paid plans. Both stack vertically on smaller screens. -->
+    <section class="sl-plans sl-purchase-support">
+      <article class="sl-plan sl-trial">
+        <img class="sl-plan-art" src="/plan/cover-trial.jpg" :alt="$t('purchase.trial_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
+        <div class="sl-plan-body">
+          <h2 class="sl-plan-name">
+            {{ $t("purchase.trial_name") }}
+            <span class="sl-plan-tag">{{ $t("purchase.trial_days_tag", { days: links.trial_days || 30 }) }}</span>
+          </h2>
+          <p class="sl-plan-note">{{ $t("purchase.trial_note") }}</p>
+          <ul class="sl-plan-feats">
+            <li>{{ $t("purchase.trial_f1") }}</li>
+            <li>{{ $t("purchase.trial_f2") }}</li>
+            <li>{{ $t("purchase.trial_f3") }}</li>
+          </ul>
+          <a v-if="links.trial" class="sl-btn sl-pri sl-plan-cta" :href="links.trial" target="_blank" rel="noopener noreferrer">
+            {{ $t("purchase.trial_cta") }}
+          </a>
+        </div>
+      </article>
+
+      <!-- The installer itself never handles player activation codes. -->
+      <div class="sl-card sl-pad sl-activation-guide">
         <div class="sl-card-head">
           <h2 class="sl-card-title"><span class="sl-ico-t sl-gold"><GoldIcon /></span>{{ $t("purchase.steps_title") }}</h2>
           <span class="sl-card-sub">{{ $t("purchase.steps_sub") }}</span>

@@ -145,6 +145,8 @@ test("purchase page keeps the FrpDeck plan language with gated commerce", () => 
   assert.ok(purchase.includes("songlib-config"), "links come from the verified config source");
   assert.ok(purchase.includes("/plan/cover-pro.jpg"), "official Pro cover in use");
   assert.ok(purchase.includes("/plan/cover-basic.jpg"), "official Basic cover in use");
+  assert.ok(purchase.includes("/plan/cover-trial.jpg"), "official trial-card cover in use");
+  assert.ok(purchase.includes('links.trial'), "trial card links to the official claim flow, no local activation");
 });
 
 test("index.html favicon and title follow the brand", () => {

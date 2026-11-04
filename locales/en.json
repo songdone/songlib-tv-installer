@@ -1101,6 +1101,13 @@
         "faq5_q": "What if the purchase button is missing?",
         "faq5_a": "Purchase links appear only after the official channel is verified. Meanwhile the comparison and the official site (songlib.playsong.cn) stay available for information.",
         "trial_link": "Trial on the official site",
-        "cover_alt": "official product cover"
+        "cover_alt": "official product cover",
+        "trial_name": "30-Day Pro Experience Card",
+        "trial_days_tag": "{{days}} days · full Pro",
+        "trial_note": "Claim a card on the official site and activate it in the player — full Pro for 30 days per device.",
+        "trial_f1": "Full Pro features for 30 days per device, starting at first activation",
+        "trial_f2": "Claim on the official site; the installer never issues or stores codes",
+        "trial_f3": "Unbinding does not restart the clock; expiry is independent of the 7-day signing cycle",
+        "trial_cta": "Claim on songlib.playsong.cn"
     }
 }

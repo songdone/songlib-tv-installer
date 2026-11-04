@@ -15,6 +15,8 @@ export const SONGLIB_DEFAULT_LINKS = {
   ios: "https://songlib.playsong.cn/#download-ios",
   mac: null,
   trial: null,
+  trial_days: 30,
+  trial_open: false,
   basic: SONGLIB_16688_SHOP,
   pro: SONGLIB_16688_SHOP,
   // Plan prices in cents (分) — only ever filled from a verified channel

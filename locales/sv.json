@@ -1101,6 +1101,13 @@
         "faq5_q": "Vad gör jag om köpknappen saknas?",
         "faq5_a": "Köplänkar visas först när den officiella kanalen verifierats. Jämförelsen och songlib.playsong.cn är alltid tillgängliga för information.",
         "trial_link": "Prov på den officiella webbplatsen",
-        "cover_alt": "officiellt produktomslag"
+        "cover_alt": "officiellt produktomslag",
+        "trial_name": "30 dagars Pro-provkort",
+        "trial_days_tag": "{{days}} dagar · full Pro",
+        "trial_note": "Hämta ett kort på den officiella webbplatsen och aktivera i spelaren — full Pro i 30 dagar per enhet.",
+        "trial_f1": "Full Pro i 30 dagar per enhet från första aktiveringen",
+        "trial_f2": "Hämtas på den officiella webbplatsen; verktyget utfärdar eller lagrar aldrig koder",
+        "trial_f3": "Upplösning nollställer inte klockan; giltigheten är oberoende av 7-dagars-signeringscykeln",
+        "trial_cta": "Hämta på songlib.playsong.cn"
     }
 }

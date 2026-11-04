@@ -46,6 +46,16 @@
           "quality": 82,
           "sha256": "bff6c1a25e2669e0c5da322093c540592cecce8952bbbe6d6b0569b158a2a956"
         }
+      },
+      "trial": {
+        "source": "产品所有者提供的官方商品主图：30 天专业版体验卡（1254×1254，2026-11-04）",
+        "sha256_original": "fedc5f014779d3ade6c612dad7254ad74c46d9047ce68920e5aab268328f7b76",
+        "web_copy": {
+          "path": "web/static/public/plan/cover-trial.jpg",
+          "width": 800,
+          "quality": 82,
+          "sha256": "9297212a826fa1c9e110fa62701095fef0efab88117a7f247bfb421d694fe444"
+        }
       }
     }
   }

@@ -6,5 +6,6 @@
   "image_repository": "666uos/songlib-tv-installer",
   "single_fpk": true,
   "bundled_image": false,
-  "reference": "FrpDeck packaging/fnos/frpdeck/manifest"
+  "reference": "FrpDeck packaging/fnos/frpdeck/manifest",
+  "version": "1.0.1"
 }

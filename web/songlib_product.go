@@ -32,7 +32,7 @@ func mountSongLib(server *fiber.App) {
 		return c.JSON(fiber.Map{"product": "音屿-Apple TV音乐播放器安装助手", "version": "0.1.3", "process": "running", "privacy": "no account/device identifiers or logs included", "device_acceptance": "not_verified", "resign_long_term": "not_observed"})
 	})
 	server.Get("/songlib/config", func(c *fiber.Ctx) error {
-		result := fiber.Map{"website": "https://songlib.playsong.cn/", "download": "https://songlib.playsong.cn/#download-tv", "ios": "https://songlib.playsong.cn/#download-ios", "mac": nil, "trial": "https://songlib.playsong.cn/#trial", "basic": nil, "pro": nil, "basic_price": nil, "pro_price": nil, "source": "/source", "license": "/license"}
+		result := fiber.Map{"website": "https://songlib.playsong.cn/", "download": "https://songlib.playsong.cn/#download-tv", "ios": "https://songlib.playsong.cn/#download-ios", "mac": nil, "trial": "https://songlib.playsong.cn/#trial", "trial_days": 30, "trial_open": false, "basic": nil, "pro": nil, "basic_price": nil, "pro_price": nil, "source": "/source", "license": "/license"}
 		client := &http.Client{Timeout: 3 * time.Second, CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse }}
 		r, e := client.Get(salesConfigURL)
 		if e == nil {
@@ -44,8 +44,21 @@ func mountSongLib(server *fiber.App) {
 						Verified bool   `json:"verified"`
 						Amount   int    `json:"amount"`
 					} `json:"plans"`
+					Trial struct {
+						Days     int    `json:"days"`
+						Open     bool   `json:"open"`
+						ClaimURL string `json:"claim_url"`
+					} `json:"trial"`
 				}
 				if json.NewDecoder(io.LimitReader(r.Body, 65536)).Decode(&data) == nil {
+					// 30-day Pro experience card state: rendered by the purchase
+					// page as a link to the official claim flow, never as a
+					// local activation box.
+					if data.Trial.ClaimURL != "" {
+						result["trial_days"] = data.Trial.Days
+						result["trial_open"] = data.Trial.Open
+						result["trial_url"] = data.Trial.ClaimURL
+					}
 					for _, p := range []string{"basic", "pro"} {
 						m := data.Plans[p]
 						if m.Verified && validBuyURL(m.BuyURL) {

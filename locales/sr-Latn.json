@@ -1101,6 +1101,13 @@
         "faq5_q": "Šta ako dugme za kupovinu nedostaje?",
         "faq5_a": "Linkovi za kupovinu pojavljuju se tek kada je zvanični kanal proveren. Poređenje i songlib.playsong.cn su uvek dostupni za informacije.",
         "trial_link": "Proba na zvaničnom sajtu",
-        "cover_alt": "zvanična proizvodna slika"
+        "cover_alt": "zvanična proizvodna slika",
+        "trial_name": "Probna karta Pro na 30 dana",
+        "trial_days_tag": "{{days}} dana · pun Pro",
+        "trial_note": "Zahtevajte kartu na zvaničnom sajtu i aktivirajte u plejeru — pun Pro 30 dana po uređaju.",
+        "trial_f1": "Pun Pro 30 dana po uređaju od prve aktivacije",
+        "trial_f2": "Zahteva se na zvaničnom sajtu; instalator ne izdaje niti čuva kodove",
+        "trial_f3": "Raskidanje ne resetuje vreme; važenje je nezavisno od 7-dnevnog ciklusa potpisa",
+        "trial_cta": "Zahtevajte na songlib.playsong.cn"
     }
 }
