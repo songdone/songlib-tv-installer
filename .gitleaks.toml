@@ -1,0 +1,8 @@
+# gitleaks configuration — extends the default rule set.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Static i18n caption keys on the explore page are not credentials"
+paths = ['''web/static/src/page/explore/index\.vue''']
+regexes = ['''captionKey:\s*'[^']*' ''']
