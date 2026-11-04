@@ -10,6 +10,8 @@ case "$p" in ''|*[!0-9]*) exit 0 ;; esac
 old=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
 [ "$p" = "$old" ] && exit 0               # unchanged: nothing to do
 sh "$(dirname "$0")/prepare"
+# 飞牛以应用根目录名为 compose 项目名；从应用根执行，项目名才能对上
+cd "${TRIM_APPDEST:?}/.."
 f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
 log="$TRIM_PKGVAR/info.log"
 { if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \

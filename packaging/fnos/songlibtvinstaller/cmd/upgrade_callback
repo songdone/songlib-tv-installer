@@ -1,3 +1,16 @@
 #!/bin/sh
+# Upgrade: re-render + force-recreate so new image/port mappings take effect.
+# A plain restart does not apply compose changes (ports, image, env).
 set -eu
-exec sh "$(dirname "$0")/prepare"
+sh "$(dirname "$0")/prepare"
+# 飞牛以应用根目录名为 compose 项目名；从应用根执行，项目名才能对上
+cd "${TRIM_APPDEST:?}/.."
+f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
+log="$TRIM_PKGVAR/info.log"
+{ if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \
+   || docker-compose -f "$f" up -d --force-recreate >>"$log" 2>&1; then
+    printf '%s upgrade: container recreated from new compose\n' "$(date '+%F %T')" >>"$log"
+  else
+    printf '%s upgrade: recreate failed; app center will retry\n' "$(date '+%F %T')" >>"$log"
+  fi; } || true
+exit 0

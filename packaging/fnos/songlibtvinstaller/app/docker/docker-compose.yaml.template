@@ -5,7 +5,7 @@ services:
     environment:
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
     ports:
-      - "${wizard_port:-5533}:5533" # songlib:port
+      - "${wizard_port:-5533}:80" # songlib:port
     volumes:
       - "${TRIM_PKGVAR:-/var/apps/songlibtvinstaller/var}/data:/data"
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # songlib:socket
@@ -21,7 +21,7 @@ services:
       core: 0
     restart: unless-stopped
     healthcheck:
-      test: [CMD, curl, --fail, --silent, http://127.0.0.1:5533/ready]
+      test: [CMD, curl, --fail, --silent, http://127.0.0.1:80/ready]
       interval: 30s
       timeout: 5s
       retries: 3
