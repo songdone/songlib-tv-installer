@@ -6,6 +6,12 @@ p=${wizard_port:-}
 [ -n "$p" ] || exit 0                     # nothing surfaced from the settings page
 case "$p" in ''|*[!0-9]*) exit 0 ;; esac
 [ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || exit 0
+# 端口被其他服务占用时明确拒绝（exit 1 + TRIM_TEMP_LOGFILE 弹给用户），旧容器保持运行不受影响
+hex=$(printf '%04X' "$p")
+if awk -v h=":$hex" '$4=="0A" && substr($2,length($2)-4)==h{f=1} END{exit !f}' /proc/net/tcp /proc/net/tcp6 2>/dev/null; then
+    printf '管理端口 %s 已被其他服务占用，请换一个端口再保存。\n' "$p" > "${TRIM_TEMP_LOGFILE:-/dev/stderr}"
+    exit 1
+fi
 : "${TRIM_PKGVAR:?缺少飞牛应用数据目录}"
 old=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
 [ "$p" = "$old" ] && exit 0               # unchanged: nothing to do
