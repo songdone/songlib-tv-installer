@@ -36,5 +36,7 @@ awk -v port="$p" -v uid="$uid" -v gid="$gid" -v mdns="$mdns" '
  {print}
 ' "$TRIM_APPDEST/docker/docker-compose.yaml.template" > "$TRIM_APPDEST/docker/docker-compose.yaml.new"
 cat "$TRIM_APPDEST/docker/docker-compose.yaml.new" > "$TRIM_APPDEST/docker/docker-compose.yaml"
-sed -E 's/"port": *"[^"]*"/"port": "'"$p"'"/' "$TRIM_APPDEST/ui/config" > "$TRIM_APPDEST/ui/config.new"
-cat "$TRIM_APPDEST/ui/config.new" > "$TRIM_APPDEST/ui/config"
+# NOTE: app/ui/config is NOT rendered here. The desktop entry is registered
+# from the packaged file, so it keeps the literal "${wizard_port}" placeholder
+# and fnOS substitutes the wizard value itself; sed-ing a literal port here
+# would be too late (and would destroy the placeholder for later changes).
