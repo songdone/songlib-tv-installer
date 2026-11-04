@@ -1077,8 +1077,8 @@
         "step3_d": "Enter the redemption code in the SongLib player (or via the official activation entry) on your device. This installer does not request, store or validate player codes.",
         "cmp_title": "Version comparison",
         "cmp_sub": "Released feature set of the official player",
-        "cmp_free": "Free features",
-        "cmp_free_hint": "Included in Basic",
+        "cmp_free": "Basic features",
+        "cmp_free_hint": "Requires the Basic license",
         "cmp_pro_hint": "Everything in Basic plus:",
         "cmp_row_libraries": "Connect a music library",
         "cmp_row_lyrics": "Synced / full-screen lyrics",
@@ -1098,16 +1098,18 @@
         "faq3_a": "They are two independent timelines. Free Apple accounts sign apps for about 7 days and the installer renews them automatically; that cycle exists whether or not you ever buy SongLib. The player license governs the player's features only.",
         "faq4_q": "Can I paste a redemption code here to activate the player?",
         "faq4_a": "No. This installer intentionally has no code box: activation happens in the SongLib player or through the official entry. This keeps the free signing tool fully separate from purchases.",
-        "faq5_q": "What if the purchase button is missing?",
-        "faq5_a": "Purchase links appear only after the official channel is verified. Meanwhile the comparison and the official site (songlib.playsong.cn) stay available for information.",
+        "faq5_q": "Why does the buy button open 16688?",
+        "faq5_a": "16688 is the official SongLib sales channel: orders, payment and delivery happen there. The installer only links out — it takes no part in the transaction and stores no order data.",
         "trial_link": "Trial on the official site",
         "cover_alt": "official product cover",
         "trial_name": "30-Day Pro Experience Card",
         "trial_days_tag": "{{days}} days · full Pro",
-        "trial_note": "Claim a card on the official site and activate it in the player — full Pro for 30 days per device.",
+        "trial_note": "The card is claimed on the official site and activated in the player — full Pro for 30 days per device.",
         "trial_f1": "Full Pro features for 30 days per device, starting at first activation",
         "trial_f2": "Claim on the official site; the installer never issues or stores codes",
         "trial_f3": "Unbinding does not restart the clock; expiry is independent of the 7-day signing cycle",
-        "trial_cta": "Claim on songlib.playsong.cn"
+        "trial_cta": "Claim on songlib.playsong.cn",
+        "trial_tag_idle": "Not open yet",
+        "trial_closed": "The campaign opens per the official site announcement; once it is open you can claim it here."
     }
 }

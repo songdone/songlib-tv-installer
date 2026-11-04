@@ -1077,8 +1077,8 @@
         "step3_d": "Ange koden i SongLib-spelaren (eller via den officiella aktiveringspunkten) på din enhet. Verktyget begär, sparar eller validerar aldrig spelarkoder.",
         "cmp_title": "Versionsjämförelse",
         "cmp_sub": "Officiell utgiven funktionsuppsättning",
-        "cmp_free": "Gratisfunktioner",
-        "cmp_free_hint": "Ingår i Basic",
+        "cmp_free": "Basic-funktioner",
+        "cmp_free_hint": "Kräver Basic-licens",
         "cmp_pro_hint": "Allt i Basic plus:",
         "cmp_row_libraries": "Anslut ett musikbibliotek",
         "cmp_row_lyrics": "Synkade / helskärmstexter",
@@ -1098,16 +1098,18 @@
         "faq3_a": "Två oberoende tidslinjer. Gratis Apple-konton signerar i ca 7 dagar och verktyget förnyar automatiskt — oavsett köp. Spelarlicensen styr bara spelarens funktioner.",
         "faq4_q": "Kan jag klistra in en kod här för att aktivera spelaren?",
         "faq4_a": "Nej. Verktyget har medvetet ingen kodruta: aktivering sker i spelaren eller via den officiella punkten. Så hålls gratisverktyget helt skilt från köp.",
-        "faq5_q": "Vad gör jag om köpknappen saknas?",
-        "faq5_a": "Köplänkar visas först när den officiella kanalen verifierats. Jämförelsen och songlib.playsong.cn är alltid tillgängliga för information.",
+        "faq5_q": "Varför öppnar köpknappen 16688?",
+        "faq5_a": "16688 är SongLibs officiella försäljningskanal: order, betalning och leverans sker där. Installationsprogrammet länkar bara vidare och lagrar inga orderuppgifter.",
         "trial_link": "Prov på den officiella webbplatsen",
         "cover_alt": "officiellt produktomslag",
         "trial_name": "30 dagars Pro-provkort",
         "trial_days_tag": "{{days}} dagar · full Pro",
-        "trial_note": "Hämta ett kort på den officiella webbplatsen och aktivera i spelaren — full Pro i 30 dagar per enhet.",
+        "trial_note": "Kortet hämtas på den officiella webbplatsen och aktiveras i spelaren — full Pro i 30 dagar per enhet.",
         "trial_f1": "Full Pro i 30 dagar per enhet från första aktiveringen",
         "trial_f2": "Hämtas på den officiella webbplatsen; verktyget utfärdar eller lagrar aldrig koder",
         "trial_f3": "Upplösning nollställer inte klockan; giltigheten är oberoende av 7-dagars-signeringscykeln",
-        "trial_cta": "Hämta på songlib.playsong.cn"
+        "trial_cta": "Hämta på songlib.playsong.cn",
+        "trial_tag_idle": "Inte öppen än",
+        "trial_closed": "Kampanjen öppnar enligt besked på den officiella webbplatsen; när den är öppen kan du hämta kortet här."
     }
 }

@@ -37,9 +37,9 @@
             <span class="sl-plan-tag">{{ $t("purchase.basic_tag") }}</span>
           </h2>
           <!-- Price mirrors the licensing backend's verified amount (cents);
-               it renders only while the purchase link itself is verified. -->
-          <div v-if="links.basic_price !== null && links.basic_price !== undefined" class="sl-plan-price">
-            <span>¥</span>{{ Math.floor(links.basic_price / 100) }}
+               it renders only for a positive amount and keeps its 角/分. -->
+          <div v-if="basicPrice" class="sl-plan-price">
+            <span>¥</span>{{ basicPrice }}
           </div>
           <p class="sl-plan-note">{{ $t("purchase.basic_note") }}</p>
           <ul class="sl-plan-feats">
@@ -61,8 +61,8 @@
             {{ $t("purchase.pro_name") }}
             <span class="sl-plan-tag">Pro</span>
           </h2>
-          <div v-if="links.pro_price !== null && links.pro_price !== undefined" class="sl-plan-price">
-            <span>¥</span>{{ Math.floor(links.pro_price / 100) }}
+          <div v-if="proPrice" class="sl-plan-price">
+            <span>¥</span>{{ proPrice }}
           </div>
           <p class="sl-plan-note">{{ $t("purchase.pro_note") }}</p>
           <ul class="sl-plan-feats">
@@ -88,7 +88,8 @@
         <div class="sl-plan-body">
           <h2 class="sl-plan-name">
             {{ $t("purchase.trial_name") }}
-            <span class="sl-plan-tag">{{ $t("purchase.trial_days_tag", { days: links.trial_days || 30 }) }}</span>
+            <span v-if="trialOpen" class="sl-plan-tag">{{ $t("purchase.trial_days_tag", { days: trialDays }) }}</span>
+            <span v-else class="sl-plan-tag sl-plan-tag-idle">{{ $t("purchase.trial_tag_idle") }}</span>
           </h2>
           <p class="sl-plan-note">{{ $t("purchase.trial_note") }}</p>
           <ul class="sl-plan-feats">
@@ -96,9 +97,13 @@
             <li>{{ $t("purchase.trial_f2") }}</li>
             <li>{{ $t("purchase.trial_f3") }}</li>
           </ul>
-          <a v-if="links.trial" class="sl-btn sl-pri sl-plan-cta" :href="links.trial" target="_blank" rel="noopener noreferrer">
+          <!-- The claim button exists only while the licensing backend reports
+               the campaign open and published an official claim link; a closed
+               campaign shows an explanation, never a dead button. -->
+          <a v-if="trialOpen" class="sl-btn sl-pri sl-plan-cta" :href="trialUrl" target="_blank" rel="noopener noreferrer">
             {{ $t("purchase.trial_cta") }}
           </a>
+          <p v-else class="sl-plan-hint">{{ $t("purchase.trial_closed") }}</p>
         </div>
       </article>
 
@@ -211,14 +216,21 @@
 
 <script>
 import HomeFooter from "@/components/HomeFooter.vue";
-import { songlibConfig, SONGLIB_DEFAULT_LINKS, SONGLIB_16688_SHOP } from "@/utils/songlib-config.mjs";
+import {
+  songlibConfig,
+  SONGLIB_DEFAULT_LINKS,
+  formatPlanPrice,
+  trialIsClaimable,
+  trialClaimURL,
+  trialDays as resolveTrialDays,
+} from "@/utils/songlib-config.mjs";
 
 export default {
   name: "Purchase",
   components: { HomeFooter },
   data() {
     return {
-      links: { ...SONGLIB_DEFAULT_LINKS, basic_price: null, pro_price: null },
+      links: { ...SONGLIB_DEFAULT_LINKS },
       // Verified, released feature differences (official site copy). Rows must
       // match what the player actually ships; adjust only with the product.
       rows: [
@@ -234,15 +246,32 @@ export default {
       ],
     };
   },
+  computed: {
+    // Prices keep their 角/分: the previous Math.floor() truncated them and
+    // showed 128.50 as 128. A null means "no verified amount", never "free".
+    basicPrice() {
+      return formatPlanPrice(this.links.basic_price);
+    },
+    proPrice() {
+      return formatPlanPrice(this.links.pro_price);
+    },
+    // Owner decision 2026-11-04: each plan button goes to its own 16688 goods
+    // page (SONGLIB_PLAN_BASIC / SONGLIB_PLAN_PRO are those defaults);
+    // /songlib/config can only replace them with another verified goods URL.
+    // The trial CTA is gated on the campaign state, not on a fixed anchor.
+    trialOpen() {
+      return trialIsClaimable(this.links);
+    },
+    trialUrl() {
+      return trialClaimURL(this.links);
+    },
+    trialDays() {
+      return resolveTrialDays(this.links);
+    },
+  },
   mounted() {
     songlibConfig().then((config) => {
       Object.assign(this.links, config);
-      // Owner decision 2026-11-04: purchase buttons always point at 16688 —
-      // the storefront by default, the verified goods page (with price) once
-      // the channel reports it. "null" from config means "not yet verified",
-      // never "hide the button".
-      if (!this.links.basic) this.links.basic = SONGLIB_16688_SHOP;
-      if (!this.links.pro) this.links.pro = SONGLIB_16688_SHOP;
     });
   },
 };

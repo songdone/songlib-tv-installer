@@ -1077,8 +1077,8 @@
         "step3_d": "Unesite kod u SongLib plejeru (ili preko zvanične tačke aktivacije) na uređaju. Instalator ne traži, ne čuva i ne proverava kodove plejera.",
         "cmp_title": "Poređenje verzija",
         "cmp_sub": "Objavljeni skup funkcija zvaničnog plejera",
-        "cmp_free": "Besplatne funkcije",
-        "cmp_free_hint": "Uključeno u Basic",
+        "cmp_free": "Funkcije Basic",
+        "cmp_free_hint": "Potrebna je Basic licenca",
         "cmp_pro_hint": "Sve iz Basic plus:",
         "cmp_row_libraries": "Povežite muzičku biblioteku",
         "cmp_row_lyrics": "Sinhronizovani tekstovi / preko celog ekrana",
@@ -1098,16 +1098,18 @@
         "faq3_a": "Dve odvojene vremenske linije. Besplatni Apple nalozi potpisuju oko 7 dana i alat obnavlja automatski — bez veze sa kupovinom. Licenca plejera određuje samo funkcije plejera.",
         "faq4_q": "Mogu li ovde nalepiti kod za aktivaciju plejera?",
         "faq4_a": "Ne. Instalator namerno nema polje za kod: aktivacija se obavlja u plejeru ili preko zvanične tačke. Tako je besplatni alat potpuno odvojen od kupovine.",
-        "faq5_q": "Šta ako dugme za kupovinu nedostaje?",
-        "faq5_a": "Linkovi za kupovinu pojavljuju se tek kada je zvanični kanal proveren. Poređenje i songlib.playsong.cn su uvek dostupni za informacije.",
+        "faq5_q": "Zašto dugme za kupovinu otvara 16688?",
+        "faq5_a": "16688 je zvanični prodajni kanal SongLib-a: porudžbine, plaćanje i dostava obavljaju se tamo. Instalater samo prosleđuje link i ne čuva podatke o porudžbini.",
         "trial_link": "Proba na zvaničnom sajtu",
         "cover_alt": "zvanična proizvodna slika",
         "trial_name": "Probna karta Pro na 30 dana",
         "trial_days_tag": "{{days}} dana · pun Pro",
-        "trial_note": "Zahtevajte kartu na zvaničnom sajtu i aktivirajte u plejeru — pun Pro 30 dana po uređaju.",
+        "trial_note": "Karta se preuzima na zvaničnom sajtu i aktivira u plejeru — pun Pro 30 dana po uređaju.",
         "trial_f1": "Pun Pro 30 dana po uređaju od prve aktivacije",
         "trial_f2": "Zahteva se na zvaničnom sajtu; instalator ne izdaje niti čuva kodove",
         "trial_f3": "Raskidanje ne resetuje vreme; važenje je nezavisno od 7-dnevnog ciklusa potpisa",
-        "trial_cta": "Zahtevajte na songlib.playsong.cn"
+        "trial_cta": "Zahtevajte na songlib.playsong.cn",
+        "trial_tag_idle": "Još nije otvoreno",
+        "trial_closed": "Kampanja se otvara prema obaveštenju na zvaničnom sajtu; kada bude otvorena, kartu možete preuzeti ovde."
     }
 }

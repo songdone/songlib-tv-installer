@@ -137,16 +137,22 @@ test("purchase page keeps the FrpDeck plan language with gated commerce", () => 
   for (const banned of ["¥8.8", "¥18", "¥6", "机器码", "兑换码激活", "FD2.", "FDV"]) {
     assert.ok(!purchase.includes(banned), `purchase page must not contain ${banned}`);
   }
-  // Owner decision 2026-11-04: purchase CTAs always point at 16688 — the
-  // storefront by default, the verified goods page + price once reported.
-  assert.ok(purchase.includes("SONGLIB_16688_SHOP"), "16688 storefront fallback must exist");
-  assert.match(purchase, /v-if="links\.basic_price/, "price stays gated on verified config");
-  assert.match(purchase, /v-if="links\.pro_price/, "price stays gated on verified config");
+  // Owner decision 2026-11-04 (checkpoint §8-3): each plan button goes to its
+  // own 16688 goods page. The storefront is no longer used as a plan fallback,
+  // otherwise both buttons would land on a catalogue and still call it done.
+  assert.ok(purchase.includes("SONGLIB_PLAN_BASIC"), "basic plan needs its own goods page");
+  assert.ok(purchase.includes("SONGLIB_PLAN_PRO"), "pro plan needs its own goods page");
+  assert.ok(!purchase.includes("SONGLIB_16688_SHOP"), "storefront must not stand in for a plan page");
+  assert.match(purchase, /v-if="basicPrice"/, "price stays gated on a verified amount");
+  assert.match(purchase, /v-if="proPrice"/, "price stays gated on a verified amount");
   assert.ok(purchase.includes("songlib-config"), "links come from the verified config source");
   assert.ok(purchase.includes("/plan/cover-pro.jpg"), "official Pro cover in use");
   assert.ok(purchase.includes("/plan/cover-basic.jpg"), "official Basic cover in use");
   assert.ok(purchase.includes("/plan/cover-trial.jpg"), "official trial-card cover in use");
-  assert.ok(purchase.includes('links.trial'), "trial card links to the official claim flow, no local activation");
+  // The claim button is gated on the campaign state reported by the backend,
+  // never on the fixed official anchor.
+  assert.match(purchase, /v-if="trialOpen"/, "trial CTA must follow the open state");
+  assert.ok(purchase.includes("trialClaimURL"), "trial link must come from a validated claim URL");
 });
 
 test("index.html favicon and title follow the brand", () => {

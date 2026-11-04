@@ -765,9 +765,10 @@ details.sl-faq > div p + p { margin-top: 8px; }
 
 .sl-plans {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
   margin: 16px 0 4px;
+  align-items: stretch;
 }
 
 .sl-plan {
@@ -811,6 +812,8 @@ details.sl-faq > div p + p { margin-top: 8px; }
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .sl-plan-tag {
@@ -820,6 +823,13 @@ details.sl-faq > div p + p { margin-top: 8px; }
   border-radius: 99px;
   color: var(--sl-gold);
   background: color-mix(in srgb, var(--sl-gold) 13%, transparent);
+  white-space: nowrap;
+  flex: none;
+}
+
+.sl-plan-tag-idle {
+  color: var(--sl-muted);
+  background: var(--sl-hover);
 }
 
 .sl-plan-price {
@@ -869,6 +879,13 @@ details.sl-faq > div p + p { margin-top: 8px; }
 
 .sl-plan-cta { width: 100%; }
 
+.sl-plan-hint {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--sl-subtle);
+}
+
 .sl-plan-muted-cta {
   width: 100%;
   text-align: center;
@@ -879,10 +896,56 @@ details.sl-faq > div p + p { margin-top: 8px; }
   box-shadow: inset 0 0 0 1px var(--sl-border);
 }
 
+/* The activation guide is a peer of the trial card, not a generic panel:
+   same surface, border, padding and radius as .sl-plan so the second row
+   lines up with the plan row above instead of reading as a full-width block. */
+.sl-purchase-support .sl-activation-guide {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px;
+  border: 1px solid var(--sl-border);
+  border-radius: var(--sl-radius-lg);
+  background: var(--sl-surface);
+  box-shadow: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: border-color .18s, transform .2s var(--sl-motion-ease);
+}
+
+.sl-purchase-support .sl-activation-guide:hover {
+  border-color: var(--sl-gold);
+  transform: translateY(-1px);
+}
+
+.sl-purchase-support .sl-activation-guide .sl-steps {
+  margin-bottom: 0;
+}
+
+/* On laptops the two-up grid leaves ~330–430px per card: shrink the artwork
+   and the type instead of squeezing the copy into a 90px column. */
+@media (min-width: 901px) and (max-width: 1180px) {
+  .sl-plan { grid-template-columns: 148px minmax(0, 1fr); gap: 14px; }
+  .sl-plan-art { width: 148px; height: 148px; border-radius: 12px; }
+  .sl-plan-name { font-size: 16px; }
+  .sl-plan-feats { font-size: 12.5px; }
+  .sl-plan-feats li { margin: 7px 0; }
+}
+
 @media (max-width: 900px) {
-  .sl-plans { grid-template-columns: 1fr; gap: 14px; }
-  .sl-plan { grid-template-columns: 1fr; }
-  .sl-plan-art { width: 100%; height: 170px; grid-row: auto; }
+  .sl-plans { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}
+
+/* Phones: the square poster becomes a 4:3 banner. 16:9 sliced the headline
+   off the top of the artwork; 4:3 keeps the logo band, the title and the TV. */
+@media (max-width: 520px) {
+  .sl-plan { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .sl-plan-art {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    grid-row: auto;
+    object-position: 50% 45%;
+  }
 }
 
 /* ---------- comparison table ---------- */

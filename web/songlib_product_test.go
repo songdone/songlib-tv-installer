@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/bitxeno/atvloadly/internal/app/build"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -17,6 +18,73 @@ type salesConfigStub struct {
 		Verified bool   `json:"verified"`
 		Amount   int    `json:"amount"`
 	} `json:"plans"`
+}
+
+// TestSongLibConfigNeverAdvertisesFreePlans guards the difference between "the
+// backend sent no amount" and "the plan costs 0": both must hide the price.
+func TestSongLibConfigNeverAdvertisesFreePlans(t *testing.T) {
+	withSalesStub(t, 200, `{"channel":"16688","plans":{
+		"basic":{"buy_url":"https://www.16688.com.cn/goods/G41709534","verified":true},
+		"pro":{"buy_url":"https://www.16688.com.cn/goods/G49510548","verified":true,"amount":0}
+	}}`)
+	result := songLibConfig(t)
+	if result["basic_price"] != nil {
+		t.Fatalf("absent amount must stay nil, got %v", result["basic_price"])
+	}
+	if result["pro_price"] != nil {
+		t.Fatalf("zero amount must stay nil, got %v", result["pro_price"])
+	}
+	if result["basic"] != "https://www.16688.com.cn/goods/G41709534" {
+		t.Fatalf("verified link must survive a missing price, got %v", result["basic"])
+	}
+}
+
+func TestSongLibConfigTrialRequiresValidatedClaimURL(t *testing.T) {
+	cases := []struct {
+		name, body          string
+		wantOpen, wantURLed bool
+		wantDays            float64
+	}{
+		{"open with official claim", `{"trial":{"days":30,"open":true,"claim_url":"https://songlib.playsong.cn/#trial"}}`, true, true, 30},
+		{"closed with official claim", `{"trial":{"days":14,"open":false,"claim_url":"https://songlib.playsong.cn/trial"}}`, false, true, 14},
+		{"foreign claim host", `{"trial":{"days":30,"open":true,"claim_url":"https://evil.example.com/trial"}}`, false, false, 30},
+		{"plain http claim", `{"trial":{"days":30,"open":true,"claim_url":"http://songlib.playsong.cn/trial"}}`, false, false, 30},
+		{"userinfo claim", `{"trial":{"days":30,"open":true,"claim_url":"https://a@songlib.playsong.cn/trial"}}`, false, false, 30},
+		{"absurd days", `{"trial":{"days":900,"open":true,"claim_url":"https://songlib.playsong.cn/#trial"}}`, true, true, 30},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			withSalesStub(t, 200, tc.body)
+			result := songLibConfig(t)
+			if result["trial_open"] != tc.wantOpen {
+				t.Fatalf("trial_open = %v, want %v", result["trial_open"], tc.wantOpen)
+			}
+			hasURL := result["trial_url"] != nil
+			if hasURL != tc.wantURLed {
+				t.Fatalf("trial_url present = %v, want %v (value %v)", hasURL, tc.wantURLed, result["trial_url"])
+			}
+			if result["trial_days"] != tc.wantDays {
+				t.Fatalf("trial_days = %v, want %v", result["trial_days"], tc.wantDays)
+			}
+		})
+	}
+}
+
+func TestSongLibDiagnosticsReportsBuildVersion(t *testing.T) {
+	app := fiber.New()
+	mountSongLib(app)
+	resp, err := app.Test(httptest.NewRequest(http.MethodGet, "/songlib/diagnostics", nil))
+	if err != nil {
+		t.Fatalf("request /songlib/diagnostics: %v", err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+	if result["version"] != build.Version {
+		t.Fatalf("diagnostics version = %v, want %v", result["version"], build.Version)
+	}
 }
 
 func withSalesStub(t *testing.T, status int, body string) {
