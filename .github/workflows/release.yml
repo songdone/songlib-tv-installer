@@ -71,7 +71,7 @@ jobs:
         run: cd ./web/static && npm install && npm test && npm run build
       # packaging/Dockerfile 会把源码归档打进镜像，用于留存构建出处
       - name: Generate source archive
-        run: git archive --format=tar.gz -o build/songlib-source.tar.gz HEAD
+        run: mkdir -p build && git archive --format=tar.gz -o build/songlib-source.tar.gz HEAD
       - name: Generate build files
         uses: crazy-max/ghaction-xgo@v4
         env:
