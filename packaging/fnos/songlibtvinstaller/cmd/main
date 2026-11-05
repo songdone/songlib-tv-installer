@@ -1,14 +1,21 @@
 #!/bin/sh
+# The container is managed by fnOS's docker-project (project = app name).
+# status is deliberately lenient, same defense as the store-listed TingJi:
+# fnOS flips the app to "stopped" in its UI on a single failed probe, while
+# the container keeps running. Only a confirmed "nothing is listening"
+# (connection refused) counts as stopped; busy, slow or erroring responses
+# all count as running.
 case "${1:-}" in
- start) exit 0 ;;
- stop) exit 0 ;;
- status)
- # Health-check port: persisted choice first, then the host port currently
- # rendered in the compose (covers native edits), then the packaged default.
- port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=
- [ -n "$port" ] || port=$(sed -n 's/.*- "\{1\}\([0-9]\{4,5\}\):5533".*/\1/p' "${TRIM_APPDEST}/docker/docker-compose.yaml" 2>/dev/null | head -n 1)
- [ -n "$port" ] || port=5533
- curl --noproxy '*' --fail --silent --max-time 3 "http://127.0.0.1:$port/ready" >/dev/null && exit 0
- exit 3 ;;
- *) exit 1 ;;
+    start) exit 0 ;;
+    stop) exit 0 ;;
+    status)
+        port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=
+        [ -n "$port" ] || port=$(sed -n 's/.*- "\{1\}\([0-9]\{4,5\}\):80".*/\1/p' "${TRIM_APPDEST}/docker/docker-compose.yaml" 2>/dev/null | head -n 1)
+        [ -n "$port" ] || port=5533
+        curl --noproxy '*' --silent --output /dev/null --max-time 3 "http://127.0.0.1:$port/ready"
+        case $? in
+            7) exit 3 ;;
+            *) exit 0 ;;
+        esac ;;
+    *) exit 1 ;;
 esac
