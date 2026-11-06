@@ -242,6 +242,9 @@ jobs:
           # type=ref,event=tag would add for any tag.
           tags: |
             type=ref,event=tag
+            # 同时推不带 v 的版本号 tag（1.0.9）——FPK 的 compose 引用的就是
+            # 这种格式；只推 v1.0.9 会让应用拉到不存在/陈旧的镜像（真机事故）。
+            type=semver,pattern={{version}}
             type=raw,value=latest,enable=${{ !contains(github.ref_name, '-') }}
             type=raw,value=beta,enable=${{ contains(github.ref_name, '-') }}
           flavor: |
@@ -294,6 +297,9 @@ jobs:
           # Same rule as DockerHub: latest for stable tags, beta otherwise.
           tags: |
             type=ref,event=tag
+            # 同时推不带 v 的版本号 tag（1.0.9）——FPK 的 compose 引用的就是
+            # 这种格式；只推 v1.0.9 会让应用拉到不存在/陈旧的镜像（真机事故）。
+            type=semver,pattern={{version}}
             type=raw,value=latest,enable=${{ !contains(github.ref_name, '-') }}
             type=raw,value=beta,enable=${{ contains(github.ref_name, '-') }}
           flavor: |
