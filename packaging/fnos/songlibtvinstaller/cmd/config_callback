@@ -1,26 +1,26 @@
 #!/bin/sh
-# Called after the user saves 运行设置. fnOS re-renders the container from the
-# packaged compose on save and re-opens this dialog with empty inputs, so the
-# semantics are: empty port = keep current port; empty domains = keep current
-# domains; "-" in domains = clear them. Apply (re-render + recreate) only when
-# something actually changed.
+# Called after the user saves 运行设置. Empty port = keep current port;
+# empty password = keep current password; empty domains (vestigial) ignored.
+# fnOS recreates the container from the rendered compose itself, so this
+# callback only renders files - the platform's docker socket is not
+# available to package scripts (permission denied, real-device finding).
 set -eu
 : "${TRIM_PKGVAR:?缺少飞牛应用数据目录}"
 f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
-old_port=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
-old_hosts=$(sed -n 's/.*SONGLIB_ALLOWED_HOSTS: *"\([^"]*\)".*/\1/p' "$f" 2>/dev/null | head -n 1)
+log="$TRIM_PKGVAR/info.log"
+old_port=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 15533)
 
 p=${wizard_port:-}
 case $p in ''|*[!0-9]*) p=$old_port ;; esac
 [ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || p=$old_port
-hosts=${wizard_allowed_hosts:-}
-case $hosts in *[!a-zA-Z0-9.,-]*) hosts='' ;; esac
-hosts=${hosts:-$old_hosts}
-[ "$hosts" = "-" ] && hosts=''
 
-[ "$p" = "$old_port" ] && [ "$hosts" = "$old_hosts" ] && exit 0   # nothing changed
+pw=${wizard_password:-}
+changed=0
+[ "$p" != "$old_port" ] && changed=1
+[ -n "$pw" ] && changed=1
+[ "$changed" = 1 ] || exit 0
 
-# 新端口被其他服务占用时明确拒绝（exit 1 + TRIM_TEMP_LOGFILE 弹给用户），旧容器保持运行
+# 新端口被其他服务占用时明确拒绝（exit 1 + TRIM_TEMP_LOGFILE 弹给用户）
 if [ "$p" != "$old_port" ]; then
     hex=$(printf '%04X' "$p")
     if awk -v h=":$hex" '$4=="0A" && substr($2,length($2)-4)==h{f=1} END{exit !f}' /proc/net/tcp /proc/net/tcp6 2>/dev/null; then
@@ -29,12 +29,17 @@ if [ "$p" != "$old_port" ]; then
     fi
 fi
 
+# 改密码：写新 initial-password 并移除旧 hash，应用下次启动重新生成 hash
+if [ -n "$pw" ]; then
+    len=$(printf '%s' "$pw" | wc -c)
+    if [ "$len" -ge 8 ] && [ "$len" -le 64 ]; then
+        mkdir -p "$TRIM_PKGVAR/data/keys"
+        printf '%s' "$pw" > "$TRIM_PKGVAR/data/keys/initial-password"
+        chmod 600 "$TRIM_PKGVAR/data/keys/initial-password"
+        rm -f "$TRIM_PKGVAR/data/keys/management-password.hash"
+    fi
+fi
+
 sh "$(dirname "$0")/prepare"
-log="$TRIM_PKGVAR/info.log"
-{ if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \
-   || docker-compose -f "$f" up -d --force-recreate >>"$log" 2>&1; then
-    printf '%s settings applied: port %s -> %s, hosts [%s]\n' "$(date '+%F %T')" "$old_port" "$p" "$hosts" >>"$log"
-  else
-    printf '%s settings apply FAILED for port %s hosts [%s]; old container keeps running\n' "$(date '+%F %T')" "$p" "$hosts" >>"$log"
-  fi; } || true
+printf '%s settings applied: port %s -> %s, password %s\n' "$(date '+%F %T')" "$old_port" "$p" "$([ -n "$pw" ] && echo changed || echo unchanged)" >> "$log"
 exit 0

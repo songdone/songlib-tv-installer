@@ -6,7 +6,7 @@ services:
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
       SONGLIB_ALLOWED_HOSTS: "<hosts>" # songlib:hosts
     ports:
-      - "${wizard_port:-5533}:80" # songlib:port
+      - "${wizard_port:-15533}:80" # songlib:port
     volumes:
       - "${TRIM_PKGVAR:-/var/apps/songlibtvinstaller/var}/data:/data"
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro # songlib:socket

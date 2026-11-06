@@ -7,7 +7,9 @@ umask 077
 mkdir -p "$TRIM_PKGVAR/data/keys"
 chmod 700 "$TRIM_PKGVAR/data" "$TRIM_PKGVAR/data/keys"
 p=${wizard_port:-}
-[ -n "$p" ] || p=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 5533)
+# Default 15533: the store-listed ATVLoadly occupies 5533, and fnOS does not
+# always surface wizard/install (update flows and some installs skip it).
+[ -n "$p" ] || p=$(cat "$TRIM_PKGVAR/port" 2>/dev/null || printf 15533)
 printf '%s\n' "$p" > "$TRIM_PKGVAR/port"
 # Keep existing password hashes. Never evaluate a password as shell or compose syntax.
 if [ ! -f "$TRIM_PKGVAR/data/keys/management-password.hash" ] && [ ! -f "$TRIM_PKGVAR/data/keys/initial-password" ]; then
@@ -17,9 +19,12 @@ if [ ! -f "$TRIM_PKGVAR/data/keys/management-password.hash" ] && [ ! -f "$TRIM_P
   while IFS= read -r line || [ -n "$line" ]; do
    case "$line" in SONGLIB_ADMIN_PASSWORD=*) printf '%s' "${line#SONGLIB_ADMIN_PASSWORD=}" > "$TRIM_PKGVAR/data/keys/initial-password" ;; esac
   done < "$TRIM_PKGVAR/runtime.env"
- else
-  printf '%s\n' '缺少首次管理密码，请在安装向导设置8位及以上密码。' >&2
-  exit 1
+ fi
+ if [ ! -f "$TRIM_PKGVAR/data/keys/initial-password" ]; then
+  # fnOS skips wizard/install on update flows; never fail the install for a
+  # missing password. Documented default, changeable in 应用设置 after login.
+  printf '%s' 'songlib123' > "$TRIM_PKGVAR/data/keys/initial-password"
+  printf '%s\n' '未收到安装向导密码，已使用默认初始密码 songlib123。' >&2
  fi
  chmod 600 "$TRIM_PKGVAR/data/keys/initial-password"
 fi

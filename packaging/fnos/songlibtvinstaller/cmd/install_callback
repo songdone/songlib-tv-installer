@@ -1,13 +1,9 @@
 #!/bin/sh
-# fnOS creates the container from the packaged compose BEFORE this callback;
-# re-render and force-recreate so wizard values (port, domains) land in the
-# running container even on a fresh install.
+# fnOS creates the container from the packaged compose BEFORE this callback
+# and its package scripts run without docker socket access (real-device
+# finding: permission denied). So this only renders the compose for the
+# platform's own (re)create, never tries to drive docker itself.
 set -eu
 sh "$(dirname "$0")/prepare"
-f=${TRIM_APPDEST:?}/docker/docker-compose.yaml
-log="$TRIM_PKGVAR/info.log"
-{ if docker compose -f "$f" up -d --force-recreate >>"$log" 2>&1 \
-   || docker-compose -f "$f" up -d --force-recreate >>"$log" 2>&1; then
-    printf '%s install: container recreated from rendered compose\n' "$(date '+%F %T')" >>"$log"
-  fi; } || true
+printf '%s install: compose rendered for the platform\n' "$(date '+%F %T')" >> "$TRIM_PKGVAR/info.log" 2>/dev/null || true
 exit 0
