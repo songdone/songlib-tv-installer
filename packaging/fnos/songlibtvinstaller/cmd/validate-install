@@ -2,7 +2,7 @@
 # Validate only: fnOS has not assigned the data directory to the package user yet.
 set -eu
 fail(){ printf '%s\n' "$1" >&2; [ -z "${TRIM_TEMP_LOGFILE:-}" ] || printf '%s\n' "$1" > "$TRIM_TEMP_LOGFILE"; exit 1; }
-p=${wizard_port:-5533}
+p=${wizard_port:-15533}
 case "$p" in ''|*[!0-9]*) fail '管理端口须为1024–65535之间的整数。' ;; esac
 [ "$p" -ge 1024 ] && [ "$p" -le 65535 ] || fail '管理端口超出范围。'
 hex=$(printf '%04X' "$p")

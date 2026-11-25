@@ -9,7 +9,7 @@ maintainer_url = https://songlib.playsong.cn/
 distributor = 6uos
 desktop_uidir = ui
 desktop_applaunchname = songlibtvinstaller.Application
-service_port = 5533
+service_port = 15533
 checkport = false
 ctl_stop = true
 

@@ -11,7 +11,7 @@ case "${1:-}" in
     status)
         port=$(cat "${TRIM_PKGVAR}/port" 2>/dev/null) || port=
         [ -n "$port" ] || port=$(sed -n 's/.*- "\{1\}\([0-9]\{4,5\}\):80".*/\1/p' "${TRIM_APPDEST}/docker/docker-compose.yaml" 2>/dev/null | head -n 1)
-        [ -n "$port" ] || port=5533
+        [ -n "$port" ] || port=15533
         curl --noproxy '*' --silent --output /dev/null --max-time 3 "http://127.0.0.1:$port/ready"
         case $? in
             7) exit 3 ;;

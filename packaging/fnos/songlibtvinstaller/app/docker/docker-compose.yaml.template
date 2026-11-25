@@ -1,10 +1,10 @@
 services:
   installer:
-    image: 666uos/songlib-tv-installer:0.1.3
+    image: 666uos/songlib-tv-installer:1.1.0
     pull_policy: missing
     environment:
+      SONGLIB_DEPLOY_MODE: "fnos"
       ZEROCONF_ENABLED: "false" # songlib:mdns-env
-      SONGLIB_ALLOWED_HOSTS: "<hosts>" # songlib:hosts
     ports:
       - "${wizard_port:-15533}:80" # songlib:port
     volumes:

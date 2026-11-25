@@ -32,7 +32,7 @@ fi
 # 改密码：写新 initial-password 并移除旧 hash，应用下次启动重新生成 hash
 if [ -n "$pw" ]; then
     len=$(printf '%s' "$pw" | wc -c)
-    if [ "$len" -ge 8 ] && [ "$len" -le 64 ]; then
+    if [ "$len" -ge 8 ] && [ "$len" -le 256 ]; then
         mkdir -p "$TRIM_PKGVAR/data/keys"
         printf '%s' "$pw" > "$TRIM_PKGVAR/data/keys/initial-password"
         chmod 600 "$TRIM_PKGVAR/data/keys/initial-password"
