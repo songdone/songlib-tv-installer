@@ -71,7 +71,7 @@ jobs:
       # step 4: generate build files
       - name: build frontend
         run: cd ./web/static && npm install && npm test && npm run build
-      # packaging/Dockerfile 会把源码归档打进镜像，用于留存构建出处
+      # Dockerfile 会把源码归档打进镜像 /opt/songlib-source.tar.gz，供 /source 路由履行 AGPL 义务
       - name: Generate source archive
         run: mkdir -p build && git archive --format=tar.gz -o build/songlib-source.tar.gz HEAD
       - name: Generate build files
@@ -86,7 +86,7 @@ jobs:
           targets: linux/amd64,linux/arm64
           v: true
           x: false
-          ldflags: -w -s -X ${{steps.vars.outputs.REPO}}/internal/app/build.Version=${{steps.vars.outputs.VERSION}} -X ${{steps.vars.outputs.REPO}}/internal/app/build.BuildDate=${{steps.vars.outputs.BUILDDATE}} -X ${{steps.vars.outputs.REPO}}/internal/app/build.Commit=${{steps.vars.outputs.COMMIT}} -X ${{steps.vars.outputs.REPO}}/internal/app/build.Mode=production
+          ldflags: -w -s -X ${{steps.vars.outputs.REPO}}/internal/app/build.Version=${{steps.vars.outputs.VERSION}} -X ${{steps.vars.outputs.REPO}}/internal/app/build.BuildDate=${{steps.vars.outputs.BUILDDATE}} -X ${{steps.vars.outputs.REPO}}/internal/app/build.Commit=${{steps.vars.outputs.COMMIT}} -X ${{steps.vars.outputs.REPO}}/internal/app/build.Mode=production -X ${{steps.vars.outputs.REPO}}/internal/app/build.WebUpdateFeed=${{ vars.SONGLIB_WEB_UPDATE_FEED }} -X ${{steps.vars.outputs.REPO}}/internal/app/build.WebUpdateKeyID=${{ vars.SONGLIB_WEB_UPDATE_KEY_ID }} -X ${{steps.vars.outputs.REPO}}/internal/app/build.WebUpdatePublicKey=${{ vars.SONGLIB_WEB_UPDATE_PUBLIC_KEY }}
 
       # step 5: Upload binary to artifact
       - name: Upload artifact
@@ -369,7 +369,15 @@ jobs:
           echo "CASK_REF=bitxeno/tap/$CASK_TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Compress server builds
-        run: cd ./build && for i in *; do tar -czf $i.tar.gz $i; done && cd ..
+        run: |
+          cd ./build
+          for i in *; do
+            case "$i" in
+              *.tar.gz) continue ;;
+            esac
+            tar -czf "$i.tar.gz" "$i"
+          done
+          cd ..
 
       # mygo names the artifacts with spaces: "atvloadly <version>.dmg" and
       # "atvloadly Setup <version> <arch>.exe". Rename them to a dash form, so

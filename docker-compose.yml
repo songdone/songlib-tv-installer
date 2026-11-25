@@ -1,17 +1,42 @@
-version: '3.3'
+# 音屿-Apple TV音乐播放器安装助手 · 通用 Docker / NAS 部署模板
+# 适用于群晖、极空间、威联通、绿联、Unraid 及通用 Linux（x86_64 / ARM64 自动匹配）
+# 如宿主机具备 avahi-daemon 且需要局域网自动发现，可叠加使用：
+#   docker compose -f docker-compose.yml -f docker-compose.avahi.yml up -d
 services:
   songlib-tv-installer:
     container_name: songlib-tv-installer
     hostname: songlib-tv-installer
     image: 666uos/songlib-tv-installer:latest
-    security_opt:
-      - seccomp:unconfined
-    volumes:
-      - /etc/atvloadly:/data
-      - /var/run/dbus:/var/run/dbus
-      - /var/run/avahi-daemon:/var/run/avahi-daemon 
+    environment:
+      SONGLIB_DEPLOY_MODE: "docker"
+      # 首次启动初始化管理密码（8-64位）；密码哈希落盘后本变量不再覆盖，
+      # 登录后请直接在网页「设置 › 管理登录密码」修改。
+      SONGLIB_ADMIN_PASSWORD: "${SONGLIB_ADMIN_PASSWORD:-songlib123}"
+      # 通用 NAS 环境下默认关闭宿主机 Avahi 依赖，可直接通过 Apple TV 局域网 IP 或 Tailscale 配对。
+      ZEROCONF_ENABLED: "${ZEROCONF_ENABLED:-false}"
+      TZ: "${TZ:-Asia/Shanghai}"
+      # 可选：限制允许访问的外部域名（逗号分隔，内网 IP 与 localhost 始终放行）
+      # SONGLIB_ALLOWED_HOSTS: "installer.example.com"
+      # 可选：签名前端热更新公开配置（仅公有信息，绝不填写私钥）
+      # SONGLIB_WEB_UPDATE_FEED: ""
+      # SONGLIB_WEB_UPDATE_KEY_ID: ""
+      # SONGLIB_WEB_UPDATE_PUBLIC_KEY: ""
     ports:
-      - 5533:80/tcp
+      - "${SONGLIB_PORT:-15533}:80/tcp"
+    volumes:
+      - ./data:/data
+    security_opt:
+      - no-new-privileges:true
     ulimits:
       core: 0
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:80/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "2"

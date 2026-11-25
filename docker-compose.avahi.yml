@@ -1,0 +1,9 @@
+# 可选叠加配置：在已安装并运行 avahi-daemon 的 Linux / NAS 宿主机上启用局域网 mDNS 自动发现
+# 用法：docker compose -f docker-compose.yml -f docker-compose.avahi.yml up -d
+services:
+  songlib-tv-installer:
+    environment:
+      ZEROCONF_ENABLED: "true"
+    volumes:
+      - /var/run/dbus:/var/run/dbus
+      - /var/run/avahi-daemon:/var/run/avahi-daemon

@@ -5,7 +5,7 @@ import test from "node:test";
 const read = (rel) => readFileSync(new URL(rel, import.meta.url), "utf8");
 
 test("vite build uses relative base for _web/<revision> asset resolution", () => {
-  const viteConfig = read("../../vite.config.js");
+  const viteConfig = read("../vite.config.js");
   assert.match(viteConfig, /base:\s*["']\.\/["']/);
 });
 

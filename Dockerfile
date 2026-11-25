@@ -67,8 +67,10 @@ RUN apt-get clean
 RUN cd /tmp && rm -rf ./*.deb && rm -rf ./*.tar.gz && rm -rf ./*.zip && rm -rf ./*.apk
 
 # The add command will automatically decompress the file.
-RUN mkdir -p /keep
+RUN mkdir -p /keep /opt
 COPY ./docs/config.yaml.example /keep/config.yaml
+COPY ./LICENSE /opt/LICENSE
+COPY ./build/songlib-source.tar.gz /opt/songlib-source.tar.gz
 COPY ./build/${APP_NAME}-${TARGETOS}-${TARGETARCH} /usr/bin/${APP_NAME}
 RUN chmod +x /usr/bin/${APP_NAME}
 
@@ -107,14 +109,17 @@ if [ ! -f "/data/config.yaml" ]; then  \n\
     cp /keep/config.yaml /data/config.yaml \n\
 fi  \n\
 
-/etc/init.d/usbmuxd start \n\
+/etc/init.d/usbmuxd start || true \n\
 
-/usr/bin/%s server -p ${SERVICE_PORT:-80} -c /data/config.yaml  \n\
+exec /usr/bin/%s server -p ${SERVICE_PORT:-80} -c /data/config.yaml  \n\
 \n\
 ' ${APP_NAME} >> /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl --fail --silent http://127.0.0.1:${SERVICE_PORT:-80}/ready || exit 1
 
 EXPOSE 80
 VOLUME /data
