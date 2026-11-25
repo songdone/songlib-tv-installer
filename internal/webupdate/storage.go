@@ -13,6 +13,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/evanw/esbuild/pkg/api"
 	"golang.org/x/sys/unix"
@@ -347,38 +348,98 @@ func (m *Manager) install(ctx context.Context, raw []byte, manifest Manifest, re
 		return "", err
 	}
 	defer func() { _ = removeTree(stage) }()
+
+	// Pre-create unique parent directories sequentially before launching
+	// concurrent file downloads so workers only write distinct file targets.
+	createdDirs := make(map[string]struct{}, 8)
 	for _, item := range manifest.Files {
-		if err := ctx.Err(); err != nil {
-			return "", err
+		dirPath := filepath.Dir(filepath.Join(stage, filepath.FromSlash(item.Path)))
+		if _, seen := createdDirs[dirPath]; seen {
+			continue
 		}
-		response, err := m.get(ctx, m.fileURL(item.Path))
-		if err != nil {
-			return "", fmt.Errorf("download %q: %w", item.Path, err)
-		}
-		content, readErr := io.ReadAll(io.LimitReader(response.Body, item.Size+1))
-		_ = response.Body.Close()
-		if readErr != nil {
-			return "", fmt.Errorf("download %q: %w", item.Path, readErr)
-		}
-		if err := ctx.Err(); err != nil {
-			return "", err
-		}
-		digest := sha256.Sum256(content)
-		if int64(len(content)) != item.Size || hex.EncodeToString(digest[:]) != item.SHA256 {
-			return "", fmt.Errorf("downloaded file %q failed size/SHA-256 validation", item.Path)
-		}
-		if err := syntaxCheck(item.Path, content); err != nil {
-			return "", err
-		}
-		target := filepath.Join(stage, filepath.FromSlash(item.Path))
-		directory, err := openDirectory(filepath.Dir(target), true)
-		if err != nil {
-			return "", err
+		directory, dirErr := openDirectory(dirPath, true)
+		if dirErr != nil {
+			return "", dirErr
 		}
 		_ = directory.Close()
-		if err := writeSynced(target, content); err != nil {
-			return "", err
-		}
+		createdDirs[dirPath] = struct{}{}
+	}
+
+	workerCount := downloadConcurrency
+	if len(manifest.Files) < workerCount {
+		workerCount = len(manifest.Files)
+	}
+	if workerCount < 1 {
+		workerCount = 1
+	}
+
+	downloadCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	jobs := make(chan File, len(manifest.Files))
+	for _, item := range manifest.Files {
+		jobs <- item
+	}
+	close(jobs)
+
+	var (
+		wg       sync.WaitGroup
+		errOnce  sync.Once
+		firstErr error
+	)
+	recordErr := func(e error) {
+		errOnce.Do(func() {
+			firstErr = e
+			cancel()
+		})
+	}
+
+	for range workerCount {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for item := range jobs {
+				if err := downloadCtx.Err(); err != nil {
+					recordErr(err)
+					return
+				}
+				content, dlErr := m.readURL(
+					downloadCtx,
+					m.fileURL(item.Path),
+					item.Size,
+					fmt.Errorf("downloaded file %q failed size/SHA-256 validation", item.Path),
+				)
+				if dlErr != nil {
+					recordErr(fmt.Errorf("download %q: %w", item.Path, dlErr))
+					return
+				}
+				if err := downloadCtx.Err(); err != nil {
+					recordErr(err)
+					return
+				}
+				digest := sha256.Sum256(content)
+				if int64(len(content)) != item.Size || hex.EncodeToString(digest[:]) != item.SHA256 {
+					recordErr(fmt.Errorf("downloaded file %q failed size/SHA-256 validation", item.Path))
+					return
+				}
+				if err := syntaxCheck(item.Path, content); err != nil {
+					recordErr(err)
+					return
+				}
+				target := filepath.Join(stage, filepath.FromSlash(item.Path))
+				if err := writeSynced(target, content); err != nil {
+					recordErr(err)
+					return
+				}
+			}
+		}()
+	}
+	wg.Wait()
+	if firstErr != nil {
+		return "", firstErr
+	}
+	if err := ctx.Err(); err != nil {
+		return "", err
 	}
 	if err := writeSynced(filepath.Join(stage, envelopeName), raw); err != nil {
 		return "", err

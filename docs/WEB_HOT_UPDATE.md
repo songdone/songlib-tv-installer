@@ -16,15 +16,18 @@
 
 ## 运行时 / 编译时公开配置
 
-私钥绝不进入仓库、镜像、FPK、NAS 数据目录或日志。以下三项公开配置默认全空（保持纯离线安全默认）：
+私钥绝不进入仓库、镜像、FPK、NAS 数据目录或日志。正式版本默认已内置官方公开只读更新源与 Ed25519 公钥（按当前核心版本自动匹配 `v<version>` 目录），开箱即用：
 
 ```text
-SONGLIB_WEB_UPDATE_FEED=https://<受信任更新站点>/<backend_id>/manifest.json
-SONGLIB_WEB_UPDATE_KEY_ID=<公开签名标识>
-SONGLIB_WEB_UPDATE_PUBLIC_KEY=<Base64编码的32字节Ed25519公钥>
+SONGLIB_WEB_UPDATE_FEED=https://update.6uos.de/tv-installer/v<核心版本>/manifest.json
+SONGLIB_WEB_UPDATE_KEY_ID=songlib-web-2026
+SONGLIB_WEB_UPDATE_PUBLIC_KEY=AUfJlb2xfRXdbSN2WKiHCU5mxbCkAcDsNOP3IhS8k+w=
 ```
 
-本机开发调试时如需通过 loopback HTTP 验证，可额外设置 `SONGLIB_WEB_UPDATE_ALLOW_HTTP=1`（仅允许 `localhost` / loopback IP，禁止重定向与压缩响应）。
+- 如需切换到自建镜像源，可通过环境变量或编译 `-ldflags` 覆盖上述三项。
+- 如需在纯离线/内网环境关闭在线热更新源，可设置 `SONGLIB_WEB_UPDATE_DISABLED=1`（或 `SONGLIB_WEB_UPDATE_FEED=off`）。
+- 后端下载阶段采用 **6 路并发 HTTP/2 下载 + 瞬断/5xx 自动重试（最多 3 次）**，对 `4xx`/重定向/压缩响应/校验失败立即快速失败，保证事务原子性。
+- 本机开发调试时如需通过 loopback HTTP 验证，可额外设置 `SONGLIB_WEB_UPDATE_ALLOW_HTTP=1`（仅允许 `localhost` / loopback IP，禁止重定向与压缩响应）。
 
 ## 离线生成签名快照
 
@@ -52,3 +55,29 @@ go run ./cmd/songlib-web-release \
 ```
 
 工具仅在本地写出 `files/` 与 `manifest.json`，不联网、不覆盖已有目录，并在标准输出打印 `public_key`、`key_id`、`backend_id` 与 `revision`。
+
+## 发布到 Cloudflare R2（本地一键脚本）
+
+仓库内提供纯本地发布脚本 `scripts/publish-web-update.sh`（底层 `scripts/r2_upload.py` 仅依赖 Python 3 标准库）：
+
+1. 在本机仓库外创建最小权限 R2 桶凭据文件 `~/.config/songlib-r2.env`（`chmod 600`，严禁入库）：
+
+```bash
+CLOUDFLARE_ACCOUNT_ID=<account_id>
+R2_BUCKET=<bucket_name>
+R2_ACCESS_KEY_ID=<bucket_scoped_access_key_id>
+R2_SECRET_ACCESS_KEY=<bucket_scoped_secret_access_key>
+```
+
+2. 一键构建前端、Ed25519 签名并发布（先逐文件校验 SHA-256，并发上传全部 `files/*`，全部成功后**最后**上传 `manifest.json`）：
+
+```bash
+./scripts/publish-web-update.sh \
+  --version 1.2.0-ui.2 \
+  --sequence 2 \
+  --min-backend 1.2.0 \
+  --backend-id <运行实例返回的backend_id> \
+  --prefix tv-installer/v1.2.0
+```
+
+如需仅上传已签名目录或演练校验，可使用 `--release-dir <dir>` 与 `--dry-run`。

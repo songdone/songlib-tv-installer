@@ -9,13 +9,17 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"testing/fstest"
+	"time"
 )
 
 func newPackagedFS() fstest.MapFS {
@@ -344,5 +348,227 @@ func TestRejectsBadSyntaxAndBackendMismatch(t *testing.T) {
 	}
 	if _, err := mgr2.Apply(context.Background(), revOther); !errors.Is(err, ErrIncompatible) {
 		t.Fatalf("expected ErrIncompatible, got %v", err)
+	}
+}
+
+func TestConcurrentDownloadAndTransientRetry(t *testing.T) {
+	origBackoffs := retryBackoffs
+	retryBackoffs = []time.Duration{5 * time.Millisecond, 10 * time.Millisecond}
+	t.Cleanup(func() { retryBackoffs = origBackoffs })
+
+	pub, priv, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const backendID = "backend-concurrent-1"
+	const keyID = "songlib-web-2026"
+
+	files := map[string][]byte{
+		"index.html": []byte(`<!doctype html><html><head><title>parallel</title></head><body>ok</body></html>`),
+	}
+	for i := 1; i <= 24; i++ {
+		name := fmt.Sprintf("assets/chunk-%02d.js", i)
+		files[name] = []byte(fmt.Sprintf("export const chunk_%02d = %d;\n", i, i))
+	}
+	manifestBytes, rev := makeSignedFeed(t, priv, keyID, Manifest{
+		Schema:            1,
+		Version:           "1.2.1-ui.1",
+		Sequence:          1,
+		MinBackendVersion: "1.2.0",
+		BackendID:         backendID,
+	}, files)
+
+	var (
+		inFlight      atomic.Int32
+		maxInFlight   atomic.Int32
+		manifestCalls atomic.Int32
+		mu            sync.Mutex
+		fileCalls     = map[string]int{}
+	)
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/feed/manifest.json" {
+			if manifestCalls.Add(1) == 1 {
+				http.Error(w, "temporary gateway error", http.StatusBadGateway)
+				return
+			}
+			_, _ = w.Write(manifestBytes)
+			return
+		}
+		if strings.HasPrefix(r.URL.Path, "/feed/files/") {
+			rel := strings.TrimPrefix(r.URL.Path, "/feed/files/")
+			cur := inFlight.Add(1)
+			for {
+				prev := maxInFlight.Load()
+				if cur <= prev || maxInFlight.CompareAndSwap(prev, cur) {
+					break
+				}
+			}
+			defer inFlight.Add(-1)
+
+			time.Sleep(15 * time.Millisecond)
+
+			mu.Lock()
+			fileCalls[rel]++
+			attempt := fileCalls[rel]
+			mu.Unlock()
+
+			// Inject transient 503 twice on chunk-01.js (recovers on 3rd attempt).
+			if rel == "assets/chunk-01.js" && attempt <= 2 {
+				http.Error(w, "edge busy", http.StatusServiceUnavailable)
+				return
+			}
+			// Inject truncated body (UnexpectedEOF) on chunk-02.js attempt 1.
+			if rel == "assets/chunk-02.js" && attempt == 1 {
+				data := files[rel]
+				w.Header().Set("Content-Length", fmt.Sprintf("%d", len(data)))
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write(data[:5])
+				if flusher, ok := w.(http.Flusher); ok {
+					flusher.Flush()
+				}
+				if hj, ok := w.(http.Hijacker); ok {
+					if conn, _, err := hj.Hijack(); err == nil {
+						_ = conn.Close()
+					}
+				}
+				return
+			}
+
+			data, ok := files[rel]
+			if !ok {
+				http.NotFound(w, r)
+				return
+			}
+			_, _ = w.Write(data)
+			return
+		}
+		http.NotFound(w, r)
+	}))
+	defer srv.Close()
+
+	mgr, err := New(Config{
+		DataDir:        t.TempDir(),
+		PackagedFS:     newPackagedFS(),
+		BackendVersion: "1.2.0",
+		BackendID:      backendID,
+		FeedURL:        srv.URL + "/feed/manifest.json",
+		KeyID:          keyID,
+		PublicKey:      pub,
+		AllowHTTP:      true,
+	})
+	if err != nil {
+		t.Fatalf("New: %v", err)
+	}
+
+	st, err := mgr.Check(context.Background())
+	if err != nil {
+		t.Fatalf("Check after transient 502: %v", err)
+	}
+	if st.Available == nil || st.Available.Revision != rev {
+		t.Fatalf("unexpected check status: %+v", st.Available)
+	}
+
+	st, err = mgr.Apply(context.Background(), rev)
+	if err != nil {
+		t.Fatalf("Apply with concurrency + transient retries failed: %v", err)
+	}
+	if st.ActiveVersion != "1.2.1-ui.1" || st.ActiveRevision != rev {
+		t.Fatalf("unexpected active status: %+v", st)
+	}
+	peak := maxInFlight.Load()
+	if peak < 2 || peak > downloadConcurrency {
+		t.Fatalf("maxInFlight = %d, want between 2 and %d", peak, downloadConcurrency)
+	}
+	mu.Lock()
+	c1, c2 := fileCalls["assets/chunk-01.js"], fileCalls["assets/chunk-02.js"]
+	mu.Unlock()
+	if c1 != 3 || c2 != 2 {
+		t.Fatalf("expected retry counts chunk-01=3 chunk-02=2, got %d and %d", c1, c2)
+	}
+}
+
+func TestDownloadFailsFastOnNonRetryableErrors(t *testing.T) {
+	origBackoffs := retryBackoffs
+	retryBackoffs = []time.Duration{5 * time.Millisecond, 10 * time.Millisecond}
+	t.Cleanup(func() { retryBackoffs = origBackoffs })
+
+	pub, priv, err := ed25519.GenerateKey(rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const backendID = "backend-failfast"
+	const keyID = "songlib-web-2026"
+
+	cases := []struct {
+		name    string
+		handler func(w http.ResponseWriter, r *http.Request)
+	}{
+		{
+			name: "http-404",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				http.NotFound(w, r)
+			},
+		},
+		{
+			name: "http-302-redirect",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				http.Redirect(w, r, "/other", http.StatusFound)
+			},
+		},
+		{
+			name: "gzip-content-encoding",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Encoding", "gzip")
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write([]byte("not allowed"))
+			},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			var hits atomic.Int32
+			files := map[string][]byte{
+				"index.html": []byte(`<!doctype html><html></html>`),
+			}
+			manifestBytes, rev := makeSignedFeed(t, priv, keyID, Manifest{
+				Schema:            1,
+				Version:           "1.2.1-ui.1",
+				Sequence:          1,
+				MinBackendVersion: "1.2.0",
+				BackendID:         backendID,
+			}, files)
+
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path == "/feed/manifest.json" {
+					_, _ = w.Write(manifestBytes)
+					return
+				}
+				hits.Add(1)
+				tc.handler(w, r)
+			}))
+			defer srv.Close()
+
+			mgr, err := New(Config{
+				DataDir:        t.TempDir(),
+				PackagedFS:     newPackagedFS(),
+				BackendVersion: "1.2.0",
+				BackendID:      backendID,
+				FeedURL:        srv.URL + "/feed/manifest.json",
+				KeyID:          keyID,
+				PublicKey:      pub,
+				AllowHTTP:      true,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := mgr.Apply(context.Background(), rev); err == nil {
+				t.Fatalf("%s: expected error, got nil", tc.name)
+			}
+			if got := hits.Load(); got != 1 {
+				t.Fatalf("%s: hits = %d, want 1 (must not retry permanent/security error)", tc.name, got)
+			}
+		})
 	}
 }

@@ -379,3 +379,41 @@ func TestWebUpdateEndToEndWithAuthMutexAndRecovery(t *testing.T) {
 		t.Fatalf("expected packaged index after restore, got: %s", string(afterBody))
 	}
 }
+
+func TestWebUpdateBuiltInDefaultsAndDisableSwitch(t *testing.T) {
+	packaged := fstest.MapFS{
+		"index.html": {Data: []byte(`<!doctype html><html><head><title>packaged</title></head><body>packaged</body></html>`)},
+	}
+
+	// Default build config automatically enables signed R2 hot updates without env vars.
+	t.Setenv("SONGLIB_WEB_UPDATE_FEED", "")
+	t.Setenv("SONGLIB_WEB_UPDATE_KEY_ID", "")
+	t.Setenv("SONGLIB_WEB_UPDATE_PUBLIC_KEY", "")
+	t.Setenv("SONGLIB_WEB_UPDATE_DISABLED", "")
+
+	ctrlDefault := newWebUpdateController(t.TempDir(), packaged)
+	if ctrlDefault.manager == nil {
+		t.Fatalf("expected built-in web update manager, got nil (%s)", ctrlDefault.initErr)
+	}
+	if st := ctrlDefault.localStatus(); !st.Configured {
+		t.Fatalf("expected built-in default web update Configured=true, got %+v", st)
+	}
+
+	// Explicit opt-out via SONGLIB_WEB_UPDATE_DISABLED=1 keeps offline baseline cleanly.
+	t.Setenv("SONGLIB_WEB_UPDATE_DISABLED", "1")
+	ctrlDisabled := newWebUpdateController(t.TempDir(), packaged)
+	if ctrlDisabled.manager == nil {
+		t.Fatalf("expected offline manager when disabled, got nil (%s)", ctrlDisabled.initErr)
+	}
+	if st := ctrlDisabled.localStatus(); st.Configured || st.Reason != webUpdateNoSource {
+		t.Fatalf("expected disabled offline status, got %+v", st)
+	}
+
+	// Explicit opt-out via SONGLIB_WEB_UPDATE_FEED=off also disables online source.
+	t.Setenv("SONGLIB_WEB_UPDATE_DISABLED", "")
+	t.Setenv("SONGLIB_WEB_UPDATE_FEED", "off")
+	ctrlOff := newWebUpdateController(t.TempDir(), packaged)
+	if st := ctrlOff.localStatus(); st.Configured {
+		t.Fatalf("expected feed=off to disable online source, got %+v", st)
+	}
+}

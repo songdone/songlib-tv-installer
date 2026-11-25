@@ -17,7 +17,9 @@ services:
       TZ: "${TZ:-Asia/Shanghai}"
       # 可选：限制允许访问的外部域名（逗号分隔，内网 IP 与 localhost 始终放行）
       # SONGLIB_ALLOWED_HOSTS: "installer.example.com"
-      # 可选：签名前端热更新公开配置（仅公有信息，绝不填写私钥）
+      # 可选：签名前端热更新公开配置（默认已内置官方 R2 更新源与公钥，无需手动填写；
+      # 如需自建镜像源可覆盖以下三项，如需纯离线禁用热更新可设 SONGLIB_WEB_UPDATE_DISABLED: "1"）
+      # SONGLIB_WEB_UPDATE_DISABLED: "1"
       # SONGLIB_WEB_UPDATE_FEED: ""
       # SONGLIB_WEB_UPDATE_KEY_ID: ""
       # SONGLIB_WEB_UPDATE_PUBLIC_KEY: ""

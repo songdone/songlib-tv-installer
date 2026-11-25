@@ -57,17 +57,26 @@ func newWebUpdateController(dataDir string, packagedFS fs.FS) *webUpdateControll
 	if dataDir == "" {
 		return ctrl
 	}
-	feed := strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_FEED"))
-	if feed == "" {
-		feed = build.WebUpdateFeed
-	}
-	keyID := strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_KEY_ID"))
-	if keyID == "" {
-		keyID = build.WebUpdateKeyID
-	}
-	pubB64 := strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_PUBLIC_KEY"))
-	if pubB64 == "" {
-		pubB64 = build.WebUpdatePublicKey
+	defaultFeed, defaultKeyID, defaultPub := build.DefaultWebUpdateConfig()
+	disabledEnv := strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_DISABLED"))
+	feedEnv := strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_FEED"))
+	disabled := strings.EqualFold(disabledEnv, "true") || disabledEnv == "1" ||
+		strings.EqualFold(feedEnv, "off") || strings.EqualFold(feedEnv, "disabled") || strings.EqualFold(feedEnv, "none")
+
+	var feed, keyID, pubB64 string
+	if !disabled {
+		feed = feedEnv
+		if feed == "" {
+			feed = defaultFeed
+		}
+		keyID = strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_KEY_ID"))
+		if keyID == "" {
+			keyID = defaultKeyID
+		}
+		pubB64 = strings.TrimSpace(os.Getenv("SONGLIB_WEB_UPDATE_PUBLIC_KEY"))
+		if pubB64 == "" {
+			pubB64 = defaultPub
+		}
 	}
 	var pubKey ed25519.PublicKey
 	if pubB64 != "" {
