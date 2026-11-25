@@ -49,7 +49,7 @@ func loginManagementTestSession(t *testing.T, app *fiber.App, password string) (
 
 func TestManagementPasswordChangeAndSessionRotation(t *testing.T) {
 	keysDir := t.TempDir()
-	t.Setenv("SONGLIB_ADMIN_PASSWORD", "initial-pass-1234")
+	t.Setenv("SONGLIB_ADMIN_PASSWORD", "testing-only-password-1")
 	auth, err := loadManagementAuth(keysDir)
 	if err != nil {
 		t.Fatal(err)
@@ -57,11 +57,11 @@ func TestManagementPasswordChangeAndSessionRotation(t *testing.T) {
 	server := fiber.New()
 	auth.mount(server)
 
-	cookie1, csrf1 := loginManagementTestSession(t, server, "initial-pass-1234")
-	cookieOther, _ := loginManagementTestSession(t, server, "initial-pass-1234")
+	cookie1, csrf1 := loginManagementTestSession(t, server, "testing-only-password-1")
+	cookieOther, _ := loginManagementTestSession(t, server, "testing-only-password-1")
 
 	// Wrong current password rejected with 401.
-	req := httptest.NewRequest(http.MethodPost, "http://localhost:15533/management/password", strings.NewReader(`{"current_password":"wrong-pass-1234","new_password":"updated-pass-5678"}`))
+	req := httptest.NewRequest(http.MethodPost, "http://localhost:15533/management/password", strings.NewReader(`{"current_password":"testing-only-wrong","new_password":"testing-only-password-2"}`))
 	req.AddCookie(cookie1)
 	req.Header.Set("Origin", "http://localhost:15533")
 	req.Header.Set("X-CSRF-Token", csrf1)
@@ -75,7 +75,7 @@ func TestManagementPasswordChangeAndSessionRotation(t *testing.T) {
 	_ = resp.Body.Close()
 
 	// Too-short new password rejected with 400.
-	req = httptest.NewRequest(http.MethodPost, "http://localhost:15533/management/password", strings.NewReader(`{"current_password":"initial-pass-1234","new_password":"short"}`))
+	req = httptest.NewRequest(http.MethodPost, "http://localhost:15533/management/password", strings.NewReader(`{"current_password":"testing-only-password-1","new_password":"short"}`))
 	req.AddCookie(cookie1)
 	req.Header.Set("Origin", "http://localhost:15533")
 	req.Header.Set("X-CSRF-Token", csrf1)
@@ -89,7 +89,7 @@ func TestManagementPasswordChangeAndSessionRotation(t *testing.T) {
 	_ = resp.Body.Close()
 
 	// Valid password change rotates session and invalidates other sessions.
-	req = httptest.NewRequest(http.MethodPost, "http://localhost:15533/management/password", strings.NewReader(`{"current_password":"initial-pass-1234","new_password":"updated-pass-5678"}`))
+	req = httptest.NewRequest(http.MethodPost, "http://localhost:15533/management/password", strings.NewReader(`{"current_password":"testing-only-password-1","new_password":"testing-only-password-2"}`))
 	req.AddCookie(cookie1)
 	req.Header.Set("Origin", "http://localhost:15533")
 	req.Header.Set("X-CSRF-Token", csrf1)
@@ -123,7 +123,7 @@ func TestManagementPasswordChangeAndSessionRotation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !managementPasswordMatches(reloaded.hash, "updated-pass-5678") {
+	if !managementPasswordMatches(reloaded.hash, "testing-only-password-2") {
 		t.Fatal("persisted hash does not match new password")
 	}
 }

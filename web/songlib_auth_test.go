@@ -143,7 +143,7 @@ func TestExistingManagementHashIsPreserved(t *testing.T) {
 
 func TestManagementLoginClearsAttemptsAndLogoutInvalidatesSession(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("SONGLIB_ADMIN_PASSWORD", "valid-pass-12345")
+	t.Setenv("SONGLIB_ADMIN_PASSWORD", "testing-only-password-123")
 	auth, err := loadManagementAuth(dir)
 	if err != nil {
 		t.Fatal(err)
@@ -156,7 +156,7 @@ func TestManagementLoginClearsAttemptsAndLogoutInvalidatesSession(t *testing.T) 
 	var lastCookie string
 	var lastCSRF string
 	for i := 0; i < 12; i++ {
-		req := httptest.NewRequest("POST", "http://localhost:18533/management/login", strings.NewReader(`{"password":"valid-pass-12345"}`))
+		req := httptest.NewRequest("POST", "http://localhost:18533/management/login", strings.NewReader(`{"password":"testing-only-password-123"}`))
 		req.Header.Set("Origin", "http://localhost:18533")
 		r, err := app.Test(req, 5000)
 		if err != nil {
