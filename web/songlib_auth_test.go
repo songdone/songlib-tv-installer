@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestManagementBoundary(t *testing.T) {
@@ -183,8 +184,12 @@ func TestManagementLoginClearsAttemptsAndLogoutInvalidatesSession(t *testing.T) 
 	if r.StatusCode != 204 {
 		t.Fatalf("logout status = %d, want 204", r.StatusCode)
 	}
-	if len(r.Cookies()) == 0 || r.Cookies()[0].MaxAge >= 0 {
-		t.Fatalf("expected expired cookie on logout, got %+v", r.Cookies())
+	if len(r.Cookies()) == 0 {
+		t.Fatalf("expected cleared cookie on logout, got none")
+	}
+	cleared := r.Cookies()[0]
+	if cleared.Value != "" || (cleared.MaxAge >= 0 && (cleared.Expires.IsZero() || !cleared.Expires.Before(time.Now()))) {
+		t.Fatalf("expected expired empty cookie on logout, got %+v", cleared)
 	}
 
 	// Subsequent authenticated call with the revoked session must be rejected.

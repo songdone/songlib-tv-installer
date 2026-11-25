@@ -31,11 +31,11 @@ func TestBrandIconSource(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read source index: %v", err)
 	}
-	wantIcon := `<link rel="icon" type="image/png" sizes="512x512" href="/songlib-mark.png" />`
+	wantIcon := `<link rel="icon" type="image/png" sizes="512x512" href="./songlib-mark.png" />`
 	if !strings.Contains(string(index), wantIcon) {
 		t.Fatalf("source index does not contain %q", wantIcon)
 	}
-	wantTouch := `<link rel="apple-touch-icon" type="image/png" href="/songlib-mark.png" />`
+	wantTouch := `<link rel="apple-touch-icon" type="image/png" href="./songlib-mark.png" />`
 	if !strings.Contains(string(index), wantTouch) {
 		t.Fatalf("source index does not contain %q", wantTouch)
 	}
