@@ -47,6 +47,8 @@ func newTestServer(t *testing.T) (*fiber.App, string) {
 
 	server := fiber.New()
 	route(server)
+	task.ResetForTest()
+	t.Cleanup(task.ResetForTest)
 	return server, dataDir
 }
 

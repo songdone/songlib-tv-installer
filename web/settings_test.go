@@ -13,6 +13,7 @@ import (
 	"github.com/bitxeno/atvloadly/internal/app"
 	"github.com/bitxeno/atvloadly/internal/log"
 	"github.com/bitxeno/atvloadly/internal/secret"
+	"github.com/bitxeno/atvloadly/internal/task"
 	"github.com/rs/zerolog"
 )
 
@@ -21,6 +22,8 @@ func setupGithubTokenSettings(t *testing.T, token string) {
 	oldSettings := app.Settings
 	oldConfig := app.Config
 	t.Cleanup(func() { app.Settings = oldSettings; app.Config = oldConfig })
+	task.ResetForTest()
+	t.Cleanup(task.ResetForTest)
 
 	app.Settings = &app.SettingsConfiguration{}
 	app.Settings.Update.CheckInterval = 6

@@ -865,3 +865,12 @@ func HasActiveWork() bool {
 	})
 	return busy
 }
+
+// ResetForTest stops any active scheduler/worker on the global task singleton
+// and replaces it with a fresh empty Task so tests cannot leak queued items.
+func ResetForTest() {
+	if instance != nil {
+		instance.Stop()
+	}
+	instance = new()
+}
