@@ -9,7 +9,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -21,6 +20,7 @@ import (
 	mcpserver "github.com/bitxeno/atvloadly/internal/mcp"
 	"github.com/bitxeno/atvloadly/internal/model"
 	"github.com/bitxeno/atvloadly/internal/notify"
+	"github.com/bitxeno/atvloadly/internal/release"
 	"github.com/bitxeno/atvloadly/internal/service"
 	"github.com/bitxeno/atvloadly/internal/signing"
 	"github.com/bitxeno/atvloadly/internal/signing/appcheck"
@@ -83,8 +83,25 @@ func route(fi *fiber.App) {
 			return c.Status(http.StatusNotFound).SendString(err.Error())
 		}
 
-		// Only an icon stored with an installed app is served.
-		icon, err := service.ResolveAppIconPath(t.Icon)
+		// Show the custom icon when the app has one and its file is still
+		// readable; otherwise fall back to the IPA icon. Both are restricted
+		// to icons stored with the installed app.
+		icon, err := service.ResolveAppDisplayIconPath(*t)
+		if err != nil {
+			return c.Status(http.StatusNotFound).SendString("")
+		}
+		return c.Status(http.StatusOK).SendFile(icon, false)
+	})
+	fi.Get("/apps/:id/custom-icon", func(c *fiber.Ctx) error {
+		id := utils.MustParseInt(c.Params("id"))
+
+		t, err := service.GetApp(uint(id))
+		if err != nil {
+			return c.Status(http.StatusNotFound).SendString(err.Error())
+		}
+
+		// Only the custom icon stored with an installed app is served.
+		icon, err := service.ResolveAppIconPath(t.CustomIconPath)
 		if err != nil {
 			return c.Status(http.StatusNotFound).SendString("")
 		}
@@ -118,6 +135,9 @@ func route(fi *fiber.App) {
 	})
 	api.Get("/version", func(c *fiber.Ctx) error {
 		return c.Status(http.StatusOK).JSON(apiSuccess(app.Version))
+	})
+	api.Get("/version/latest", func(c *fiber.Ctx) error {
+		return c.Status(http.StatusOK).JSON(apiSuccess(release.Latest()))
 	})
 	api.Get("/settings", func(c *fiber.Ctx) error {
 		return c.Status(http.StatusOK).JSON(apiSuccess(safeSettings()))
@@ -255,6 +275,10 @@ func route(fi *fiber.App) {
 			app.Settings.Notification = settings.Notification
 		case "network":
 			app.Settings.Network = settings.Network
+		case "advanced":
+			app.Settings.Advanced = settings.Advanced
+			// Apply the new debug mode to the running process immediately.
+			app.ApplyLogLevel()
 		case "task":
 			app.Settings.Task = settings.Task
 			if err := task.ReloadTask(); err != nil {
@@ -287,14 +311,12 @@ func route(fi *fiber.App) {
 		return c.Status(http.StatusOK).JSON(apiError("device not found"))
 	})
 
-	// Forget a manually added device (pairing files + in-memory entry).
-	api.Post("/devices/:id/manual/delete", func(c *fiber.Ctx) error {
+	// Delete a connected device: clears its pairing material (pairing files and
+	// lockdown record) and drops it from the list. Works for any connected
+	// device, whether it was added manually or discovered on the network.
+	api.Post("/devices/:id/delete", func(c *fiber.Ctx) error {
 		id := c.Params("id")
-		device, ok := manager.GetDeviceByID(id)
-		if !ok || device == nil || !device.Manual || device.UDID == "" {
-			return c.Status(http.StatusOK).JSON(apiError("manual device not found"))
-		}
-		if err := service.DeleteManualDevice(device.UDID); err != nil {
+		if err := service.DeleteDevice(id); err != nil {
 			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
 		}
 		return c.Status(http.StatusOK).JSON(apiSuccess(true))
@@ -525,16 +547,37 @@ func route(fi *fiber.App) {
 		return c.Status(http.StatusOK).JSON(apiSuccess(result))
 	})
 
+	api.Post("/custom-icon/upload", func(c *fiber.Ctx) error {
+		icon, err := readSigningUpload(c, "file", "custom icon", service.MaxCustomIconUploadSize)
+		if err != nil {
+			return c.Status(http.StatusOK).JSON(apiSigningError(err))
+		}
+		path, err := service.SaveCustomIconUpload(icon)
+		if err != nil {
+			return c.Status(http.StatusOK).JSON(apiSigningError(err))
+		}
+		return c.Status(http.StatusOK).JSON(apiSuccess(map[string]string{"path": path}))
+	})
+
 	api.Post("/install", func(c *fiber.Ctx) error {
 		account := strings.TrimSpace(c.FormValue("account"))
 		ipaURL := strings.TrimSpace(c.FormValue("url"))
 		deviceID := strings.TrimSpace(c.FormValue("device_id"))
+		deviceType := strings.TrimSpace(c.FormValue("device_type"))
+		if err := service.ValidateInstallDeviceType(deviceType); err != nil {
+			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
+		}
 		customName := strings.TrimSpace(c.FormValue("custom_name"))
 		customIdentifier := strings.TrimSpace(c.FormValue("custom_identifier"))
+		customIconPath := strings.TrimSpace(c.FormValue("custom_icon_path"))
 		removeExt := c.FormValue("remove_extensions") == "true"
 
 		if err := service.ValidateCustomName(customName); err != nil {
 			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
+		}
+		customIconPath, err := service.ResolveCustomIconPath(customIconPath)
+		if err != nil {
+			return c.Status(http.StatusOK).JSON(apiSigningError(err))
 		}
 
 		signingMode := model.SigningMode(strings.TrimSpace(c.FormValue("signing_mode")))
@@ -609,13 +652,13 @@ func route(fi *fiber.App) {
 		manager.ReloadDevices()
 		devices, err := manager.GetDevices()
 		if err != nil {
-			// The uploaded file never reaches a task: clean it here.
-			manager.CleanUploadTempFiles(ipaPath)
+			// The uploaded files never reach a task: clean them here.
+			manager.CleanUploadTempFiles(ipaPath, customIconPath)
 			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
 		}
-		selectedDevice, err := selectInstallDevice(devices, deviceID)
+		selectedDevice, err := service.SelectInstallDevice(devices, deviceID, deviceType)
 		if err != nil {
-			manager.CleanUploadTempFiles(ipaPath)
+			manager.CleanUploadTempFiles(ipaPath, customIconPath)
 			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
 		}
 
@@ -633,12 +676,13 @@ func route(fi *fiber.App) {
 			SigningIdentityID:        signingIdentityID,
 			AllowMissingEntitlements: allowMissingEntitlements,
 			CustomIdentifier:         customIdentifier,
+			CustomIconPath:           customIconPath,
 		}
 
 		if task.StartInstallApps([]model.InstalledApp{appModel}, true) == 0 {
 			// Nothing was queued (duplicate or full queue): the uploaded
-			// file has no task to clean it.
-			manager.CleanUploadTempFiles(ipaPath)
+			// files have no task to clean them.
+			manager.CleanUploadTempFiles(ipaPath, customIconPath)
 			return c.Status(http.StatusOK).JSON(apiError("install task was not queued, please retry"))
 		}
 
@@ -651,6 +695,7 @@ func route(fi *fiber.App) {
 			"signing_mode":        signingMode,
 			"signing_identity_id": signingIdentityID,
 			"custom_identifier":   customIdentifier,
+			"custom_icon_path":    customIconPath,
 		}))
 	})
 
@@ -783,6 +828,25 @@ func route(fi *fiber.App) {
 		if err != nil {
 			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
 		}
+
+		// A refresh normally revokes nothing. The home page may retry a refresh
+		// that stopped at the certificate limit with one certificate serial the
+		// user picked, the same one-shot authorization the install page sends.
+		var req struct {
+			RevokeCertificateSerial string `json:"revoke_certificate_serial"`
+		}
+		if len(c.Body()) > 0 {
+			if err := c.BodyParser(&req); err != nil {
+				return c.Status(http.StatusOK).JSON(apiError("invalid request body"))
+			}
+		}
+		if t.IsExternalSigning() {
+			req.RevokeCertificateSerial = ""
+		}
+		if err := service.ValidateRevokeCertificateSerial(req.RevokeCertificateSerial); err != nil {
+			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
+		}
+		t.RevokeCertificateSerial = req.RevokeCertificateSerial
 
 		task.RefreshApp(*t)
 		return c.Status(http.StatusOK).JSON(apiSuccess(true))
@@ -969,33 +1033,6 @@ func route(fi *fiber.App) {
 		}
 	})
 
-}
-
-// selectInstallDevice picks the install target: the device with deviceID, or
-// the only available device when deviceID is empty. Several devices without
-// a deviceID is refused rather than guessed.
-func selectInstallDevice(devices []model.Device, deviceID string) (model.Device, error) {
-	if len(devices) == 0 {
-		return model.Device{}, fmt.Errorf("no available devices found")
-	}
-	if deviceID != "" {
-		for _, d := range devices {
-			if d.ID == deviceID {
-				return d, nil
-			}
-		}
-		return model.Device{}, fmt.Errorf("device_id not found: %s", deviceID)
-	}
-	if len(devices) == 1 {
-		return devices[0], nil
-	}
-
-	choices := make([]string, 0, len(devices))
-	for _, d := range devices {
-		choices = append(choices, fmt.Sprintf("%s (%s, %s)", d.ID, d.Name, d.DeviceClass))
-	}
-	sort.Strings(choices)
-	return model.Device{}, fmt.Errorf("several devices are available, device_id is required: %s", strings.Join(choices, ", "))
 }
 
 // removeUploadArtifacts removes the temp files of already parsed uploads in a

@@ -1,4 +1,5 @@
 import request from "@/utils/request";
+import { uploadRequestConfig } from "@/utils/upload-guard.mjs";
 
 export default {
   syncLang: (params) => {
@@ -11,6 +12,12 @@ export default {
   getVersion: () => {
     return request({
       url: "/api/version",
+      method: "get",
+    });
+  },
+  getLatestRelease: () => {
+    return request({
+      url: "/api/version/latest",
       method: "get",
     });
   },
@@ -209,10 +216,35 @@ export default {
     });
   },
 
-  upload: (data) => {
+  // upload stages one IPA on the server. It has no request timeout: the file
+  // size decides how long it takes, and a 23 GB IPA needs far longer than any
+  // timeout short enough to catch a dead connection. A guard aborts it only
+  // when no byte moved for its stall budget (see utils/upload-guard.mjs).
+  upload: (data, guard) => {
     return new Promise((resolve, reject) => {
       request({
         url: "/api/upload",
+        method: "post",
+        ...uploadRequestConfig(guard),
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        data,
+      }).then((res) => {
+        resolve(res.data);
+      })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+  // uploadCustomIcon sends one image to the server and resolves with the path
+  // of the normalized PNG that the install request submits.
+  uploadCustomIcon: (data) => {
+    return new Promise((resolve, reject) => {
+      request({
+        url: "/api/custom-icon/upload",
         method: "post",
         timeout: 300000,
         headers: {
@@ -220,7 +252,7 @@ export default {
         },
         data,
       }).then((res) => {
-        resolve(res.data);
+        resolve(res.data.path);
       })
         .catch((err) => {
           reject(err);
@@ -251,17 +283,18 @@ export default {
     });
   },
 
-  deleteManualDevice: (id) => {
+  deleteDevice: (id) => {
     return request({
-      url: `/api/devices/${id}/manual/delete`,
+      url: `/api/devices/${id}/delete`,
       method: "post",
     });
   },
 
-  refreshApp: (id) => {
+  refreshApp: (id, data) => {
     return request({
       url: `/api/apps/${id}/refresh`,
       method: "post",
+      data,
     });
   },
 
@@ -386,6 +419,14 @@ export default {
   saveNetworkSettings: function (data) {
     return request({
       url: "/api/settings/network",
+      method: "post",
+      data,
+    });
+  },
+
+  saveAdvancedSettings: function (data) {
+    return request({
+      url: "/api/settings/advanced",
       method: "post",
       data,
     });

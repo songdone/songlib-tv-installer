@@ -112,6 +112,7 @@ test("upstream README pages link all supported languages and both logo themes", 
     ["docs/readme/README_cn.md", "中文"],
     ["docs/readme/README_sr.md", "Српски (ћирилица)"],
     ["docs/readme/README_sr_Latn.md", "Srpski (latinica)"],
+    ["docs/readme/README_ru.md", "Русский"],
   ];
   const english = readFileSync(new URL("../../../docs/upstream/README.md", import.meta.url), "utf8");
   const headingCount = (document) => [...document.matchAll(/^#{2,3} /gm)].length;

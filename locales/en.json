@@ -15,7 +15,9 @@
         "settings_saved": "Settings saved. Restart the app to apply them.",
         "settings_invalid_port": "Enter a valid TCP port between 1 and 65535.",
         "settings_save_error": "Could not save the settings.",
-        "quit": "Quit"
+        "quit": "Quit",
+        "update_available": "SongLib Installer {{.version}} is available",
+        "update_notification": "A new SongLib Installer version is available (running {{.current}})."
     },
     "common": {
         "loading": "Loading...",
@@ -32,7 +34,9 @@
         "update_available": "{{.name}}: {{.version}} is available\n",
         "update_attention": "{{.name}}: update needs attention: {{.error}}\n",
         "update_installed_title": "SongLib Installer: apps updated",
-        "update_installed": "{{.name}} updated to {{.version}}\n"
+        "update_installed": "{{.name}} updated to {{.version}}\n",
+        "release_content": "You are running {{.current}}.\n{{.url}}",
+        "release_title": "SongLib Installer {{.version}} is available"
     },
     "nav": {
         "settings": "Settings",
@@ -55,7 +59,9 @@
         "home_short": "Home",
         "devices_short": "TVs",
         "apps_short": "Apps",
-        "explore_short": "Player"
+        "explore_short": "Player",
+        "collapse_sidebar": "Collapse sidebar",
+        "expand_sidebar": "Expand sidebar"
     },
     "about": {
         "version": "Version",
@@ -99,7 +105,8 @@
                 "ip_badge": "IP",
                 "forget": "Delete",
                 "forget_confirm": "Confirm",
-                "forget_done": "Device forgotten"
+                "forget_done": "Device deleted",
+                "more": "More"
             }
         },
         "table": {
@@ -140,7 +147,7 @@
             "tips": {
                 "view_log": "Click to view installation log",
                 "account_invalid": "There is an issue with the account. Please check logs and fix it.",
-                "certificate_limit": "The Apple ID has no free certificate slot, so nothing was installed or revoked. Open the app on the install page to choose which certificate may be revoked.",
+                "certificate_limit": "The Apple ID has no free certificate slot, so nothing was installed or revoked. Choose which certificate may be revoked to retry.",
                 "footer": "By default, when the app expiration time is less than 1 day, it will automatically refresh between 3-6am. Apps linked to a GitHub or AltStore source are checked for new versions in the background; automatic updates are installed in the same time window.",
                 "footer_external": "Apps signed with an external certificate are never refreshed automatically: they stop working when the certificate or the provisioning profile expires. Reinstalling with the same certificate and profile does not extend this date: replace the profile (or import a new identity when the certificate expires first), then reinstall the app.",
                 "reinstall_external": "Reinstalling with the same certificate and provisioning profile does not extend the validity. After replacing the profile (or with a new identity), reinstall the app to extend it.",
@@ -192,7 +199,12 @@
         "devices_title": "Devices",
         "devices_open": "All devices",
         "apps_title": "Recent apps",
-        "apps_open": "All apps & renewal"
+        "apps_open": "All apps & renewal",
+        "release_banner": {
+            "dismiss": "Dismiss",
+            "message": "SongLib Installer {{version}} is available (running {{current}}).",
+            "view": "View release"
+        }
     },
     "pair": {
         "toast": {
@@ -220,7 +232,7 @@
             "pin": {
                 "title": "Enter PIN code",
                 "loading": "Connecting…",
-                "placeholder": "Please enter the PIN displayed on AppleTV",
+                "placeholder": "Please enter the PIN displayed on Apple TV",
                 "button": "Confirm"
             },
             "completed": {
@@ -369,6 +381,13 @@
             "allow_missing_entitlements": {
                 "label": "Allow missing entitlements",
                 "tips": "Sign even though the provisioning profile does not grant some entitlements the app requests. Features relying on them may not work."
+            },
+            "custom_icon": {
+                "choose": "Choose an icon",
+                "empty": "No icon",
+                "preview_alt": "Custom app icon",
+                "remove": "Remove icon",
+                "tips": "Replace the app icon on the home screen. Click to choose an image (PNG, JPEG or GIF); it is stored with the app and reused on every refresh and update."
             }
         },
         "login_modal": {
@@ -453,7 +472,7 @@
             },
             "iphone_toggle": {
                 "label": "iPhone Auto Refresh",
-                "tips": "iPhone refresh isn't restricted by the configured running time; it will attempt to refresh when the iPhone is connected to WiFi"
+                "tips": "iPhone refresh isn't restricted by the configured running time; it will attempt to refresh when the iPhone is connected to Wi-Fi."
             },
             "mode": {
                 "label": "Refresh Mode",
@@ -493,6 +512,10 @@
             "task_disabled": "Auto Refresh App is disabled: new versions are still detected, but automatic updates are not installed.",
             "button": {
                 "submit": "Save"
+            },
+            "release_notify": {
+                "label": "New atvloadly releases",
+                "tips": "Notify when a new SongLib Installer core release (Docker image / FPK) is published."
             }
         },
         "sources": {
@@ -560,6 +583,10 @@
                 "remove_failed": "Delete failed",
                 "server_success": "Anisette server saved",
                 "server_failed": "Saving anisette server failed"
+            },
+            "debug_mode": {
+                "label": "Debug Mode",
+                "tips": "When enabled, install commands run with the RUST_LOG=debug environment variable and the log level is set to debug."
             }
         },
         "tools": {
@@ -943,7 +970,8 @@
             "signed_entitlements_invalid": "A signed bundle has unexpected entitlements.",
             "transport_failed": "The device could not be reached or rejected the installation.",
             "pairing_record_invalid": "The pairing record of the device is missing or unreadable. Pair the device again.",
-            "certificate_invalid": "The stored certificate cannot be read. Import the identity again."
+            "certificate_invalid": "The stored certificate cannot be read. Import the identity again.",
+            "custom_icon_invalid": "The custom app icon is not a readable image. Upload a PNG, JPEG or GIF image again."
         }
     },
     "quickstart": {

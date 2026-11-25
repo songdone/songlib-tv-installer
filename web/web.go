@@ -15,9 +15,7 @@ import (
 )
 
 func Run(addr string, port int) error {
-	server := fiber.New(fiber.Config{
-		BodyLimit: 1024 * 1024 * 1024,
-	})
+	server := newServer()
 	setup(server)
 
 	if err := server.Listen(fmt.Sprintf("%s:%d", addr, port)); err != nil {
@@ -31,9 +29,7 @@ func Run(addr string, port int) error {
 // app uses to bind a random loopback port before opening its window. It
 // returns when the listener closes.
 func RunListener(ln net.Listener) error {
-	server := fiber.New(fiber.Config{
-		BodyLimit: 1024 * 1024 * 1024,
-	})
+	server := newServer()
 	setup(server)
 
 	if err := server.Listener(ln); err != nil {
@@ -41,6 +37,18 @@ func RunListener(ln net.Listener) error {
 		return err
 	}
 	return nil
+}
+
+// newServer returns the Fiber app the web service runs on.
+//
+// BodyLimit keeps a 1 GiB safety ceiling above the 512 MiB IPA upload check
+// while lifting Fiber's default 4 MiB cap so large tvOS IPAs upload reliably.
+// StreamRequestBody is left off on purpose so fasthttp stages multipart files
+// into TMPDIR before the handler streams them to their destination.
+func newServer() *fiber.App {
+	return fiber.New(fiber.Config{
+		BodyLimit: 1024 * 1024 * 1024,
+	})
 }
 
 func setup(server *fiber.App) {

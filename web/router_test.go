@@ -3,6 +3,8 @@ package web
 import (
 	"bytes"
 	"encoding/json"
+	"image"
+	"image/png"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -16,6 +18,7 @@ import (
 	"github.com/bitxeno/atvloadly/internal/app"
 	"github.com/bitxeno/atvloadly/internal/db"
 	"github.com/bitxeno/atvloadly/internal/model"
+	"github.com/bitxeno/atvloadly/internal/service"
 	"github.com/bitxeno/atvloadly/internal/signing"
 	"github.com/bitxeno/atvloadly/internal/task"
 	"github.com/gofiber/fiber/v2"
@@ -167,6 +170,66 @@ func TestDeleteRefusesInstallingApp(t *testing.T) {
 	}
 }
 
+// A manual refresh may retry with one certificate serial the user authorized
+// to revoke, mirroring the install page. Anything else is refused before the
+// task is queued.
+func TestRefreshAcceptsCertificateRevocationSerial(t *testing.T) {
+	server, dataDir := newTestServer(t)
+	const appID uint = 900002
+	record := model.InstalledApp{
+		Model:            gorm.Model{ID: appID},
+		IpaName:          "Test",
+		IpaPath:          writeFile(t, filepath.Join(dataDir, "ipa", strconv.FormatUint(uint64(appID), 10), "app.ipa"), "ipa"),
+		BundleIdentifier: "com.example.test",
+		UDID:             "device",
+		Account:          "user@example.com",
+		Enabled:          true,
+	}
+	if err := db.Store().Create(&record).Error; err != nil {
+		t.Fatal(err)
+	}
+
+	refresh := func(serial string) ApiResult {
+		t.Helper()
+		body, err := json.Marshal(map[string]string{"revoke_certificate_serial": serial})
+		if err != nil {
+			t.Fatal(err)
+		}
+		req := httptest.NewRequest(http.MethodPost, "/api/apps/"+strconv.FormatUint(uint64(appID), 10)+"/refresh", bytes.NewReader(body))
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := server.Test(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer func() { _ = resp.Body.Close() }()
+		var result ApiResult
+		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+			t.Fatal(err)
+		}
+		return result
+	}
+
+	if result := refresh("not-a-serial"); result.Code != -1 {
+		t.Fatalf("invalid serial: code = %d, want -1", result.Code)
+	}
+	if task.IsInstalling(appID) {
+		t.Fatal("invalid serial queued the refresh")
+	}
+
+	if result := refresh("AB12cd34"); result.Code != 200 {
+		t.Fatalf("valid serial: code = %d, want 200", result.Code)
+	}
+	for _, app := range task.GetCurrentInstallingApps() {
+		if app.ID == appID {
+			if app.RevokeCertificateSerial != "AB12cd34" {
+				t.Fatalf("queued serial = %q, want AB12cd34", app.RevokeCertificateSerial)
+			}
+			return
+		}
+	}
+	t.Fatal("refresh was not queued")
+}
+
 // A custom bundle identifier is refused before anything is queued when the
 // installation cannot use it.
 func TestInstallRefusesUnusableCustomIdentifier(t *testing.T) {
@@ -242,6 +305,41 @@ func TestInstallRefusesUnusableCustomIdentifier(t *testing.T) {
 	}
 }
 
+func TestInstallRejectsInvalidDeviceType(t *testing.T) {
+	server, _ := newTestServer(t)
+
+	var body bytes.Buffer
+	form := multipart.NewWriter(&body)
+	if err := form.WriteField("device_type", "iphone"); err != nil {
+		t.Fatal(err)
+	}
+	if err := form.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(http.MethodPost, "/api/install", &body)
+	req.Header.Set("Content-Type", form.FormDataContentType())
+	resp, err := server.Test(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var result struct {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		t.Fatal(err)
+	}
+	if result.Code != -1 {
+		t.Fatalf("code = %d, want -1", result.Code)
+	}
+	if result.Msg != "invalid device_type: iphone; valid values are: AppleTV, iPhone, iPad" {
+		t.Fatalf("msg = %q, want invalid device type and valid values", result.Msg)
+	}
+}
+
 // An Apple ID install with a valid custom bundle identifier is accepted: it
 // passes validation and is queued, so it is not refused as an unusable
 // combination.
@@ -280,6 +378,139 @@ func TestInstallAcceptsAppleIDCustomIdentifier(t *testing.T) {
 	}
 	if data != nil && data.Code == signing.CodeCustomIdentifierInvalid {
 		t.Fatalf("a valid custom identifier was refused: %+v", data)
+	}
+}
+
+// The custom icon upload endpoint decodes the image, normalizes it to PNG and
+// returns a path inside the upload directory that /api/install accepts.
+func TestCustomIconUpload(t *testing.T) {
+	server, dataDir := newTestServer(t)
+
+	img := image.NewRGBA(image.Rect(0, 0, 8, 8))
+	var pngData bytes.Buffer
+	if err := png.Encode(&pngData, img); err != nil {
+		t.Fatal(err)
+	}
+
+	var body bytes.Buffer
+	form := multipart.NewWriter(&body)
+	part, err := form.CreateFormFile("file", "icon.png")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, _ = part.Write(pngData.Bytes())
+	_ = form.Close()
+
+	req := httptest.NewRequest(http.MethodPost, "/api/custom-icon/upload", &body)
+	req.Header.Set("Content-Type", form.FormDataContentType())
+	resp, err := server.Test(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var result struct {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+		Data struct {
+			Path string `json:"path"`
+		} `json:"data"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		t.Fatal(err)
+	}
+	if result.Code != 200 {
+		t.Fatalf("code = %d, msg = %q, want 200", result.Code, result.Msg)
+	}
+	path := result.Data.Path
+	if path == "" || filepath.Dir(path) != filepath.Join(dataDir, "tmp") {
+		t.Fatalf("the returned icon path is not an upload: %q", path)
+	}
+	if _, err := service.ResolveCustomIconPath(path); err != nil {
+		t.Fatalf("the uploaded icon is not accepted by the install API: %v", err)
+	}
+}
+
+// A non-image upload is refused with a stable signing code and stores nothing.
+func TestCustomIconUploadRejectsNonImage(t *testing.T) {
+	server, dataDir := newTestServer(t)
+
+	var body bytes.Buffer
+	form := multipart.NewWriter(&body)
+	part, err := form.CreateFormFile("file", "icon.png")
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, _ = part.Write([]byte("not an image"))
+	_ = form.Close()
+
+	req := httptest.NewRequest(http.MethodPost, "/api/custom-icon/upload", &body)
+	req.Header.Set("Content-Type", form.FormDataContentType())
+	resp, err := server.Test(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	var result struct {
+		Code int             `json:"code"`
+		Data json.RawMessage `json:"data"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		t.Fatal(err)
+	}
+	if result.Code != -1 {
+		t.Fatalf("code = %d, want -1", result.Code)
+	}
+	var data *SigningErrorData
+	if err := json.Unmarshal(result.Data, &data); err != nil {
+		t.Fatal(err)
+	}
+	if data == nil || data.Code != signing.CodeCustomIconInvalid {
+		t.Fatalf("signing code = %+v, want %q", data, signing.CodeCustomIconInvalid)
+	}
+	if entries, _ := os.ReadDir(filepath.Join(dataDir, "tmp")); len(entries) != 0 {
+		t.Fatalf("the refused upload was kept: %v", entries)
+	}
+}
+
+// The app icon route shows the custom icon when one is stored, and falls back
+// to the IPA icon when the custom icon is missing.
+func TestAppIconPrefersCustomIcon(t *testing.T) {
+	server, dataDir := newTestServer(t)
+	saveDir := filepath.Join(dataDir, "ipa", "1")
+	original := writeFile(t, filepath.Join(saveDir, "app.png"), "original icon")
+	custom := writeFile(t, filepath.Join(saveDir, "custom-icon.png"), "custom icon")
+
+	tests := []struct {
+		name       string
+		customIcon string
+		wantBody   string
+	}{
+		{name: "custom icon", customIcon: custom, wantBody: "custom icon"},
+		{name: "missing custom icon falls back", customIcon: filepath.Join(saveDir, "gone.png"), wantBody: "original icon"},
+		{name: "no custom icon", wantBody: "original icon"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			record := model.InstalledApp{IpaName: "Test", Icon: original, CustomIconPath: tt.customIcon}
+			if err := db.Store().Create(&record).Error; err != nil {
+				t.Fatal(err)
+			}
+			url := "/apps/" + strconv.FormatUint(uint64(record.ID), 10) + "/icon"
+			resp, err := server.Test(httptest.NewRequest(http.MethodGet, url, nil))
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer func() { _ = resp.Body.Close() }()
+			body, _ := io.ReadAll(resp.Body)
+			if resp.StatusCode != http.StatusOK {
+				t.Fatalf("status = %d, want 200", resp.StatusCode)
+			}
+			if string(body) != tt.wantBody {
+				t.Fatalf("body = %q, want %q", body, tt.wantBody)
+			}
+		})
 	}
 }
 

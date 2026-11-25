@@ -22,8 +22,15 @@ func ScanServices(ctx context.Context, callback func(serviceType string, name st
 func StartDeviceManager() {
 	// 如果之前已启动，先停止
 	StopDeviceManager()
-	// Zeroconf disabled: no Avahi or mDNS discovery at all. Manually paired
-	// devices are still loaded from the pairing files on each ReloadDevices.
+	// Load persisted manual (pairing-file) devices before discovery starts so
+	// they are available right after startup regardless of whether Zeroconf is
+	// enabled. Without this, a Zeroconf-disabled deployment leaves the registry
+	// empty until something explicitly calls ReloadDevices (the Devices page or
+	// /api/reload), so scheduled refreshes fail with "device not found for
+	// UDID" after every restart (issue #261).
+	deviceManager.ReloadManualDevices()
+	// Zeroconf disabled: no Avahi or mDNS discovery at all, but the manual
+	// devices loaded above stay available.
 	if !app.ZeroconfEnabled() {
 		log.Info("Zeroconf discovery disabled by configuration")
 		return
@@ -99,20 +106,34 @@ func ReloadManualDevices() {
 	deviceManager.ReloadManualDevices()
 }
 
-// DeleteManualDevice removes a manually added device: its pairing files
-// (<udid>.json and <udid>.plist) and its in-memory entry.
-func DeleteManualDevice(udid string) error {
-	if strings.TrimSpace(udid) == "" {
-		return fmt.Errorf("udid is required")
+// DeleteDevice removes a connected device by its current ID. It clears the
+// device's pairing material (pairing files and lockdown record) and drops it
+// from the in-memory device list. An unknown or blank ID is an error.
+func DeleteDevice(id string) error {
+	if strings.TrimSpace(id) == "" {
+		return fmt.Errorf("device id is required")
 	}
-	// Both files belong to the same pairing record: delete them together.
+	device, ok := deviceManager.GetDeviceByID(id)
+	if !ok || device == nil {
+		return fmt.Errorf("device not found: %s", id)
+	}
+	return deviceManager.ForgetDevice(id, device.UDID)
+}
+
+// deletePairingFiles removes the <udid>.json (remote pairing record) and
+// <udid>.plist (tunnel pairing record) files for a UDID. A missing file is not
+// an error so forgetting an already-clean device still succeeds.
+func deletePairingFiles(udid string) error {
+	if strings.TrimSpace(udid) == "" {
+		return nil
+	}
+	dir := app.RemotePairingDir()
 	for _, ext := range []string{".json", ".plist"} {
-		path := filepath.Join(app.RemotePairingDir(), udid+ext)
+		path := filepath.Join(dir, udid+ext)
 		if err := os.Remove(path); err != nil && !os.IsNotExist(err) {
 			return err
 		}
 	}
-	deviceManager.RemoveManualDevice(utils.Md5(udid))
 	return nil
 }
 
@@ -200,6 +221,11 @@ func GetRunEnvs() []string {
 			envs = append(envs, fmt.Sprintf("HTTPS_PROXY=%s", app.Settings.Network.HTTPSProxy))
 			envs = append(envs, fmt.Sprintf("https_proxy=%s", app.Settings.Network.HTTPSProxy))
 		}
+	}
+	// Debug mode makes the signing engine (a Rust binary reading RUST_LOG)
+	// log at debug level.
+	if app.Settings.Advanced.DebugMode {
+		envs = append(envs, "RUST_LOG=debug")
 	}
 	return utils.MergeEnvs(os.Environ(), envs)
 }

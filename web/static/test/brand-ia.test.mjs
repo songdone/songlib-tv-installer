@@ -105,7 +105,7 @@ test("devices page filters and manual pairing exist", () => {
   const devices = read("../src/page/devices/index.vue");
   assert.ok(devices.includes('activeFilter === "paired"') || devices.includes('"paired"'));
   assert.ok(devices.includes("pair-manual"), "manual IP must route to the real pair flow");
-  assert.ok(devices.includes("deleteManualDevice"), "forget must call the real API");
+  assert.ok(devices.includes("deleteDevice"), "forget must call the real API");
 });
 
 test("hero primary CTA opens the in-app wizard, not an external page", () => {

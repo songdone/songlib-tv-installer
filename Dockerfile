@@ -34,7 +34,7 @@ RUN case ${TARGETARCH} in \
          "arm64")  PKG_ARCH=aarch64  ;; \
     esac \
     && cd /tmp \
-    && wget https://github.com/bitxeno/PlumeImpactor/releases/download/v2.7.1-patch.8/plumesign-linux-${PKG_ARCH}.tar.gz \
+    && wget https://github.com/bitxeno/PlumeImpactor/releases/download/v2.7.1-patch.11/plumesign-linux-${PKG_ARCH}.tar.gz \
     && tar zxf plumesign-linux-${PKG_ARCH}.tar.gz \
     && mv plumesign-linux-${PKG_ARCH} /usr/bin/plumesign \
     && chmod +x /usr/bin/plumesign
@@ -85,9 +85,11 @@ RUN printf '#!/bin/sh \n\n\
 
 ulimit -c 0 \n\
 mkdir -p /data/lockdown \n\
+mkdir -p /data/tmp \n\
 mkdir -p /data/PlumeImpactor \n\
 mkdir -p /data/PlumeImpactor/pairing_files \n\
 mkdir -p $HOME/.config \n\
+export TMPDIR=/data/tmp \n\
 [ ! -e "$HOME/.config/PlumeImpactor" ] && ln -s /data/PlumeImpactor $HOME/.config/PlumeImpactor \n\
 
 if [ -d "/keep/lib" ]; then  \n\

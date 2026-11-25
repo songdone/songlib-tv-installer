@@ -14,6 +14,7 @@ import (
 // callers only learn whether a token is configured.
 type safeUpdateSettings struct {
 	CheckInterval  int  `json:"check_interval"`
+	ReleaseNotify  bool `json:"release_notify"`
 	GitHubTokenSet bool `json:"github_token_set"`
 }
 
@@ -25,6 +26,7 @@ type safeSettingsResponse struct {
 	Update       safeUpdateSettings `json:"update"`
 	Notification any                `json:"notification"`
 	Network      any                `json:"network"`
+	Advanced     any                `json:"advanced"`
 }
 
 func safeSettings() safeSettingsResponse {
@@ -32,6 +34,7 @@ func safeSettings() safeSettingsResponse {
 	update := safeUpdateSettings{}
 	if s != nil {
 		update.CheckInterval = s.Update.CheckInterval
+		update.ReleaseNotify = s.Update.ReleaseNotify
 		update.GitHubTokenSet = app.GitHubTokenConfigured()
 		return safeSettingsResponse{
 			App:          s.App,
@@ -39,6 +42,7 @@ func safeSettings() safeSettingsResponse {
 			Update:       update,
 			Notification: s.Notification,
 			Network:      s.Network,
+			Advanced:     s.Advanced,
 		}
 	}
 	return safeSettingsResponse{Update: update}
@@ -49,6 +53,7 @@ func safeSettings() safeSettingsResponse {
 // removes the stored token; an absent one keeps it.
 type updateSettingsRequest struct {
 	CheckInterval    *int    `json:"check_interval"`
+	ReleaseNotify    *bool   `json:"release_notify"`
 	GitHubToken      *string `json:"github_token"`
 	ClearGitHubToken bool    `json:"clear_github_token"`
 	Update           *struct {
@@ -75,6 +80,10 @@ func saveUpdateSettings(c *fiber.Ctx) error {
 		return c.Status(http.StatusOK).JSON(apiError("invalid check interval"))
 	}
 	app.Settings.Update.CheckInterval = interval
+	// An absent release_notify keeps the current choice.
+	if req.ReleaseNotify != nil {
+		app.Settings.Update.ReleaseNotify = *req.ReleaseNotify
+	}
 
 	tokenProvided := req.ClearGitHubToken
 	tokenValue := ""

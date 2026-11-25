@@ -15,7 +15,9 @@
         "settings_saved": "Inställningarna har sparats. Starta om appen för att tillämpa dem.",
         "settings_invalid_port": "Ange en giltig TCP-port mellan 1 och 65535.",
         "settings_save_error": "Det gick inte att spara inställningarna.",
-        "quit": "Avsluta"
+        "quit": "Avsluta",
+        "update_available": "Uppdatering tillgänglig: {{.version}}",
+        "update_notification": "Du kör {{.current}}. Klicka för att visa versionen."
     },
     "common": {
         "loading": "Laddar…",
@@ -32,7 +34,9 @@
         "update_available": "{{.name}}: {{.version}} finns tillgänglig\n",
         "update_attention": "{{.name}}: uppdateringen kräver åtgärd: {{.error}}\n",
         "update_installed_title": "SongLib Installer: appar uppdaterade",
-        "update_installed": "{{.name}} har uppdaterats till {{.version}}\n"
+        "update_installed": "{{.name}} har uppdaterats till {{.version}}\n",
+        "release_content": "Du kör {{.current}}.\n{{.url}}",
+        "release_title": "SongLib Installer {{.version}} finns tillgänglig"
     },
     "nav": {
         "settings": "Inställningar",
@@ -55,7 +59,9 @@
         "home_short": "Översikt",
         "devices_short": "TVs",
         "apps_short": "Appar",
-        "explore_short": "Spelare"
+        "explore_short": "Spelare",
+        "collapse_sidebar": "Fäll ihop sidofältet",
+        "expand_sidebar": "Expandera sidofältet"
     },
     "about": {
         "version": "Version",
@@ -99,7 +105,8 @@
                 "ip_badge": "IP",
                 "forget": "Ta bort",
                 "forget_confirm": "Bekräfta",
-                "forget_done": "Enheten har tagits bort"
+                "forget_done": "Enheten har tagits bort",
+                "more": "Mer"
             }
         },
         "table": {
@@ -140,7 +147,7 @@
             "tips": {
                 "view_log": "Klicka för att visa installationsloggen",
                 "account_invalid": "Det finns ett problem med kontot. Kontrollera loggarna och åtgärda felet.",
-                "certificate_limit": "Apple-ID:t har nått gränsen för antalet certifikat. Ingen app installerades och inget certifikat återkallades. Öppna appen på installationssidan och välj vilket certifikat som får återkallas.",
+                "certificate_limit": "Apple-ID:t har nått gränsen för antalet certifikat. Ingen app installerades och inget certifikat återkallades. Välj vilket certifikat som får återkallas för att försöka igen.",
                 "footer": "Som standard förnyas appars signering automatiskt mellan kl. 03 och 06 när mindre än ett dygn återstår till utgångsdatumet. Appar som är kopplade till en GitHub- eller AltStore-källa kontrolleras i bakgrunden efter nya versioner; automatiska versionsuppdateringar installeras under samma tidsperiod.",
                 "footer_external": "Appar som signerats med ett externt certifikat uppdateras aldrig automatiskt: de slutar fungera när certifikatet eller provisioneringsprofilen går ut. En ominstallation med samma certifikat och profil förlänger inte det datumet: byt profil (eller importera en ny signeringsidentitet om certifikatet går ut först) och installera sedan om appen.",
                 "reinstall_external": "En ominstallation med samma certifikat och provisioneringsprofil förlänger inte giltighetstiden. Byt profil (eller använd en ny signeringsidentitet) och installera sedan om appen för att förlänga den.",
@@ -192,7 +199,12 @@
         "devices_title": "Enheter",
         "devices_open": "Alla enheter",
         "apps_title": "Senaste appar",
-        "apps_open": "Alla appar & förnyelse"
+        "apps_open": "Alla appar & förnyelse",
+        "release_banner": {
+            "dismiss": "Stäng",
+            "message": "SongLib Installer {{version}} finns tillgänglig. Du kör {{current}}.",
+            "view": "Visa version"
+        }
     },
     "pair": {
         "toast": {
@@ -369,6 +381,13 @@
             "allow_missing_entitlements": {
                 "label": "Tillåt saknade entitlements",
                 "tips": "Signera även om provisioneringsprofilen inte beviljar vissa entitlements som appen begär. Funktioner som är beroende av dem kanske inte fungerar."
+            },
+            "custom_icon": {
+                "choose": "Välj ikon",
+                "empty": "Ingen ikon",
+                "preview_alt": "Anpassad appikon",
+                "remove": "Ta bort ikon",
+                "tips": "Byt ut appens ikon på hemskärmen. Klicka för att välja en bild (PNG, JPEG eller GIF); den sparas med appen och används igen vid varje förnyelse och uppdatering."
             }
         },
         "login_modal": {
@@ -493,6 +512,10 @@
             "task_disabled": "Automatisk appförnyelse är avstängd: nya versioner upptäcks fortfarande, men versionsuppdateringar installeras inte automatiskt.",
             "button": {
                 "submit": "Spara"
+            },
+            "release_notify": {
+                "label": "Nya versioner av SongLib Installer",
+                "tips": "Meddela när en ny version av SongLib Installer släpps. Använder aviseringskanalen ovan, och i skrivbordsappen en systemavisering."
             }
         },
         "sources": {
@@ -560,6 +583,10 @@
                 "remove_failed": "Borttagningen misslyckades",
                 "server_success": "Anisette-servern har sparats",
                 "server_failed": "Det gick inte att spara Anisette-servern"
+            },
+            "debug_mode": {
+                "label": "Felsökningsläge",
+                "tips": "När det är aktiverat körs installationskommandon med miljövariabeln RUST_LOG=debug och loggnivån sätts till debug."
             }
         },
         "tools": {
@@ -943,7 +970,8 @@
             "signed_entitlements_invalid": "Ett signerat paket har oväntade entitlements.",
             "transport_failed": "Det gick inte att nå enheten, eller så avvisade den installationen.",
             "pairing_record_invalid": "Enhetens parkopplingspost saknas eller kan inte läsas. Parkoppla enheten igen.",
-            "certificate_invalid": "Det sparade certifikatet kan inte läsas. Importera identiteten igen."
+            "certificate_invalid": "Det sparade certifikatet kan inte läsas. Importera identiteten igen.",
+            "custom_icon_invalid": "Den anpassade appikonen är inte en läsbar bild. Ladda upp en PNG-, JPEG- eller GIF-bild igen."
         }
     },
     "quickstart": {

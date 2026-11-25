@@ -11,7 +11,9 @@ import (
 	"testing"
 
 	"github.com/bitxeno/atvloadly/internal/app"
+	"github.com/bitxeno/atvloadly/internal/log"
 	"github.com/bitxeno/atvloadly/internal/secret"
+	"github.com/rs/zerolog"
 )
 
 func setupGithubTokenSettings(t *testing.T, token string) {
@@ -335,5 +337,78 @@ func TestRemoveAnisetteRouteRunsEngineCommandForAccount(t *testing.T) {
 	want := "anisette remove -u orphan@example.com"
 	if got := strings.Join(strings.Fields(string(data)), " "); got != want {
 		t.Errorf("arguments = %q, want %q", got, want)
+	}
+}
+
+func TestSaveUpdateSettingsReleaseNotify(t *testing.T) {
+	setupGithubTokenSettings(t, "ghp_1234567890abcdef1234567890ab")
+	app.Settings.Update.ReleaseNotify = true
+	server, _ := newTestServer(t)
+
+	post := func(body string) {
+		req := httptest.NewRequest(http.MethodPost, "/api/settings/update", strings.NewReader(body))
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := server.Test(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_ = decodeAPI(t, resp)
+	}
+
+	post(`{"check_interval":6,"release_notify":false}`)
+	if app.Settings.Update.ReleaseNotify {
+		t.Fatal("release_notify=false did not disable release notifications")
+	}
+	post(`{"check_interval":6}`)
+	if app.Settings.Update.ReleaseNotify {
+		t.Fatal("an absent release_notify changed the setting")
+	}
+}
+
+// The debug mode toggle is persisted through the flat advanced section and
+// takes effect on the running process without a restart.
+func TestSaveAdvancedSettingsDebugMode(t *testing.T) {
+	previous := app.Settings
+	app.Settings = &app.SettingsConfiguration{}
+	t.Cleanup(func() { app.Settings = previous })
+	log.SetInfoLevel()
+	t.Cleanup(log.SetInfoLevel)
+
+	server, _ := newTestServer(t)
+
+	post := func(body string) {
+		req := httptest.NewRequest(http.MethodPost, "/api/settings/advanced", strings.NewReader(body))
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := server.Test(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		_ = decodeAPI(t, resp)
+	}
+
+	post(`{"advanced":{"debug_mode":true}}`)
+	if !app.Settings.Advanced.DebugMode {
+		t.Fatal("debug_mode=true was not persisted")
+	}
+	if zerolog.GlobalLevel() != zerolog.DebugLevel {
+		t.Fatalf("log level = %v, want debug", zerolog.GlobalLevel())
+	}
+
+	getResp, err := server.Test(httptest.NewRequest(http.MethodGet, "/api/settings", nil))
+	if err != nil {
+		t.Fatal(err)
+	}
+	data := decodeAPI(t, getResp)
+	advanced, _ := data["advanced"].(map[string]any)
+	if advanced == nil || advanced["debug_mode"] != true {
+		t.Fatalf("GET /api/settings advanced = %v, want debug_mode true", data["advanced"])
+	}
+
+	post(`{"advanced":{"debug_mode":false}}`)
+	if app.Settings.Advanced.DebugMode {
+		t.Fatal("debug_mode=false was not persisted")
+	}
+	if zerolog.GlobalLevel() != zerolog.InfoLevel {
+		t.Fatalf("log level = %v, want info", zerolog.GlobalLevel())
 	}
 }

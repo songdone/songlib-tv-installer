@@ -291,6 +291,26 @@
         <div class="form-item">
           <label class="form-item-label">
             <span class="label-text">{{
+              $t("settings.update.release_notify.label")
+            }}</span>
+          </label>
+          <div class="flex flex-col grow">
+            <input
+              type="checkbox"
+              class="toggle toggle-success"
+              v-model="settings.update.release_notify"
+            />
+            <label class="label">
+              <span class="label-text-alt whitespace-normal">{{
+                $t("settings.update.release_notify.tips")
+              }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label class="form-item-label">
+            <span class="label-text">{{
               $t("settings.update.github_token.label")
             }}</span>
           </label>
@@ -582,6 +602,23 @@
             </div>
           </div>
         </div>
+        <div class="form-item">
+          <label class="form-item-label">
+            <span class="label-text">{{ $t('settings.advanced.debug_mode.label') }}</span>
+          </label>
+          <div class="form-item-content">
+            <input
+              type="checkbox"
+              class="toggle toggle-success"
+              v-model="settings.advanced.debug_mode"
+              :disabled="advanced.debugLoading"
+              @change="saveDebugMode"
+            />
+            <label class="label">
+              <span class="label-text-alt whitespace-normal">{{ $t('settings.advanced.debug_mode.tips') }}</span>
+            </label>
+          </div>
+        </div>
       </form>
     </section>
     <!-- Advanced tools moved out of the main navigation per the IA spec:
@@ -626,6 +663,7 @@ export default {
         task: {},
         update: {
           check_interval: 6,
+          release_notify: true,
         },
         notification: {
           type: "bark",
@@ -639,6 +677,9 @@ export default {
           http_proxy: "",
           https_proxy: "",
         },
+        advanced: {
+          debug_mode: false,
+        },
       },
       advanced: {
         adiLoading: false,
@@ -647,6 +688,7 @@ export default {
         anisetteServer: "",
         savedAnisetteServer: "",
         serverLoading: false,
+        debugLoading: false,
       },
       anisetteAccounts: [],
       serverComboOpen: false,
@@ -725,6 +767,7 @@ export default {
     saveUpdate() {
       const payload = {
         check_interval: this.settings.update.check_interval,
+        release_notify: this.settings.update.release_notify,
       };
       // Only a non-empty input replaces the token; an empty one keeps it.
       // Removal is done through the delete button instead.
@@ -820,6 +863,26 @@ export default {
           toast.success(this.$t("settings.toast.save_success"));
         }
       });
+    },
+
+    saveDebugMode() {
+      this.advanced.debugLoading = true;
+      const enabled = this.settings.advanced.debug_mode;
+      api.saveAdvancedSettings({ advanced: { debug_mode: enabled } })
+        .then((res) => {
+          if (res.data) {
+            toast.success(this.$t("settings.toast.save_success"));
+          }
+        })
+        .catch((err) => {
+          // request.js already shows the error; revert the toggle so the UI
+          // reflects the setting that is actually stored.
+          this.settings.advanced.debug_mode = !enabled;
+          console.error(err);
+        })
+        .finally(() => {
+          this.advanced.debugLoading = false;
+        });
     },
 
     confirmUpdateCoreADI(close) {

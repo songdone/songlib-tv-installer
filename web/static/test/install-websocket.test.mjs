@@ -8,6 +8,11 @@ import {
   needsCertificateReset,
   pickRevocableCertificates,
 } from "../src/utils/install-error-feedback.mjs";
+import {
+  createUploadGuard,
+  defaultUploadStallMs,
+  uploadStallMessage,
+} from "../src/utils/upload-guard.mjs";
 
 const source = readFileSync(new URL("../src/page/install/index.vue", import.meta.url), "utf8");
 const script = source.match(/<script>([\s\S]*?)<\/script>/)[1]
@@ -41,8 +46,12 @@ function page(upload = async () => [{ name: "app.ipa", path: "/tmp/app.ipa" }], 
     }),
   };
   const context = vm.createContext({
-    SigningIssueList: {}, SigningPlan: {}, SourcePicker: {},
+    CertificateRevokeDialog: {}, SigningIssueList: {}, SigningPlan: {}, SourcePicker: {},
     WebSocket, createSigningReportStream, FormData, JSZip,
+    createUploadGuard, uploadStallMessage, defaultUploadStallMs,
+    // The upload guard relies on these browser globals, which a bare vm
+    // context does not provide.
+    AbortController, setTimeout, clearTimeout,
     parseBundleIdFromPlist: () => ipaBundleId,
     formatInstallFailureMessage: installFailureMessage,
     needsCertificateReset, pickRevocableCertificates,
@@ -57,8 +66,60 @@ function page(upload = async () => [{ name: "app.ipa", path: "/tmp/app.ipa" }], 
   for (const [name, method] of Object.entries(component.methods)) {
     state[name] = method.bind(state);
   }
+  // The certificate dialog is a component with its own state and methods in
+  // the browser; repeat its contract here so page logic can be exercised.
+  const revokeDialog = {
+    visible: false,
+    loading: false,
+    submitting: false,
+    certificates: [],
+    selectedSerial: "",
+    account: "",
+    requestID: 0,
+    reset() {
+      this.requestID++;
+      this.visible = false;
+      this.loading = false;
+      this.submitting = false;
+      this.certificates = [];
+      this.selectedSerial = "";
+      this.account = "";
+    },
+    show(account) {
+      this.reset();
+      this.visible = true;
+      this.loading = true;
+      this.account = account || "";
+      const requestID = this.requestID;
+      return Promise.resolve(certificates({ email: this.account }))
+        .then((res) => {
+          if (requestID !== this.requestID) return;
+          this.certificates = pickRevocableCertificates(res.data);
+        })
+        .finally(() => {
+          if (requestID !== this.requestID) return;
+          this.loading = false;
+        });
+    },
+    confirm() {
+      if (this.loading || this.submitting || !this.selectedSerial) return;
+      const serial = this.selectedSerial;
+      this.submitting = true;
+      this.visible = false;
+      this.reset();
+      state.confirmCertRevoke(serial);
+    },
+    close() {
+      this.reset();
+      state.closeCertRevoke();
+    },
+  };
+  state.certRevoke = revokeDialog;
+  state.$refs = { certRevokeDialog: revokeDialog };
   Object.defineProperty(state, "canInstall", { configurable: true, get: () => component.computed.canInstall.call(state) });
   Object.defineProperty(state, "customIdentifierPlaceholder", { configurable: true, get: () => component.computed.customIdentifierPlaceholder.call(state) });
+  Object.defineProperty(state, "customIconPreview", { configurable: true, get: () => component.computed.customIconPreview.call(state) });
+  Object.defineProperty(state, "supportsCustomIcon", { configurable: true, get: () => component.computed.supportsCustomIcon.call(state) });
   Object.assign(state, {
     isExternal: false, installMode: "link", ipaUrl: "https://example.com/app.ipa",
     device: { connection: "RPPairing" }, reportStream: createSigningReportStream(),
@@ -298,7 +359,7 @@ test("offers the certificate dialog when the engine stops at the limit", async (
 test("confirming resends the exact install with the authorized serial", async () => {
   const { state, sockets } = await failedInstall(true);
   state.certRevoke.selectedSerial = "BBBB2222";
-  state.confirmCertRevoke();
+  state.certRevoke.confirm();
 
   assert.equal(state.certRevoke.visible, false);
   assert.equal(state.loading, true);
@@ -310,7 +371,7 @@ test("confirming resends the exact install with the authorized serial", async ()
   assert.equal(install.ipa_path, "https://example.com/app.ipa");
   assert.equal(install.account, "");
   // The authorization is spent: a later failure cannot reuse it silently.
-  assert.equal(state.certRevoke.payload, null);
+  assert.equal(state.certRevokePayload, null);
 
   sockets[0].onmessage({ currentTarget: sockets[0], data: "Installation Succeeded" });
   assert.equal(state.loading, false);
@@ -319,9 +380,9 @@ test("confirming resends the exact install with the authorized serial", async ()
 
 test("cancelling the certificate dialog reports the plain failure", async () => {
   const { state, sockets, errors } = await failedInstall(true);
-  state.closeCertRevoke();
+  state.certRevoke.close();
   assert.equal(state.certRevoke.visible, false);
-  assert.equal(state.certRevoke.payload, null);
+  assert.equal(state.certRevokePayload, null);
   // A cancel never sends another install; the engine already revoked nothing.
   assert.equal(sockets[0].sent.length, 1);
 
@@ -334,7 +395,7 @@ test("cancelling the certificate dialog reports the plain failure", async () => 
 test("an ordinary failure never opens the certificate dialog", async () => {
   const { state, errors } = await failedInstall(false);
   assert.equal(state.certRevoke.visible, false);
-  assert.equal(state.certRevoke.payload, null);
+  assert.equal(state.certRevokePayload, null);
   assert.equal(errors.length, 1);
 });
 
@@ -347,7 +408,7 @@ test("an external install has no certificate offer", async () => {
   const pending = state.onSubmit();
   sockets[0].open();
   await pending;
-  assert.equal(state.certRevoke.payload, null);
+  assert.equal(state.certRevokePayload, null);
 
   sockets[0].onmessage({ currentTarget: sockets[0], data: `${resetRequiredLog}\nInstallation Failed!` });
   assert.equal(state.certRevoke.visible, false);
@@ -403,4 +464,69 @@ test("previews the bundle identifier of a selected source build", async () => {
     build: { id: "1", name: "App", bundle_id: "com.example.source", version: "1.0" },
   });
   assert.equal(state.customIdentifierPlaceholder, "com.example.source");
+});
+
+// The custom icon path chosen on the install page is sent with the install
+// request, so the engine receives --custom-icon. Only iOS devices take it.
+test("submits the chosen custom icon path", async () => {
+  const { state, sockets } = page();
+  state.device = { connection: "RPPairing", udid: "DEVICE", device_class: "iPhone" };
+  state.form.custom_icon_path = "/tmp/custom_icon_1.png";
+  const pending = state.onSubmit();
+  sockets[0].open();
+  await pending;
+
+  const sent = JSON.parse(sockets[0].sent[0].d);
+  assert.equal(sent.custom_icon_path, "/tmp/custom_icon_1.png");
+});
+
+// Apple TV does not support a custom app icon: nothing is submitted for it.
+test("does not submit a custom icon for an Apple TV install", async () => {
+  const { state, sockets } = page();
+  state.device = { connection: "RPPairing", udid: "DEVICE", device_class: "AppleTV" };
+  state.form.custom_icon_path = "/tmp/custom_icon_1.png";
+  const pending = state.onSubmit();
+  sockets[0].open();
+  await pending;
+
+  const sent = JSON.parse(sockets[0].sent[0].d);
+  assert.equal(sent.custom_icon_path, "");
+});
+
+// The custom icon of an earlier installation of the chosen app is prefilled,
+// so it persists on the next install (including a source update) without the
+// user having to pick it again.
+test("prefills the custom icon of the recommended app", () => {
+  const { state } = page();
+  state.device = { connection: "RPPairing", udid: "DEVICE", device_class: "iPhone" };
+  state.accounts = [{ email: "user@example.com", status: "valid" }];
+  state.prefilled = { custom_name: "", custom_identifier: "", custom_icon_path: "" };
+  state.recommendAccount({
+    signing_mode: "apple_id",
+    account: "user@example.com",
+    custom_name: "My App",
+    custom_identifier: "app.custom",
+    custom_icon_path: "/data/ipa/1/custom-icon.png",
+    ID: 1,
+  });
+  assert.equal(state.form.custom_icon_path, "/data/ipa/1/custom-icon.png");
+  assert.equal(state.customIconStoredId, 1);
+  assert.equal(state.customIconPreview, "/apps/1/custom-icon");
+});
+
+// An Apple TV install never prefills a custom icon: the picker is hidden there.
+test("does not prefill a custom icon for Apple TV", () => {
+  const { state } = page();
+  state.device = { connection: "RPPairing", udid: "DEVICE", device_class: "AppleTV" };
+  state.accounts = [{ email: "user@example.com", status: "valid" }];
+  state.prefilled = { custom_name: "", custom_identifier: "", custom_icon_path: "" };
+  state.recommendAccount({
+    signing_mode: "apple_id",
+    account: "user@example.com",
+    custom_name: "My App",
+    custom_identifier: "app.custom",
+    custom_icon_path: "/data/ipa/1/custom-icon.png",
+    ID: 1,
+  });
+  assert.equal(state.form.custom_icon_path, "");
 });

@@ -15,7 +15,9 @@
         "settings_saved": "设置已保存，重启程序后生效。",
         "settings_invalid_port": "请输入 1 到 65535 之间的有效 TCP 端口。",
         "settings_save_error": "保存设置失败。",
-        "quit": "退出程序"
+        "quit": "退出程序",
+        "update_available": "音屿安装助手 {{.version}} 已发布",
+        "update_notification": "音屿安装助手有新版本可用（当前 {{.current}}）"
     },
     "common": {
         "loading": "加载中...",
@@ -32,7 +34,9 @@
         "update_available": "{{.name}}：新版本 {{.version}} 可用\n",
         "update_attention": "{{.name}}：更新需要处理：{{.error}}\n",
         "update_installed_title": "音屿安装助手：应用已更新",
-        "update_installed": "{{.name}} 已更新到 {{.version}}\n"
+        "update_installed": "{{.name}} 已更新到 {{.version}}\n",
+        "release_content": "当前版本：{{.current}}\n{{.url}}",
+        "release_title": "音屿安装助手 {{.version}} 已发布"
     },
     "nav": {
         "settings": "设置",
@@ -55,7 +59,9 @@
         "home_short": "总览",
         "devices_short": "设备",
         "apps_short": "应用",
-        "explore_short": "音屿"
+        "explore_short": "音屿",
+        "collapse_sidebar": "收起侧栏",
+        "expand_sidebar": "展开侧栏"
     },
     "about": {
         "version": "版本",
@@ -99,7 +105,8 @@
                 "ip_badge": "IP",
                 "forget": "删除",
                 "forget_confirm": "确认",
-                "forget_done": "已忘记设备"
+                "forget_done": "已忘记设备",
+                "more": "更多"
             }
         },
         "table": {
@@ -140,7 +147,7 @@
             "tips": {
                 "view_log": "点击查看安装日志",
                 "account_invalid": "帐号存在问题，请查看日志并修正",
-                "certificate_limit": "该 Apple ID 没有空闲的证书名额，本次未安装任何内容，也未注销任何证书。请前往安装页为该应用手动选择一张可注销的证书。",
+                "certificate_limit": "该 Apple ID 没有空闲的证书名额，本次未安装任何内容，也未注销任何证书。请选择一张可注销的证书后重试。",
                 "footer": "默认当app过期时间小于1天时，会在凌晨3～6点钟自动进行刷新操作。关联了 GitHub 或 AltStore 来源的应用会在后台检查新版本，自动更新会在同一时间段内安装。",
                 "footer_external": "使用外部证书签名的应用不会自动刷新：证书或描述文件过期后应用将无法使用。使用相同的证书和描述文件重新安装不会延长该日期：请先替换描述文件（如果证书先过期，则导入新的签名身份），再重新安装应用。",
                 "reinstall_external": "使用相同的证书和描述文件重新安装不会延长有效期。替换描述文件（或使用新的签名身份）后重新安装应用即可延长。",
@@ -192,7 +199,12 @@
         "devices_title": "设备",
         "devices_open": "查看所有设备",
         "apps_title": "最近的应用",
-        "apps_open": "查看全部应用与续签"
+        "apps_open": "查看全部应用与续签",
+        "release_banner": {
+            "dismiss": "忽略",
+            "message": "音屿安装助手 {{version}} 已发布，当前版本为 {{current}}。",
+            "view": "查看发布"
+        }
     },
     "pair": {
         "toast": {
@@ -369,6 +381,13 @@
             "allow_missing_entitlements": {
                 "label": "允许缺少权限",
                 "tips": "即使描述文件未授予应用请求的部分权限（entitlements）也进行签名，依赖这些权限的功能可能无法使用。"
+            },
+            "custom_icon": {
+                "choose": "选择图标",
+                "empty": "无图标",
+                "preview_alt": "自定义应用图标",
+                "remove": "删除图标",
+                "tips": "替换主屏幕上显示的应用图标。点击选择图片（PNG、JPEG 或 GIF），图片会与应用记录一起保存，刷新和更新时继续使用。"
             }
         },
         "login_modal": {
@@ -493,6 +512,10 @@
             "task_disabled": "自动刷新 App 已关闭：仍会检测新版本，但不会自动安装更新。",
             "button": {
                 "submit": "保 存"
+            },
+            "release_notify": {
+                "label": "atvloadly 新版本",
+                "tips": "当音屿安装助手发布新的核心版本（Docker 镜像 / FPK）时发送通知。"
             }
         },
         "sources": {
@@ -560,6 +583,10 @@
                 "remove_failed": "删除失败",
                 "server_success": "Anisette 服务器已保存",
                 "server_failed": "保存 Anisette 服务器失败"
+            },
+            "debug_mode": {
+                "label": "调试模式",
+                "tips": "开启后，执行安装命令时会附加 RUST_LOG=debug 环境变量，日志级别也会调整为 debug。"
             }
         },
         "tools": {
@@ -943,7 +970,8 @@
             "signed_entitlements_invalid": "某个已签名组件的权限（entitlements）不符合预期。",
             "transport_failed": "无法连接设备，或设备拒绝了安装。",
             "pairing_record_invalid": "设备的配对记录缺失或无法读取，请重新配对设备。",
-            "certificate_invalid": "无法读取已保存的证书，请重新导入该身份。"
+            "certificate_invalid": "无法读取已保存的证书，请重新导入该身份。",
+            "custom_icon_invalid": "自定义应用图标不是有效的图片，请重新上传 PNG、JPEG 或 GIF 图片。"
         }
     },
     "quickstart": {

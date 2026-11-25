@@ -33,7 +33,7 @@
 
 <div align="center">
 
-English | [Svenska](../readme/README_sv.md) | [中文](../readme/README_cn.md) | [Српски (ћирилица)](../readme/README_sr.md) | [Srpski (latinica)](../readme/README_sr_Latn.md)
+English | [Svenska](../readme/README_sv.md) | [中文](../readme/README_cn.md) | [Српски (ћирилица)](../readme/README_sr.md) | [Srpski (latinica)](../readme/README_sr_Latn.md) | [Русский](../readme/README_ru.md) | [Tiếng Việt](../readme/README_vi.md)
 
 </div>
 

@@ -94,13 +94,13 @@
 
       <main class="sl-main">
         <div class="sl-wrap">
+          <UpdateBanner v-if="$route.name === 'home'" />
           <router-view />
         </div>
       </main>
     </div>
 
-    <!-- About modal: product identity, maintainer, open-source credits.
-         Upstream sponsorship lives here, clearly attributed to ATVLoadly. -->
+    <!-- About modal: product identity, maintainer, open-source credits. -->
     <div v-if="showAboutModal" class="sl-overlay" @click.self="showAboutModal = false">
       <div class="sl-modal" role="dialog" :aria-label="$t('about.product')">
         <header>
@@ -159,7 +159,7 @@ export default {
   created() {
     const saved = window.localStorage.getItem("atvloadly-theme");
     this.themePreference = ["system", "light", "dark"].includes(saved) ? saved : "light";
-    api.syncLang({lang: this.$i18next.language})
+    api.syncLang({ lang: this.$i18next.language });
     api.getVersion().then((res) => {
       this.appVersion = res.data?.version || "unknown";
       this.buildDate = this.formatBuildDate(res.data?.build_date);
@@ -216,9 +216,11 @@ export default {
         this.openMenu = null;
       }
       // Any click outside the drawer closes it.
-      if (this.sidebarOpen &&
-          !event.target?.closest?.(".sl-sidebar") &&
-          !event.target?.closest?.(".sl-topbar")) {
+      if (
+        this.sidebarOpen &&
+        !event.target?.closest?.(".sl-sidebar") &&
+        !event.target?.closest?.(".sl-topbar")
+      ) {
         this.sidebarOpen = false;
       }
     },
@@ -229,7 +231,8 @@ export default {
       }
     },
     applyTheme() {
-      const dark = this.themePreference === "dark" ||
+      const dark =
+        this.themePreference === "dark" ||
         (this.themePreference === "system" && this.colorSchemeQuery?.matches);
       document.documentElement.setAttribute("data-theme", dark ? "dark" : "winter");
     },
@@ -268,7 +271,7 @@ export default {
     },
     changeLanguage(lang) {
       this.$i18next.changeLanguage(lang);
-      api.syncLang({lang: lang});
+      api.syncLang({ lang: lang });
       this.openMenu = null;
     },
   },
@@ -288,6 +291,7 @@ import CheckIcon from "@/assets/icons/checkmark.svg";
 import XIcon from "@/assets/icons/dismiss.svg";
 import GoldIcon from "@/assets/icons/gold.svg";
 import AppleTVIcon from "@/assets/icons/appletv.svg";
+import UpdateBanner from "@/components/UpdateBanner.vue";
 
 const icons = {
   home: HomeIcon,

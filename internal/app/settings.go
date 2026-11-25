@@ -41,6 +41,11 @@ type SettingsConfiguration struct {
 		// GetGitHubToken and write it with Set/DeleteGitHubToken. The
 		// settings API only reports whether a token is configured.
 		GitHubToken string `koanf:"github_token" json:"github_token"`
+		// NotifiedRelease is the atvloadly release tag already notified, so
+		// each new release is notified once across restarts.
+		NotifiedRelease string `koanf:"notified_release" json:"notified_release"`
+		// ReleaseNotify enables the notification of new atvloadly releases.
+		ReleaseNotify bool `koanf:"release_notify" json:"release_notify" default:"true"`
 	} `koanf:"update" json:"update"`
 	Notification struct {
 		Enabled  bool   `koanf:"enabled" json:"enabled"`
@@ -80,6 +85,12 @@ type SettingsConfiguration struct {
 		HTTPProxy    string `koanf:"http_proxy" json:"http_proxy"`
 		HTTPSProxy   string `koanf:"https_proxy" json:"https_proxy"`
 	} `koanf:"network" json:"network"`
+	Advanced struct {
+		// DebugMode turns on debug logging for both atvloadly and the signing
+		// engine: install commands run with RUST_LOG=debug and the application
+		// log level drops to debug.
+		DebugMode bool `koanf:"debug_mode" json:"debug_mode"`
+	} `koanf:"advanced" json:"advanced"`
 }
 
 func SaveSettings() {
@@ -128,6 +139,7 @@ func printRedactedSettings() {
 		"task": Settings.Task,
 		"update": map[string]any{
 			"check_interval": Settings.Update.CheckInterval,
+			"release_notify": Settings.Update.ReleaseNotify,
 			"github_token":   redactSecret(Settings.Update.GitHubToken),
 		},
 		"notification": map[string]any{
@@ -143,6 +155,9 @@ func printRedactedSettings() {
 			"proxy_enabled": Settings.Network.ProxyEnabled,
 			"http_proxy":    redactProxyURL(Settings.Network.HTTPProxy),
 			"https_proxy":   redactProxyURL(Settings.Network.HTTPSProxy),
+		},
+		"advanced": map[string]any{
+			"debug_mode": Settings.Advanced.DebugMode,
 		},
 	}
 	log.Infof("Load settings (redacted): %s", utils.ToJSON(redacted))

@@ -38,7 +38,7 @@
 
         <div class="divider divider-horizontal"></div>
 
-        <div class="p-6 flex flex-col gap-y-4 w-full max-w-lg atv-install-form-wrap">
+        <div class="p-6 flex flex-col gap-y-4 w-full max-w-lg mx-auto lg:mx-0 atv-install-form-wrap">
           <form id="form" class="flex flex-col gap-y-4" @submit.prevent>
             <div class="join w-full atv-install-mode">
               <button
@@ -200,19 +200,70 @@
             </div>
 
             <div class="form-control">
-              <label class="label">
-                <span class="label-text">{{ $t("install.form.custom_name.label") }}</span>
-                <div class="tooltip" :data-tip="$t('install.form.custom_name.tips')">
-                  <div class="w-4 h-4 text-secondary-content"><HelpIcon /></div>
+              <div class="flex items-end gap-x-4">
+                <!-- Custom app icon: a clickable swatch on the right, with a
+                     remove badge on its top-right corner once an image is
+                     chosen. The file input stays hidden; the swatch opens it.
+                     Only iOS devices (iPhone/iPad) support a custom icon. -->
+                <div v-if="supportsCustomIcon" class="order-2 shrink-0">
+                  <div class="relative">
+                    <button
+                      type="button"
+                      class="block w-16 h-16 rounded-2xl border border-base-300 overflow-hidden bg-base-200 flex items-center justify-center transition-colors hover:border-primary"
+                      :disabled="loading"
+                      :title="$t('install.form.custom_icon.tips')"
+                      :aria-label="$t('install.form.custom_icon.choose')"
+                      @click="openCustomIconPicker"
+                    >
+                      <img
+                        v-if="customIconPreview"
+                        :src="customIconPreview"
+                        :alt="$t('install.form.custom_icon.preview_alt')"
+                        class="w-full h-full object-cover"
+                      />
+                      <span v-else class="px-1 text-xs leading-tight text-center text-base-content/50">{{ $t("install.form.custom_icon.empty") }}</span>
+                    </button>
+                    <button
+                      v-if="hasCustomIcon"
+                      type="button"
+                      class="absolute -top-2 -right-2 flex items-center justify-center w-6 h-6 rounded-full bg-base-300 text-base-content border border-base-100 shadow hover:bg-error hover:text-error-content transition-colors"
+                      :disabled="loading"
+                      :title="$t('install.form.custom_icon.remove')"
+                      :aria-label="$t('install.form.custom_icon.remove')"
+                      @click.stop="clearCustomIcon"
+                    >
+                      <span class="w-3.5 h-3.5"><DismissIcon /></span>
+                    </button>
+                  </div>
+                  <input
+                    id="install-custom-icon"
+                    ref="customIconInput"
+                    type="file"
+                    class="hidden"
+                    accept="image/png,image/jpeg,image/gif"
+                    :disabled="loading"
+                    @change="onCustomIconChange"
+                  />
                 </div>
-              </label>
-              <input
-                type="text"
-                class="input input-bordered w-full"
-                maxlength="64"
-                :placeholder="$t('install.form.custom_name.placeholder')"
-                v-model="form.custom_name"
-              />
+
+                <div class="order-1 flex-1 min-w-0">
+                  <label class="label pt-0" for="install-custom-name">
+                    <span class="label-text">{{ $t("install.form.custom_name.label") }}</span>
+                    <div class="tooltip" :data-tip="$t('install.form.custom_name.tips')">
+                      <div class="w-4 h-4 text-secondary-content"><HelpIcon /></div>
+                    </div>
+                  </label>
+                  <input
+                    id="install-custom-name"
+                    type="text"
+                    class="input input-bordered w-full"
+                    maxlength="64"
+                    :placeholder="$t('install.form.custom_name.placeholder')"
+                    v-model="form.custom_name"
+                  />
+                </div>
+              </div>
+              <span v-if="customIconError" class="label-text-alt text-error mt-1">{{ customIconError }}</span>
             </div>
 
             <div class="form-control">
@@ -456,63 +507,11 @@
       </div>
     </dialog>
 
-    <!-- Certificate Revocation Dialog -->
-    <dialog
-      :class="['modal', { 'modal-open': certRevoke.visible }]"
-    >
-      <div class="modal-box">
-        <h3 class="font-bold text-lg">{{ $t("install.cert_revoke.title") }}</h3>
-        <p class="py-2 text-sm opacity-80">{{ $t("install.cert_revoke.warning") }}</p>
-
-        <div v-if="certRevoke.loading" class="flex items-center gap-x-2 py-4">
-          <span class="loading loading-spinner loading-sm"></span>
-          <span>{{ $t("common.loading") }}</span>
-        </div>
-        <div v-else-if="certRevoke.certificates.length === 0" class="py-4 text-sm">
-          {{ $t("install.cert_revoke.no_certificates") }}
-        </div>
-        <table v-else class="table w-full">
-          <thead>
-            <tr>
-              <th></th>
-              <th>{{ $t("certificate.table.header.name") }}</th>
-              <th>{{ $t("certificate.table.header.machine_name") }}</th>
-              <th>{{ $t("certificate.table.header.expiration") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="cert in certRevoke.certificates" :key="cert.serialNumber">
-              <td>
-                <input
-                  type="radio"
-                  name="revoke_cert"
-                  class="radio radio-sm"
-                  :value="cert.serialNumber"
-                  v-model="certRevoke.selectedSerial"
-                />
-              </td>
-              <td class="break-all">{{ cert.name }}</td>
-              <td class="break-all">{{ cert.machineName }}</td>
-              <td class="whitespace-nowrap">{{ cert.expirationDate }}</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="modal-action">
-          <button class="btn" @click="closeCertRevoke">
-            {{ $t("home.dialog.delete_confirm.button.cancel") }}
-          </button>
-          <button
-            class="btn btn-error"
-            :disabled="certRevoke.loading || certRevoke.submitting || !certRevoke.selectedSerial"
-            @click="confirmCertRevoke"
-          >
-            <span v-if="certRevoke.submitting" class="loading loading-spinner loading-xs"></span>
-            {{ $t("install.cert_revoke.button.revoke") }}
-          </button>
-        </div>
-      </div>
-    </dialog>
+    <CertificateRevokeDialog
+      ref="certRevokeDialog"
+      @confirm="confirmCertRevoke"
+      @close="closeCertRevoke"
+    />
   </div>
 </template>
   
@@ -524,7 +523,6 @@ import { parseBundleIdFromPlist } from "@/utils/utils";
 import {
   installFailureMessage as formatInstallFailureMessage,
   needsCertificateReset,
-  pickRevocableCertificates,
 } from "@/utils/install-error-feedback.mjs";
 import { accountStatusLabel as formatAccountStatus } from "@/utils/install-feedback.mjs";
 import {
@@ -536,6 +534,7 @@ import {
 } from "@/utils/download.mjs";
 import { guessSourceKind } from "@/utils/source.mjs";
 import JSZip from "jszip";
+import CertificateRevokeDialog from "@/components/CertificateRevokeDialog.vue";
 import SigningIssueList from "@/components/SigningIssueList.vue";
 import SigningPlan from "@/components/SigningPlan.vue";
 import SourcePicker from "@/components/SourcePicker.vue";
@@ -546,6 +545,7 @@ import {
   signingCodeText,
   summarizePlan,
 } from "@/utils/signing-report.mjs";
+import { createUploadGuard, defaultUploadStallMs, uploadStallMessage } from "@/utils/upload-guard.mjs";
 
 const appleIDMode = "apple_id";
 const externalMode = "external_certificate";
@@ -570,7 +570,7 @@ function validCustomIdentifier(id) {
 }
 
 export default {
-  components: { SigningIssueList, SigningPlan, SourcePicker },
+  components: { CertificateRevokeDialog, SigningIssueList, SigningPlan, SourcePicker },
   data() {
     return {
       id: "",
@@ -594,6 +594,12 @@ export default {
       // data() alone.
       uploadSeq: 0,
       checkSeq: 0,
+      // Guard of the upload in flight, if any: leaving the page releases it so
+      // its stall timer stops instead of aborting an abandoned request.
+      uploadGuard: null,
+      // Last whole 5% reported for the upload in flight, so the log gets one
+      // progress line per step instead of one per progress event.
+      uploadReportedPct: 0,
       accounts: [],
       installedApps: [],
       recommendedAccount: "",
@@ -637,8 +643,19 @@ export default {
         // of the IPA. Synced on change, not on input, so that the compatibility
         // check runs once per edit.
         custom_identifier: "",
+        // Path of the custom app icon uploaded to the server. Empty keeps the
+        // icons of the IPA. A prefilled path is a stored icon of an installed
+        // app and is reused on the next install.
+        custom_icon_path: "",
         auto_update: false,
       },
+      // Preview of the chosen or prefilled custom icon, and its upload state.
+      customIconFile: null,
+      customIconObjectURL: "",
+      customIconError: "",
+      // Record whose prefilled custom icon is being displayed. It is cleared
+      // once the user picks a new image or removes the choice.
+      customIconStoredId: 0,
       log: {
         newcontent : "",
         output: "",
@@ -653,18 +670,10 @@ export default {
         image: "",
         status: "",
       },
-      // Certificate revocation confirmation. The engine reports
-      // certificate_reset_required when the account is at its limit; the page
-      // then asks which one certificate may be revoked and resends the exact
-      // install it snapshotted in `payload` with that authorization.
-      certRevoke: {
-        visible: false,
-        loading: false,
-        submitting: false,
-        certificates: [],
-        selectedSerial: "",
-        payload: null,
-      },
+      // The exact install request that stopped at the certificate limit. It is
+      // kept so the certificate dialog can resend it with the one certificate
+      // the user authorizes to revoke.
+      certRevokePayload: null,
     };
   },
   computed: {
@@ -714,6 +723,28 @@ export default {
         this.signing.uploaded?.bundle_identifier ||
         this.signing.check?.plan?.main_bundle_id ||
         this.$t("install.form.custom_identifier.placeholder");
+    },
+    // A freshly picked file is previewed from an object URL; a prefilled icon
+    // of an installed app is served by its record.
+    customIconPreview() {
+      if (this.customIconObjectURL) {
+        return this.customIconObjectURL;
+      }
+      if (this.form.custom_icon_path && this.customIconStoredId) {
+        return `/apps/${this.customIconStoredId}/custom-icon`;
+      }
+      return "";
+    },
+    // hasCustomIcon reports whether an icon is currently chosen, which shows
+    // the remove badge on the swatch.
+    hasCustomIcon() {
+      return !!(this.customIconFile || this.form.custom_icon_path);
+    },
+    // supportsCustomIcon reports whether the target device takes a custom app
+    // icon. Only iOS devices (iPhone/iPad) do; Apple TV ignores it, so the
+    // picker is hidden there.
+    supportsCustomIcon() {
+      return this.isIPhone(this.device);
     },
     // The waivable issues stay in the plan, downgraded to warnings, while
     // the option is on: the toggle stays visible whenever it matters.
@@ -776,9 +807,9 @@ export default {
     // Source build of the external IPA prepared or being prepared; empty for
     // an uploaded file.
     this.externalIpaKey = "";
-    // Custom name and bundle identifier prefilled from an earlier
+    // Custom name, bundle identifier and custom icon prefilled from an earlier
     // installation of the chosen app; empty when nothing was prefilled.
-    this.prefilled = { custom_name: "", custom_identifier: "" };
+    this.prefilled = { custom_name: "", custom_identifier: "", custom_icon_path: "" };
     this.reportStream = createSigningReportStream();
 
     this.fetchData();
@@ -787,7 +818,11 @@ export default {
     // A submission may still be uploading or checking with no socket open:
     // release it so its guards return before opening a socket or sending.
     this.releaseAttempt();
+    // An upload still in flight must not keep its stall timer running.
+    this.uploadGuard?.release();
+    this.uploadGuard = null;
     this.stopUpdateLog();
+    this.releaseCustomIconObjectURL();
     // Drops the external IPA, including one still being uploaded or
     // downloaded, unless a running installation owns it.
     this.cancelExternalIpa();
@@ -868,6 +903,42 @@ export default {
       const text = this.$t(key);
       return text !== key ? text : signingClass;
     },
+    // uploadIpa stages one IPA on the server. It is guarded by upload progress
+    // rather than a request timeout: the file size decides how long a healthy
+    // upload takes, so only one that stopped delivering bytes is abandoned.
+    // Progress is reported to the install log so a large upload shows it is
+    // still moving.
+    async uploadIpa(formData) {
+      this.uploadReportedPct = -5;
+      const guard = createUploadGuard(defaultUploadStallMs, (event) => {
+        const loaded = event?.loaded ?? 0;
+        const total = event?.total ?? 0;
+        if (total <= 0) {
+          return;
+        }
+        const pct = Math.floor((loaded * 100) / total);
+        // One line per 5%: a 23 GB upload must not flood the log.
+        if (pct < this.uploadReportedPct + 5) {
+          return;
+        }
+        this.uploadReportedPct = pct - (pct % 5);
+        this.log.newcontent += `Upload progress: ${this.uploadReportedPct}%\n`;
+      });
+      this.uploadGuard = guard;
+      try {
+        return await api.upload(formData, guard);
+      } catch (err) {
+        if (guard.stalled()) {
+          throw new Error(uploadStallMessage(err?.reason ?? err));
+        }
+        throw err;
+      } finally {
+        guard.release();
+        if (this.uploadGuard === guard) {
+          this.uploadGuard = null;
+        }
+      }
+    },
     // prepareExternalIpa uploads the chosen IPA file, or has the server
     // download the selected source build, then checks it.
     async prepareExternalIpa() {
@@ -879,7 +950,7 @@ export default {
       if (this.installMode === "file" && this.files.length > 0) {
         const formData = new FormData();
         formData.append("files", this.files[0]);
-        pending = api.upload(formData).then((data) => data[0]);
+        pending = this.uploadIpa(formData).then((data) => data[0]);
       } else if (this.installMode === "source" && this.sourceSelection) {
         const selection = this.sourceSelection;
         key = sourceBuildKey(selection);
@@ -1098,7 +1169,7 @@ export default {
             formData.append("files", file);
           }
           _this.log.output += "IPA uploading...\n";
-          let data = await api.upload(formData)
+          let data = await _this.uploadIpa(formData)
           ipa = data[0];
         } else if (_this.installMode === "link") {
           _this.log.output += "IPA URL: " + _this.ipaUrl + "\n";
@@ -1122,6 +1193,16 @@ export default {
         }
         if (isStale()) {
           return;
+        }
+        // A newly picked icon is uploaded before the install request; the
+        // icon prefilled from an installed app is already stored on the server.
+        // Guarded so an install without a new icon opens its socket without
+        // an extra await, keeping the previous attempt's lifecycle intact.
+        if (_this.customIconFile && _this.supportsCustomIcon) {
+          await _this.uploadCustomIcon(isStale);
+          if (isStale()) {
+            return;
+          }
         }
         // Connect the install socket only when ready to send the install
         // request. Uploading a large IPA leaves the socket idle for minutes
@@ -1148,6 +1229,7 @@ export default {
             custom_name: _this.form.custom_name.trim(),
             remove_extensions: _this.form.remove_extensions,
             custom_identifier: _this.form.custom_identifier,
+            custom_icon_path: _this.supportsCustomIcon ? _this.form.custom_icon_path : "",
             signing_mode: _this.signing.mode,
             signing_identity_id: external ? Number(_this.signing.identityId) : 0,
             allow_missing_entitlements: external && _this.signing.allowMissingEntitlements,
@@ -1157,7 +1239,7 @@ export default {
         // Kept so the certificate dialog can resend this same install with the
         // certificate the user authorizes to revoke. Only an Apple ID install
         // can reach that failure.
-        _this.certRevoke.payload = external ? null : payload;
+        _this.certRevokePayload = external ? null : payload;
         _this.websocketsend(1, payload);
       } catch (error) {
         if (isStale()) {
@@ -1261,6 +1343,81 @@ export default {
         }
       }
     },
+    // openCustomIconPicker opens the hidden file input when the swatch is
+    // clicked.
+    openCustomIconPicker() {
+      if (this.loading) {
+        return;
+      }
+      this.$refs.customIconInput?.click();
+    },
+    // onCustomIconChange previews a newly picked image locally. The file is
+    // uploaded when the install is submitted, so a form the user never sends
+    // leaves nothing on the server.
+    onCustomIconChange(e) {
+      const file = e.target.files?.[0];
+      this.customIconError = "";
+      this.releaseCustomIconObjectURL();
+      if (!file) {
+        this.customIconFile = null;
+        // Clearing the input drops the prefilled choice too.
+        if (this.prefilled.custom_icon_path &&
+            this.form.custom_icon_path === this.prefilled.custom_icon_path) {
+          this.form.custom_icon_path = "";
+          this.prefilled.custom_icon_path = "";
+          this.customIconStoredId = 0;
+        }
+        return;
+      }
+      this.customIconFile = file;
+      this.customIconObjectURL = URL.createObjectURL(file);
+      // A picked image supersedes the icon prefilled from an installed app.
+      this.customIconStoredId = 0;
+      this.prefilled.custom_icon_path = "";
+      e.target.value = "";
+    },
+    releaseCustomIconObjectURL() {
+      if (this.customIconObjectURL) {
+        URL.revokeObjectURL(this.customIconObjectURL);
+        this.customIconObjectURL = "";
+      }
+    },
+    clearCustomIcon() {
+      this.releaseCustomIconObjectURL();
+      this.customIconFile = null;
+      this.customIconError = "";
+      this.form.custom_icon_path = "";
+      this.customIconStoredId = 0;
+      this.prefilled.custom_icon_path = "";
+      const input = document.getElementById("install-custom-icon");
+      if (input) input.value = "";
+    },
+    // uploadCustomIcon sends the picked image to the server and stores the
+    // returned path in the install request. A prefilled path needs no upload.
+    async uploadCustomIcon(isStale) {
+      if (!this.customIconFile) {
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", this.customIconFile);
+      try {
+        const path = await api.uploadCustomIcon(formData);
+        if (isStale()) {
+          return;
+        }
+        this.form.custom_icon_path = path;
+        this.customIconError = "";
+      } catch (err) {
+        if (isStale()) {
+          return;
+        }
+        this.customIconError = this.codeText(
+          err?.result?.data?.code,
+          err?.message || err?.result?.msg,
+        );
+        throw err;
+      }
+    },
     async onFileChange(e) {
       this.files = e.target.files;
       this.recommendedAccount = "";
@@ -1339,6 +1496,7 @@ export default {
       // the one installed without it: reusing the identifier reinstalls the
       // app the user picked instead of creating a second one.
       this.prefill("custom_identifier", app.custom_identifier);
+      this.prefillCustomIcon(app);
       return true;
     },
     // recommendIdentity preselects the identity that signed an earlier
@@ -1357,7 +1515,22 @@ export default {
       this.signing.identityId = identity.id;
       this.prefill("custom_name", app.custom_name);
       this.prefill("custom_identifier", app.custom_identifier);
+      this.prefillCustomIcon(app);
       return true;
+    },
+    // prefillCustomIcon reuses the custom icon of an earlier installation of
+    // the chosen app. The stored path is submitted as-is; the preview is
+    // served from the record of that app.
+    prefillCustomIcon(app) {
+      // Only iOS devices take a custom icon; Apple TV ignores it.
+      if (!this.supportsCustomIcon || !app.custom_icon_path || this.customIconFile) {
+        return;
+      }
+      this.releaseCustomIconObjectURL();
+      this.form.custom_icon_path = app.custom_icon_path;
+      this.prefilled.custom_icon_path = app.custom_icon_path;
+      this.customIconStoredId = app.ID;
+      this.customIconError = "";
     },
     // prefill sets a form field to the value of an earlier installation of
     // the same app and remembers it, so that choosing another IPA or build
@@ -1376,6 +1549,12 @@ export default {
           this.form[field] = "";
         }
         this.prefilled[field] = "";
+      }
+      // A prefilled icon belongs to the previous IPA or build: drop its
+      // preview. An icon the user picked for this form stays.
+      if (!this.customIconFile) {
+        this.releaseCustomIconObjectURL();
+        this.customIconStoredId = 0;
       }
     },
     validateForm(id) {
@@ -1441,7 +1620,7 @@ export default {
       // Installation successful.
       if (line.indexOf("Installation Succeeded") !== -1) {
         _this.onInstallFinished();
-        _this.certRevoke.payload = null;
+        _this.certRevokePayload = null;
         toast.success(this.$t("install.toast.install_success"));
         return;
       }
@@ -1457,7 +1636,7 @@ export default {
         }
         // Any other failure ends the request: the snapshot must not be
         // offered again for a later, unrelated failure.
-        _this.certRevoke.payload = null;
+        _this.certRevokePayload = null;
         const failure = _this.report.failure;
         toast.error(failure
           ? _this.codeText(failure.code, failure.message)
@@ -1480,49 +1659,30 @@ export default {
     // resolve its IPA from a source or an upload the server already staged,
     // so only the exact request that failed can be resent.
     offerCertificateRevocation() {
-      const state = this.certRevoke;
-      if (!state.payload || !needsCertificateReset(this.log.output + this.log.newcontent)) {
+      const payload = this.certRevokePayload;
+      if (!payload || !needsCertificateReset(this.log.output + this.log.newcontent)) {
         return false;
       }
-      state.visible = true;
-      state.submitting = false;
-      state.selectedSerial = "";
-      state.certificates = [];
-      state.loading = true;
-      this.fetchRevocableCertificates(state.payload.account);
+      this.$refs.certRevokeDialog.show(payload.account);
       return true;
     },
 
-    fetchRevocableCertificates(account) {
-      const state = this.certRevoke;
-      api
-        .getCertificates({ email: account })
-        .then((res) => {
-          state.certificates = pickRevocableCertificates(res.data);
-        })
-        .finally(() => {
-          state.loading = false;
-        });
-    },
-
-    confirmCertRevoke() {
-      const state = this.certRevoke;
-      if (!state.payload || !state.selectedSerial || state.submitting) {
+    confirmCertRevoke(serial) {
+      const payload = this.certRevokePayload;
+      if (!payload || !serial) {
         return;
       }
-      state.submitting = true;
-      state.visible = false;
+      this.certRevokePayload = null;
       // The retry is the same install request with the one authorized serial;
       // the engine applies it only when its account currently lists it.
-      const payload = { ...state.payload, revoke_certificate_serial: state.selectedSerial };
-      state.payload = null;
+      const retry = { ...payload, revoke_certificate_serial: serial };
       this.loading = true;
       this.submittedMode = this.signing.mode;
       this.resetSigningReport();
       this.log.newcontent = "";
       this.log.output += this.$t("install.cert_revoke.resuming") + "\n";
       try {
-        this.websocketsend(1, payload);
+        this.websocketsend(1, retry);
       } catch (error) {
         this.log.newcontent += error + "\n";
         this.onInstallFinished();
@@ -1531,11 +1691,7 @@ export default {
     },
 
     closeCertRevoke() {
-      const state = this.certRevoke;
-      state.visible = false;
-      state.payload = null;
-      state.selectedSerial = "";
-      state.certificates = [];
+      this.certRevokePayload = null;
     },
     
     accountStatusLabel(status) {
@@ -1729,6 +1885,7 @@ import FolderOpenIcon from "@/assets/icons/folder-open.svg";
 import LinkIcon from "@/assets/icons/link.svg";
 import SettingsIcon from "@/assets/icons/settings.svg";
 import GithubIcon from "@/assets/icons/github.svg";
+import DismissIcon from "@/assets/icons/dismiss.svg";
 </script>
   
   <style scoped>
@@ -1769,6 +1926,11 @@ import GithubIcon from "@/assets/icons/github.svg";
   padding: 0;
   border-radius: 9999px;
   box-shadow: var(--atv-menu-shadow);
+}
+
+.modal .modal-box.atv-cert-revoke-dialog {
+  width: min(768px, calc(100vw - 24px));
+  max-width: 768px;
 }
 
 /* Compatibility plan of the external certificate mode, below the form. */

@@ -11,12 +11,12 @@ require (
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-errors/errors v1.5.1
 	github.com/go-resty/resty/v2 v2.6.0
-	github.com/godbus/dbus/v5 v5.0.4
+	github.com/godbus/dbus/v5 v5.2.2
 	github.com/gofiber/contrib/websocket v1.0.0
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/google/uuid v1.6.0
 	github.com/gookit/event v1.1.2
-	github.com/holoplot/go-avahi v1.0.1
+	github.com/holoplot/go-avahi v1.1.0
 	github.com/iineva/CgbiPngFix v0.0.0-20210523041253-b8869b346914
 	github.com/iineva/ipa-server v0.0.0-20210613102156-5a07a87df9a8
 	github.com/json-iterator/go v1.1.12
@@ -34,6 +34,7 @@ require (
 	github.com/smallstep/pkcs7 v0.2.3
 	github.com/urfave/cli/v2 v2.3.0
 	golang.org/x/image v0.41.0
+	golang.org/x/mod v0.35.0
 	golang.org/x/text v0.37.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/gorm v1.25.7
@@ -82,10 +83,9 @@ require (
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
 	golang.org/x/crypto v0.50.0 // indirect
-	golang.org/x/mod v0.35.0 // indirect
 	golang.org/x/net v0.53.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/sys v0.46.0 // indirect
 	golang.org/x/tools v0.44.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	modernc.org/libc v1.22.5 // indirect

@@ -77,7 +77,7 @@
             {{ $t("devices.action_pair") }}
           </router-link>
           <button
-            v-if="device.manual"
+            v-if="device.status === 'paired' || device.manual"
             type="button"
             class="sl-btn sl-danger sl-dev-btn"
             :class="{ 'sl-dev-btn--armed': forgetConfirmId === device.id }"
@@ -180,7 +180,7 @@ export default {
       }
       this.forgetConfirmId = null;
       try {
-        await api.deleteManualDevice(device.id);
+        await api.deleteDevice(device.id);
         toast.success(this.$t("devices.forget_done"));
         this.refresh();
       } catch (error) {

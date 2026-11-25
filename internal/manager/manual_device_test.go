@@ -11,7 +11,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bitxeno/atvloadly/internal/app"
 	"github.com/bitxeno/atvloadly/internal/model"
+	"github.com/bitxeno/atvloadly/internal/utils"
 )
 
 // setSideloadDataDir points the PlumeImpactor data directory at a temp dir for
@@ -105,7 +107,7 @@ func TestManualDeviceDedupedByDiscovered(t *testing.T) {
 	}
 }
 
-func TestDeleteManualDeviceRemovesBothFiles(t *testing.T) {
+func TestForgetDeviceRemovesPairingFilesAndEntry(t *testing.T) {
 	pdir := setSideloadDataDir(t)
 	if err := os.MkdirAll(pdir, 0o755); err != nil {
 		t.Fatal(err)
@@ -113,13 +115,50 @@ func TestDeleteManualDeviceRemovesBothFiles(t *testing.T) {
 	writeJSON(t, pdir, "AAA.json", `{"manual":true,"remotepairing_ip":"100.65.100.37","remotepairing_udid":"AAA"}`)
 	writeJSON(t, pdir, "AAA.plist", "plist")
 
-	if err := DeleteManualDevice("AAA"); err != nil {
-		t.Fatalf("delete: %v", err)
+	dm := newDeviceManager()
+	dm.loadManualDevicesFromDir(pdir)
+	id := utils.Md5("AAA")
+	if _, ok := dm.GetDeviceByID(id); !ok {
+		t.Fatalf("manual device not loaded")
+	}
+
+	if err := dm.ForgetDevice(id, "AAA"); err != nil {
+		t.Fatalf("forget: %v", err)
 	}
 	for _, ext := range []string{".json", ".plist"} {
 		if _, err := os.Stat(filepath.Join(pdir, "AAA"+ext)); !os.IsNotExist(err) {
 			t.Fatalf("%s should be deleted", ext)
 		}
+	}
+	if _, ok := dm.GetDeviceByID(id); ok {
+		t.Fatalf("device still listed after forget")
+	}
+}
+
+// A discovered (non-manual) device must be removable too: forgetting clears its
+// pairing file and drops its in-memory entry.
+func TestForgetDeviceRemovesDiscoveredEntry(t *testing.T) {
+	pdir := setSideloadDataDir(t)
+	if err := os.MkdirAll(pdir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	writeJSON(t, pdir, "BBB.json", `{"model":"AppleTV11,1","name":"AppleTV","remotepairing_udid":"BBB"}`)
+
+	dm := newDeviceManager()
+	id := utils.Md5("BBB")
+	dm.devices.Store(id, model.Device{ID: id, UDID: "BBB", Name: "AppleTV", Status: model.Paired, Connection: model.DeviceConnectionRemote})
+	if _, ok := dm.GetDeviceByID(id); !ok {
+		t.Fatalf("device not stored")
+	}
+
+	if err := dm.ForgetDevice(id, "BBB"); err != nil {
+		t.Fatalf("forget: %v", err)
+	}
+	if _, ok := dm.GetDeviceByID(id); ok {
+		t.Fatalf("device still listed after forget")
+	}
+	if _, err := os.Stat(filepath.Join(pdir, "BBB.json")); !os.IsNotExist(err) {
+		t.Fatalf("pairing json should be deleted")
 	}
 }
 
@@ -411,4 +450,37 @@ func TestWarmManualDevicePortSkipsUnknownIP(t *testing.T) {
 	})
 	dm := newDeviceManager()
 	dm.WarmManualDevicePort("100.65.100.99") // no pairing file for this IP
+}
+
+// TestStartDeviceManagerLoadsManualDevicesWithZeroconfDisabled reproduces
+// issue #261: with discovery off, saved manual-IP devices must be loaded at
+// startup, not only after an explicit reload (Devices page or /api/reload).
+func TestStartDeviceManagerLoadsManualDevicesWithZeroconfDisabled(t *testing.T) {
+	pdir := setSideloadDataDir(t)
+	if err := os.MkdirAll(pdir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	writeJSON(t, pdir, "AAA.json", `{"manual":true,"model":"AppleTV11,1","name":"AppleTV","remotepairing_ip":"100.65.100.37","remotepairing_udid":"AAA"}`)
+
+	// Isolate the global manager and force discovery off for this test.
+	previousConfig := app.Config
+	app.Config = &app.Configuration{}
+	app.Config.Zeroconf = false
+	previousManager := deviceManager
+	deviceManager = newDeviceManager()
+	t.Cleanup(func() {
+		deviceManager.Stop()
+		deviceManager = previousManager
+		app.Config = previousConfig
+	})
+
+	StartDeviceManager()
+
+	dev, ok := deviceManager.GetDeviceByUDID("AAA")
+	if !ok {
+		t.Fatal("manual device not loaded at startup with zeroconf disabled")
+	}
+	if dev.IP != "100.65.100.37" || !dev.Manual {
+		t.Fatalf("unexpected manual device: %+v", dev)
+	}
 }
