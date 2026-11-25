@@ -22,7 +22,7 @@
     <!-- Chapter 1 · Now playing (official screenshot) -->
     <section class="sl-explore-chapter">
       <div class="sl-explore-media">
-        <TVPreview :shots="[{ src: '/tv/playing.jpg', captionKey: 'explore.ch1_caption' }]" :interval="0" />
+        <TVPreview :shots="[{ src: './tv/playing.jpg', captionKey: 'explore.ch1_caption' }]" :interval="0" />
       </div>
       <div class="sl-explore-copy">
         <h2 class="sl-h2">{{ $t("explore.ch1_title") }}</h2>
@@ -37,7 +37,7 @@
     <!-- Chapter 2 · Synced lyrics (official screenshot) -->
     <section class="sl-explore-chapter sl-explore-chapter--flip">
       <div class="sl-explore-media">
-        <TVPreview :shots="[{ src: '/tv/lyrics.jpg', captionKey: 'explore.ch2_caption' }]" :interval="0" />
+        <TVPreview :shots="[{ src: './tv/lyrics.jpg', captionKey: 'explore.ch2_caption' }]" :interval="0" />
       </div>
       <div class="sl-explore-copy">
         <h2 class="sl-h2">{{ $t("explore.ch2_title") }}</h2>
@@ -52,7 +52,7 @@
     <!-- Chapter 3 · Library across sources (official screenshot) -->
     <section class="sl-explore-chapter">
       <div class="sl-explore-media">
-        <TVPreview :shots="[{ src: '/tv/library.jpg', captionKey: 'explore.ch3_caption' }]" :interval="0" />
+        <TVPreview :shots="[{ src: './tv/library.jpg', captionKey: 'explore.ch3_caption' }]" :interval="0" />
       </div>
       <div class="sl-explore-copy">
         <h2 class="sl-h2">{{ $t("explore.ch3_title") }}</h2>

@@ -770,7 +770,7 @@ export default {
       if (app.icon) {
         return `/apps/${app.ID}/icon`;
       } else {
-        return "/img/dummy.jpg";
+        return "./img/dummy.jpg";
       }
     },
     logUrl(item) {

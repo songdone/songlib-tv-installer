@@ -38,3 +38,29 @@ test("UpdateBanner targets SongLib core updates without upstream branding", () =
   assert.ok(src.includes("sl-update-banner"));
   assert.ok(!src.includes("atvloadly-dismissed-release"));
 });
+
+test("SPA public asset URLs stay relative so hot updates resolve under /_web/<revision>/", () => {
+  for (const rel of [
+    "../index.html",
+    "../src/page/layout.vue",
+    "../src/page/purchase/index.vue",
+    "../src/page/explore/index.vue",
+    "../src/page/apps/index.vue",
+    "../src/components/SongLibHero.vue",
+  ]) {
+    const src = read(rel);
+    assert.doesNotMatch(
+      src,
+      /["']\/(plan|tv|img|songlib-mark\.png)/,
+      `${rel} must use relative ./ paths so <base href="/_web/<rev>/"> applies`,
+    );
+  }
+});
+
+test("AppShell exposes management logout action", () => {
+  const layout = read("../src/page/layout.vue");
+  const mgmt = read("../src/utils/management.js");
+  assert.ok(layout.includes("logoutManagement"), "layout must wire logoutManagement");
+  assert.ok(layout.includes('nav.logout'), "layout must label logout button");
+  assert.ok(mgmt.includes("/management/logout"), "management helper must call /management/logout");
+});

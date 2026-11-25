@@ -1037,7 +1037,7 @@ func routeWithUpdates(fi *fiber.App, webUpdates *webUpdateController) {
 			return c.Status(http.StatusOK).JSON(apiError("Invalid argument. error: " + err.Error()))
 		}
 
-		if err := notify.SendWithConfig("atvloadly", "test message", settings); err != nil {
+		if err := notify.SendWithConfig("音屿安装助手", "test message", settings); err != nil {
 			return c.Status(http.StatusOK).JSON(apiError(err.Error()))
 		} else {
 			return c.Status(http.StatusOK).JSON(apiSuccess(true))

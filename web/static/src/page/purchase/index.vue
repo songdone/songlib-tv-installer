@@ -30,7 +30,7 @@
          verified channel the card stays informative, never a dead button. -->
     <div class="sl-plans">
       <article class="sl-plan">
-        <img class="sl-plan-art" src="/plan/cover-basic.jpg" :alt="$t('purchase.basic_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
+        <img class="sl-plan-art" :src="'./plan/cover-basic.jpg'" :alt="$t('purchase.basic_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
         <div class="sl-plan-body">
           <h2 class="sl-plan-name">
             {{ $t("purchase.basic_name") }}
@@ -55,7 +55,7 @@
       </article>
 
       <article class="sl-plan">
-        <img class="sl-plan-art" src="/plan/cover-pro.jpg" :alt="$t('purchase.pro_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
+        <img class="sl-plan-art" :src="'./plan/cover-pro.jpg'" :alt="$t('purchase.pro_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
         <div class="sl-plan-body">
           <h2 class="sl-plan-name">
             {{ $t("purchase.pro_name") }}
@@ -84,7 +84,7 @@
          as the paid plans. Both stack vertically on smaller screens. -->
     <section class="sl-plans sl-purchase-support">
       <article class="sl-plan sl-trial">
-        <img class="sl-plan-art" src="/plan/cover-trial.jpg" :alt="$t('purchase.trial_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
+        <img class="sl-plan-art" :src="'./plan/cover-trial.jpg'" :alt="$t('purchase.trial_name') + ' · ' + $t('purchase.cover_alt')" loading="lazy" />
         <div class="sl-plan-body">
           <h2 class="sl-plan-name">
             {{ $t("purchase.trial_name") }}

@@ -59,9 +59,9 @@ import { songlibConfig, SONGLIB_DEFAULT_LINKS } from "@/utils/songlib-config.mjs
 // Official SongLib TV screenshots (marketing/tv/PROVENANCE.md): now playing,
 // full-screen lyrics, playlists. Real player frames — never a mocked-up UI.
 const shots = [
-  { src: "/tv/playing.jpg", captionKey: "home.hero.gallery_playing" },
-  { src: "/tv/lyrics.jpg", captionKey: "home.hero.gallery_lyrics" },
-  { src: "/tv/playlist.jpg", captionKey: "home.hero.gallery_playlist" },
+  { src: "./tv/playing.jpg", captionKey: "home.hero.gallery_playing" },
+  { src: "./tv/lyrics.jpg", captionKey: "home.hero.gallery_lyrics" },
+  { src: "./tv/playlist.jpg", captionKey: "home.hero.gallery_playlist" },
 ];
 
 const links = reactive({ ...SONGLIB_DEFAULT_LINKS });

@@ -20,7 +20,7 @@
             <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
           </button>
           <a href="/" class="sl-brand" title="音屿-Apple TV音乐播放器安装助手">
-            <img src="/songlib-mark.png" alt="音屿" />
+            <img :src="'./songlib-mark.png'" alt="音屿" />
             <span class="sl-brand-name">音屿-Apple TV音乐播放器安装助手</span>
             <span class="sl-brand-name sl-brand-name--short">音屿 TV 安装助手</span>
           </a>
@@ -89,6 +89,10 @@
             <HelpIcon />
             <span class="sl-navlabel">{{ $t("nav.about_license") }}</span>
           </button>
+          <button type="button" class="sl-navitem sl-w-full" @click="logout">
+            <LogoutIcon />
+            <span class="sl-navlabel">{{ $t("nav.logout") }}</span>
+          </button>
         </div>
       </aside>
 
@@ -109,7 +113,7 @@
         </header>
         <div class="content">
           <div class="sl-about-head">
-            <img src="/songlib-mark.png" alt="音屿" />
+            <img :src="'./songlib-mark.png'" alt="音屿" />
             <div>
               <h3 class="sl-plan-name">{{ $t("about.product") }}</h3>
               <p class="sl-hint">v{{ appVersion }} ({{ buildDate }})</p>
@@ -132,6 +136,7 @@
 
 <script>
 import api from "@/api/api";
+import { logoutManagement } from "@/utils/management";
 
 export default {
   name: "App",
@@ -274,6 +279,10 @@ export default {
       api.syncLang({ lang: lang });
       this.openMenu = null;
     },
+    logout() {
+      this.closeSidebar();
+      logoutManagement();
+    },
   },
 };
 </script>
@@ -287,15 +296,16 @@ import HomeIcon from "@/assets/icons/home.svg";
 import AppsIcon from "@/assets/icons/apps.svg";
 import ExploreIcon from "@/assets/icons/explore.svg";
 import HelpIcon from "@/assets/icons/help.svg";
+import LogoutIcon from "@/assets/icons/logout.svg";
 import CheckIcon from "@/assets/icons/checkmark.svg";
 import XIcon from "@/assets/icons/dismiss.svg";
 import GoldIcon from "@/assets/icons/gold.svg";
-import AppleTVIcon from "@/assets/icons/appletv.svg";
+import TvIcon from "@/assets/icons/tv.svg";
 import UpdateBanner from "@/components/UpdateBanner.vue";
 
 const icons = {
   home: HomeIcon,
-  appletv: AppleTVIcon,
+  appletv: TvIcon,
   apps: AppsIcon,
   account: AccountIcon,
   explore: ExploreIcon,

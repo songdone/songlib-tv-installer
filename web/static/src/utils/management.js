@@ -25,3 +25,16 @@ export function updateManagementCSRF(csrf) {
     sessionPromise = null;
   }
 }
+
+export async function logoutManagement() {
+  try {
+    const { csrf } = await managementSession();
+    await fetch("/management/logout", {
+      method: "POST",
+      headers: { "X-CSRF-Token": csrf },
+    });
+  } finally {
+    sessionPromise = null;
+    location.href = "/management/login";
+  }
+}

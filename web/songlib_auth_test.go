@@ -139,3 +139,62 @@ func TestExistingManagementHashIsPreserved(t *testing.T) {
 		t.Fatal("existing password was reset")
 	}
 }
+
+func TestManagementLoginClearsAttemptsAndLogoutInvalidatesSession(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("SONGLIB_ADMIN_PASSWORD", "valid-pass-12345")
+	auth, err := loadManagementAuth(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	app := fiber.New()
+	auth.mount(app)
+	app.Get("/secret", func(c *fiber.Ctx) error { return c.SendStatus(200) })
+
+	// Repeated valid logins must reset the failure counter and never trip 429.
+	var lastCookie string
+	var lastCSRF string
+	for i := 0; i < 12; i++ {
+		req := httptest.NewRequest("POST", "http://localhost:18533/management/login", strings.NewReader(`{"password":"valid-pass-12345"}`))
+		req.Header.Set("Origin", "http://localhost:18533")
+		r, err := app.Test(req, 5000)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if r.StatusCode != 200 {
+			t.Fatalf("valid login #%d status = %d, want 200", i+1, r.StatusCode)
+		}
+		b, _ := io.ReadAll(r.Body)
+		var out map[string]string
+		_ = json.Unmarshal(b, &out)
+		lastCSRF = out["csrf"]
+		lastCookie = r.Cookies()[0].Value
+	}
+
+	// Logout revokes the session and clears the cookie.
+	logoutReq := httptest.NewRequest("POST", "http://localhost:18533/management/logout", nil)
+	logoutReq.Header.Set("Origin", "http://localhost:18533")
+	logoutReq.Header.Set("X-CSRF-Token", lastCSRF)
+	logoutReq.Header.Set("Cookie", "sl_management="+lastCookie)
+	r, err := app.Test(logoutReq)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if r.StatusCode != 204 {
+		t.Fatalf("logout status = %d, want 204", r.StatusCode)
+	}
+	if len(r.Cookies()) == 0 || r.Cookies()[0].MaxAge >= 0 {
+		t.Fatalf("expected expired cookie on logout, got %+v", r.Cookies())
+	}
+
+	// Subsequent authenticated call with the revoked session must be rejected.
+	secReq := httptest.NewRequest("GET", "http://localhost:18533/secret", nil)
+	secReq.Header.Set("Cookie", "sl_management="+lastCookie)
+	r, err = app.Test(secReq)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if r.StatusCode != 401 {
+		t.Fatalf("revoked session status = %d, want 401", r.StatusCode)
+	}
+}
