@@ -9,7 +9,7 @@ import (
 
 var (
 	/*********Will auto update by ci build *********/
-	Version   = "1.1.0"
+	Version   = "1.2.0"
 	Commit    = "unknown"
 	BuildDate = "unknown"
 

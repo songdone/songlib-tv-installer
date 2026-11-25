@@ -36,7 +36,7 @@ docker compose -f docker-compose.yml -f docker-compose.avahi.yml up -d
 
 | 配置项 | 推荐值 | 说明 |
 | --- | --- | --- |
-| 镜像 | `666uos/songlib-tv-installer:latest` | 自动匹配 x86_64 / ARM64；也可固定为具体版本标签（如 `:1.1.0`） |
+| 镜像 | `666uos/songlib-tv-installer:latest` | 自动匹配 x86_64 / ARM64；也可固定为具体版本标签（如 `:1.2.0`） |
 | 端口映射 | 宿主机 `15533` → 容器 `80`（TCP） | 宿主机端口可改为任意未占用端口 |
 | 存储卷挂载 | 宿主机持久化目录 → 容器 `/data` | 保存管理密码哈希、配对记录、Apple 账户、已安装应用与热更新快照 |
 | 环境变量 | `SONGLIB_DEPLOY_MODE=docker`<br>`SONGLIB_ADMIN_PASSWORD=<8-64位初始密码>`<br>`ZEROCONF_ENABLED=false`<br>`TZ=Asia/Shanghai` | 不需要开启特权模式（Privileged）或 `seccomp:unconfined` |

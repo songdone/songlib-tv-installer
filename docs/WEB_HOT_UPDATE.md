@@ -43,9 +43,9 @@ cd ../..
 go run ./cmd/songlib-web-release \
   -web web/static/dist \
   -out build/ui-release-1 \
-  -version 1.1.0-ui.1 \
+  -version 1.2.0-ui.1 \
   -sequence 1 \
-  -min-backend 1.1.0 \
+  -min-backend 1.2.0 \
   -backend-id <运行实例返回的backend_id> \
   -key-id songlib-web-2026 \
   -signing-key /secure/offline/songlib-web-signing.pem

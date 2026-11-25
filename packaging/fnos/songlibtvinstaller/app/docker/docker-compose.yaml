@@ -1,6 +1,6 @@
 services:
   installer:
-    image: 666uos/songlib-tv-installer:1.1.0
+    image: 666uos/songlib-tv-installer:1.2.0
     pull_policy: missing
     environment:
       SONGLIB_DEPLOY_MODE: "fnos"
