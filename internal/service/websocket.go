@@ -22,6 +22,12 @@ import (
 )
 
 func HandleInstallMessage(c *websocket.Conn) {
+	releaseSession, ok := BeginInteractiveSession()
+	if !ok {
+		_ = c.WriteMessage(websocket.TextMessage, []byte("ERROR: maintenance operation in progress, retry shortly\nInstallation Failed!"))
+		return
+	}
+	defer releaseSession()
 	websocketMgr := manager.NewWebsocketManager(c)
 	defer websocketMgr.Cancel()
 	installMgr := manager.NewInteractiveInstallManager()
@@ -391,6 +397,12 @@ func recordExternalInstallFailure(v model.InstalledApp, err error) {
 }
 
 func HandleLoginMessage(c *websocket.Conn) {
+	releaseSession, ok := BeginInteractiveSession()
+	if !ok {
+		_ = c.WriteMessage(websocket.TextMessage, []byte("ERROR: maintenance operation in progress, retry shortly\nLogin Failed!"))
+		return
+	}
+	defer releaseSession()
 	websocketMgr := manager.NewWebsocketManager(c)
 	defer websocketMgr.Cancel()
 	loginMgr := manager.NewLoginManager()
@@ -451,6 +463,12 @@ func runLoginMessage(mgr *manager.WebsocketManager, loginMgr *manager.LoginManag
 }
 
 func HandleScanMessage(c *websocket.Conn) {
+	releaseSession, ok := BeginInteractiveSession()
+	if !ok {
+		_ = c.WriteMessage(websocket.TextMessage, []byte("ERROR: maintenance operation in progress, retry shortly"))
+		return
+	}
+	defer releaseSession()
 	websocketMgr := manager.NewWebsocketManager(c)
 	defer websocketMgr.Cancel()
 
@@ -493,6 +511,12 @@ func HandleScanMessage(c *websocket.Conn) {
 }
 
 func HandlePairMessage(c *websocket.Conn) {
+	releaseSession, ok := BeginInteractiveSession()
+	if !ok {
+		_ = c.WriteMessage(websocket.TextMessage, []byte("ERROR: maintenance operation in progress, retry shortly"))
+		return
+	}
+	defer releaseSession()
 	websocketMgr := manager.NewWebsocketManager(c)
 	defer websocketMgr.Cancel()
 	pairMgr := manager.NewPairManager()

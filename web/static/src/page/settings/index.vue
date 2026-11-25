@@ -621,6 +621,10 @@
         </div>
       </form>
     </section>
+    <WebUpdateSection />
+
+    <ManagementPasswordSection />
+
     <!-- Advanced tools moved out of the main navigation per the IA spec:
          expert / immature features live here, not in the sidebar. -->
     <section class="section bg-base-100">
@@ -645,6 +649,8 @@ import Bark from "./components/Bark.vue";
 import Telegram from "./components/Telegram.vue";
 import Weixin from "./components/Weixin.vue";
 import Webhook from "./components/Webhook.vue";
+import WebUpdateSection from "./components/WebUpdateSection.vue";
+import ManagementPasswordSection from "./components/ManagementPasswordSection.vue";
 
 export default {
   name: "Home",
@@ -653,6 +659,8 @@ export default {
     Telegram,
     Weixin,
     Webhook,
+    WebUpdateSection,
+    ManagementPasswordSection,
   },
   data() {
     return {

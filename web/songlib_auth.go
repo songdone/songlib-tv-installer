@@ -8,26 +8,31 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 	"net"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 	"unicode/utf8"
+
+	"github.com/gofiber/fiber/v2"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type managementSession struct {
 	csrf    string
 	expires time.Time
 }
+
 type attempt struct {
 	count int
 	until time.Time
 }
+
 type managementAuth struct {
+	dataDir  string
 	hash     []byte
 	mu       sync.Mutex
 	sessions map[[32]byte]managementSession
@@ -47,16 +52,61 @@ func validManagementPassword(password string) bool {
 	n := utf8.RuneCountInString(password)
 	return utf8.ValidString(password) && n >= 8 && n <= 64 && !strings.ContainsAny(password, "\r\n\x00")
 }
+
 func managementPasswordMaterial(password string) string {
 	sum := sha256.Sum256([]byte(password))
 	return hex.EncodeToString(sum[:])
 }
+
+func hashManagementPassword(password string) ([]byte, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(managementPasswordMaterial(password)), 12)
+	if err != nil {
+		return nil, err
+	}
+	return append([]byte("sha256$"), hash...), nil
+}
+
 func managementPasswordMatches(hash []byte, password string) bool {
 	if strings.HasPrefix(string(hash), "sha256$") {
 		return bcrypt.CompareHashAndPassword(hash[len("sha256$"):], []byte(managementPasswordMaterial(password))) == nil
 	}
 	return bcrypt.CompareHashAndPassword(hash, []byte(password)) == nil
 }
+
+func writePasswordHashAtomic(dataDir string, hash []byte) error {
+	if err := os.MkdirAll(dataDir, 0700); err != nil {
+		return err
+	}
+	tmpPath := filepath.Join(dataDir, ".management-password.hash."+randomToken()[:16])
+	f, err := os.OpenFile(tmpPath, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
+	if err != nil {
+		return err
+	}
+	_, writeErr := f.Write(hash)
+	if writeErr == nil {
+		writeErr = f.Sync()
+	}
+	closeErr := f.Close()
+	if writeErr != nil {
+		_ = os.Remove(tmpPath)
+		return writeErr
+	}
+	if closeErr != nil {
+		_ = os.Remove(tmpPath)
+		return closeErr
+	}
+	if err := os.Chmod(tmpPath, 0600); err != nil {
+		_ = os.Remove(tmpPath)
+		return err
+	}
+	target := filepath.Join(dataDir, "management-password.hash")
+	if err := os.Rename(tmpPath, target); err != nil {
+		_ = os.Remove(tmpPath)
+		return err
+	}
+	return nil
+}
+
 func loadManagementAuth(dataDir string) (*managementAuth, error) {
 	path := filepath.Join(dataDir, "management-password.hash")
 	hash, err := os.ReadFile(path)
@@ -71,16 +121,11 @@ func loadManagementAuth(dataDir string) (*managementAuth, error) {
 		if !validManagementPassword(password) {
 			return nil, fmt.Errorf("请设置8至64位管理密码，不需要混合大小写或特殊符号")
 		}
-		hash, err = bcrypt.GenerateFromPassword([]byte(managementPasswordMaterial(password)), 12)
+		hash, err = hashManagementPassword(password)
 		if err != nil {
 			return nil, err
 		}
-		hash = append([]byte("sha256$"), hash...)
-
-		if err = os.MkdirAll(dataDir, 0700); err != nil {
-			return nil, err
-		}
-		if err = os.WriteFile(path, hash, 0600); err != nil {
+		if err = writePasswordHashAtomic(dataDir, hash); err != nil {
 			return nil, err
 		}
 	} else if err != nil {
@@ -93,8 +138,14 @@ func loadManagementAuth(dataDir string) (*managementAuth, error) {
 		return nil, fmt.Errorf("管理密码文件无效，请从备份恢复")
 	}
 	_ = os.Chmod(path, 0600)
-	return &managementAuth{hash: hash, sessions: map[[32]byte]managementSession{}, attempts: map[string]attempt{}}, nil
+	return &managementAuth{
+		dataDir:  dataDir,
+		hash:     hash,
+		sessions: map[[32]byte]managementSession{},
+		attempts: map[string]attempt{},
+	}, nil
 }
+
 // requestProtocol resolves the effective scheme. Behind an owner-deployed
 // reverse proxy (frp tunnel / LAN gateway — the direct peer is always a
 // private or loopback address on the paths this boundary allows), the
@@ -108,9 +159,30 @@ func requestProtocol(c *fiber.Ctx) string {
 	}
 	return c.Protocol()
 }
+
 func sameOrigin(c *fiber.Ctx) bool {
-	return c.Get("Origin") != "" && c.Get("Origin") == requestProtocol(c)+"://"+string(c.Request().Host())
+	if site := c.Get("Sec-Fetch-Site"); site != "" && site != "same-origin" && site != "none" {
+		return false
+	}
+	expectedScheme := requestProtocol(c)
+	expectedHost := string(c.Request().Host())
+	origin := c.Get("Origin")
+	if origin != "" {
+		return origin == expectedScheme+"://"+expectedHost
+	}
+	// When Origin is omitted (for example certain same-origin browser form POSTs),
+	// require a valid same-origin Referer URL. Never accept missing both.
+	referer := c.Get("Referer")
+	if referer == "" {
+		return false
+	}
+	u, err := url.Parse(referer)
+	if err != nil || u.User != nil || u.Opaque != "" || u.Host == "" {
+		return false
+	}
+	return u.Scheme == expectedScheme && strings.EqualFold(u.Host, expectedHost)
 }
+
 func allowedHost(c *fiber.Ctx) bool {
 	host := string(c.Request().Host())
 	if h, _, err := net.SplitHostPort(host); err == nil {
@@ -134,6 +206,26 @@ func allowedHost(c *fiber.Ctx) bool {
 	}
 	return os.Getenv("SONGLIB_ALLOWED_HOSTS") == ""
 }
+
+func (a *managementAuth) recordAttempt(ip string) int {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	at := a.attempts[ip]
+	if time.Now().After(at.until) {
+		at = attempt{until: time.Now().Add(10 * time.Minute)}
+	}
+	at.count++
+	if len(a.attempts) > 4096 {
+		for k, v := range a.attempts {
+			if time.Now().After(v.until) {
+				delete(a.attempts, k)
+			}
+		}
+	}
+	a.attempts[ip] = at
+	return at.count
+}
+
 func (a *managementAuth) mount(server *fiber.App) {
 	server.Get("/ready", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"status": "running", "app_expiry": "check_authenticated_dashboard"})
@@ -176,7 +268,11 @@ func (a *managementAuth) mount(server *fiber.App) {
 			return c.SendStatus(403)
 		}
 		if c.Method() != "GET" && c.Method() != "HEAD" {
-			if !sameOrigin(c) || subtle.ConstantTimeCompare([]byte(c.Get("X-CSRF-Token")), []byte(session.csrf)) != 1 {
+			csrfToken := c.Get("X-CSRF-Token")
+			if csrfToken == "" && c.Path() == "/management/web-update/recovery" {
+				csrfToken = c.FormValue("csrf")
+			}
+			if !sameOrigin(c) || subtle.ConstantTimeCompare([]byte(csrfToken), []byte(session.csrf)) != 1 {
 				return c.SendStatus(403)
 			}
 		}
@@ -188,22 +284,7 @@ func (a *managementAuth) mount(server *fiber.App) {
 		if !sameOrigin(c) {
 			return c.SendStatus(403)
 		}
-		a.mu.Lock()
-		at := a.attempts[c.IP()]
-		if time.Now().After(at.until) {
-			at = attempt{until: time.Now().Add(10 * time.Minute)}
-		}
-		at.count++
-		if len(a.attempts) > 4096 {
-			for ip, v := range a.attempts {
-				if time.Now().After(v.until) {
-					delete(a.attempts, ip)
-				}
-			}
-		}
-		a.attempts[c.IP()] = at
-		a.mu.Unlock()
-		if at.count > 10 {
+		if a.recordAttempt(c.IP()) > 10 {
 			return c.SendStatus(429)
 		}
 		var body struct {
@@ -212,7 +293,10 @@ func (a *managementAuth) mount(server *fiber.App) {
 		if len(c.Body()) > 1024 || json.Unmarshal(c.Body(), &body) != nil {
 			return c.SendStatus(400)
 		}
-		if !managementPasswordMatches(a.hash, body.Password) {
+		a.mu.Lock()
+		currentHash := append([]byte(nil), a.hash...)
+		a.mu.Unlock()
+		if !managementPasswordMatches(currentHash, body.Password) {
 			return c.SendStatus(401)
 		}
 		token, csrf := randomToken(), randomToken()
@@ -228,6 +312,44 @@ func (a *managementAuth) mount(server *fiber.App) {
 		return c.JSON(fiber.Map{"csrf": csrf})
 	})
 	server.Get("/management/session", func(c *fiber.Ctx) error { return c.JSON(fiber.Map{"csrf": c.Locals("management_csrf")}) })
+	server.Post("/management/password", func(c *fiber.Ctx) error {
+		if a.recordAttempt(c.IP()) > 10 {
+			return c.Status(429).JSON(fiber.Map{"error": "尝试过多，请稍后重试"})
+		}
+		var body struct {
+			CurrentPassword string `json:"current_password"`
+			NewPassword     string `json:"new_password"`
+		}
+		if len(c.Body()) > 1024 || json.Unmarshal(c.Body(), &body) != nil {
+			return c.Status(400).JSON(fiber.Map{"error": "请求格式无效"})
+		}
+		if !validManagementPassword(body.NewPassword) {
+			return c.Status(400).JSON(fiber.Map{"error": "新密码须为 8 至 64 位，且不能包含换行符"})
+		}
+		a.mu.Lock()
+		currentHash := append([]byte(nil), a.hash...)
+		a.mu.Unlock()
+		if !managementPasswordMatches(currentHash, body.CurrentPassword) {
+			return c.Status(401).JSON(fiber.Map{"error": "当前管理密码不正确"})
+		}
+		newHash, err := hashManagementPassword(body.NewPassword)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "保存管理密码失败"})
+		}
+		if err := writePasswordHashAtomic(a.dataDir, newHash); err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "写入管理密码文件失败"})
+		}
+		// Rotate current session and invalidate all other active sessions.
+		token, csrf := randomToken(), randomToken()
+		a.mu.Lock()
+		a.hash = newHash
+		a.sessions = map[[32]byte]managementSession{
+			sha256.Sum256([]byte(token)): {csrf: csrf, expires: time.Now().Add(time.Hour)},
+		}
+		a.mu.Unlock()
+		c.Cookie(&fiber.Cookie{Name: "sl_management", Value: token, HTTPOnly: true, Secure: requestProtocol(c) == "https", SameSite: "Strict", Path: "/", MaxAge: 3600})
+		return c.JSON(fiber.Map{"ok": true, "csrf": csrf})
+	})
 	server.Post("/management/logout", func(c *fiber.Ctx) error {
 		a.mu.Lock()
 		delete(a.sessions, sha256.Sum256([]byte(c.Cookies("sl_management"))))

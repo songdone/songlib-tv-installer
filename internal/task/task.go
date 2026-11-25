@@ -844,3 +844,24 @@ func ReloadTask() error {
 func RefreshDeviceApps(device model.Device) error {
 	return instance.refreshDeviceApps(device)
 }
+
+// HasActiveWork reports whether any background install, refresh, or
+// auto-renewal operation is currently queued or running.
+func HasActiveWork() bool {
+	if len(instance.InstallAppQueue) > 0 {
+		return true
+	}
+	busy := false
+	instance.InstallingApps.Range(func(_, _ any) bool {
+		busy = true
+		return false
+	})
+	if busy {
+		return true
+	}
+	instance.RefreshingDevices.Range(func(_, _ any) bool {
+		busy = true
+		return false
+	})
+	return busy
+}

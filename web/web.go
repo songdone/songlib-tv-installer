@@ -67,6 +67,8 @@ func setup(server *fiber.App) {
 		return c.Send(data)
 	})
 	mountSongLib(server)
+	webUpdates := initDefaultWebUpdateController()
+	webUpdates.mountRecoveryAndAssets(server)
 
 	// set fiber web server access log
 	server.Use(logger.New(logger.Config{Format: "${time} ${method} ${path} ${status}\n"}))
@@ -88,5 +90,5 @@ func setup(server *fiber.App) {
 		},
 	}))
 
-	route(server)
+	routeWithUpdates(server, webUpdates)
 }

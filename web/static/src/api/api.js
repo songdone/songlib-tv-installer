@@ -21,6 +21,50 @@ export default {
       method: "get",
     });
   },
+  getWebUpdateStatus: () => {
+    return request({
+      url: "/api/web-update",
+      method: "get",
+      timeout: 20000,
+      silent: true,
+    });
+  },
+  checkWebUpdate: () => {
+    return request({
+      url: "/api/web-update/check",
+      method: "post",
+      timeout: 30000,
+      silent: true,
+      data: {},
+    });
+  },
+  applyWebUpdate: (data) => {
+    return request({
+      url: "/api/web-update/apply",
+      method: "post",
+      timeout: 110000,
+      silent: true,
+      data,
+    });
+  },
+  rollbackWebUpdate: (data) => {
+    return request({
+      url: "/api/web-update/rollback",
+      method: "post",
+      timeout: 20000,
+      silent: true,
+      data,
+    });
+  },
+  restoreWebUpdate: (data) => {
+    return request({
+      url: "/api/web-update/restore",
+      method: "post",
+      timeout: 20000,
+      silent: true,
+      data,
+    });
+  },
   getDevice: (id) => {
     return request({
       url: `/api/devices/${id}`,

@@ -33,14 +33,22 @@ import (
 )
 
 func route(fi *fiber.App) {
+	routeWithUpdates(fi, nil)
+}
+
+func routeWithUpdates(fi *fiber.App, webUpdates *webUpdateController) {
 	mcpHandler := adaptor.HTTPHandler(mcpserver.NewHTTPHandler())
 	fi.All("/mcp", mcpHandler)
 	fi.All("/mcp/*", mcpHandler)
 
-	fi.Use("/", preventDocumentCaching)
-	fi.Use("/", filesystem.New(filesystem.Config{
-		Root: http.FS(StaticAssets()),
-	}))
+	if webUpdates != nil {
+		fi.Use("/", webUpdates.frontendMiddleware())
+	} else {
+		fi.Use("/", preventDocumentCaching)
+		fi.Use("/", filesystem.New(filesystem.Config{
+			Root: http.FS(StaticAssets()),
+		}))
+	}
 
 	// Health check endpoint (no /api prefix)
 	// Returns 503 if any enabled apps are expired, 200 if healthy
@@ -120,6 +128,9 @@ func route(fi *fiber.App) {
 	// API route
 	api := fi.Group("/api")
 	registerSigningRoutes(api)
+	if webUpdates != nil {
+		webUpdates.registerAPI(api)
+	}
 	api.Get("/hello", func(c *fiber.Ctx) error {
 		return c.SendString("hello world.")
 	})

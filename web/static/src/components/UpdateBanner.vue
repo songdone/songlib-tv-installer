@@ -1,13 +1,19 @@
 <template>
-  <div v-if="visible" class="alert atv-update-banner mb-6" role="status">
-    <span class="text-sm flex-1">
-      {{ $t("home.release_banner.message", { version: release.latest, current: release.current }) }}
-    </span>
-    <div class="flex gap-x-2">
-      <a class="btn btn-sm btn-primary" :href="release.url" target="_blank" rel="noopener">
+  <div v-if="visible" class="sl-card sl-pad sl-update-banner" role="status" aria-live="polite">
+    <div class="sl-update-banner-text">
+      <span class="sl-chip sl-chip--pro">{{ $t("settings.web_update.core_badge") }}</span>
+      <span class="sl-body">
+        {{ $t("home.release_banner.message", { version: release.latest, current: release.current }) }}
+      </span>
+    </div>
+    <div class="sl-update-banner-actions">
+      <router-link class="sl-btn" :to="{ name: 'settings' }">
+        {{ $t("settings.web_update.upgrade_guide_btn") }}
+      </router-link>
+      <a class="sl-btn sl-pri" :href="release.url" target="_blank" rel="noopener noreferrer">
         {{ $t("home.release_banner.view") }}
       </a>
-      <button type="button" class="btn btn-sm btn-ghost" @click="dismiss">
+      <button type="button" class="sl-btn sl-ghost" @click="dismiss">
         {{ $t("home.release_banner.dismiss") }}
       </button>
     </div>
@@ -17,8 +23,7 @@
 <script>
 import api from "@/api/api";
 
-// The dismissed release tag: a newer release shows the banner again.
-const dismissedKey = "atvloadly-dismissed-release";
+const dismissedKey = "songlib-dismissed-release";
 
 function readDismissed() {
   try {
@@ -52,9 +57,36 @@ export default {
       try {
         window.localStorage.setItem(dismissedKey, this.dismissed);
       } catch {
-        // Without storage the banner only stays hidden for this page load.
+        // Without storage the banner stays hidden for this page load only.
       }
     },
   },
 };
 </script>
+
+<style lang="postcss" scoped>
+.sl-update-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.sl-update-banner-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+  flex: 1;
+}
+
+.sl-update-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+</style>
