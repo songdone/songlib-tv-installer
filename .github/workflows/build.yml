@@ -15,19 +15,29 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go_version }}
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      - uses: actions/checkout@v6
-      - name: build frontend
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build and test frontend
         run: cd ./web/static && npm install && npm test && npm run build
+      - name: Go vet and tests
+        run: go vet ./... && go test -count=1 ./...
+      - name: Validate Docker Compose and fnOS packaging
+        run: |
+          python3 -m pip install --quiet pillow
+          docker compose -f docker-compose.yml config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.avahi.yml config --quiet
+          python3 packaging/fnos/check.py
+          python3 packaging/fnos/test_lifecycle.py
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
           version: latest
           args: --timeout=5m
-      # - run: go mod download
-      # - run: go test -coverprofile=coverage.txt -covermode=atomic ./...
