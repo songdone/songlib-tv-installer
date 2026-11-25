@@ -13,5 +13,5 @@ service_port = 5533
 checkport = false
 ctl_stop = true
 
-distributor_url = https://t.me/+hegV0V11Jxc3MmE9
+distributor_url = https://t.me/+hvpn0ClEZB4xYTQ1
 changelog = 安装/更新流程不显示向导时也能直接使用：管理端口默认 15533、初始管理密码 songlib123（均可在应用设置中修改）；修复由此导致的容器反复重启与应用中心显示未启用。
